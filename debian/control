@@ -1,0 +1,15 @@
+Source: lsleases
+Section: utils
+Priority: optional
+Maintainer: j <jhyphenkeck@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: github.com/j-keck/lsleases
+Vcs-Git: git://github.com/j-keck/lsleases.git
+Vcs-Browser: http://github.com/j-keck/lsleases
+
+Package: lsleases
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: dhcp leases sniffer
+ lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.

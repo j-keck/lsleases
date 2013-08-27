@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DH_OPTIONS
+
+export DH_GOPKG := github.com/j-keck/lsleases
+
+%:
+	dh $@  --buildsystem=golang --with=golang
