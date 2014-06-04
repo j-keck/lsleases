@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# lsleases - dhcp leases sniffer
+#
+#
+# chkconfig: 2345 20 80
+# description: dhcp leases sniffer
+# processname: lsleases
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+NAME=lsleases
+DAEMON=/usr/bin/lsleases
+DAEMON_ARGS="-s"
+LOGDIR=/var/log
+
+
+start(){
+    touch $LOGDIR/$NAME.log && chown nobody $LOGDIR/$NAME.log
+
+    echo -n "Starting $NAME: "
+    daemon --user nobody $DAEMON $DAEMON_ARGS > $LOGDIR/$NAME.log 2>&1 &
+    RETVAL=$?
+    test $RETVAL = 0 && success || failure    
+    echo
+    return $RETVAL
+}
+
+stop(){
+    echo -n "Shutting down $NAME: "
+    lsleases -x
+    RETVAL=$?
+    test $RETVAL = 0 && success || failure        
+    echo
+    return $RETVAL
+}
+
+status(){
+    echo -n "Checking $NAME status: "
+    lsleases > /dev/null 2>&1
+    RETVAL=$?
+    test $RETVAL = 0 && echo "running" || echo "stopped"
+    return $RETVAL
+}
+
+
+case "$1" in 
+    start)
+      start
+      ;;
+    stop)
+      stop
+      ;;
+    status)
+      status
+      ;;
+    restart)
+      stop
+      start
+      ;;
+    *)
+      echo "Usage: $NAME {start|stop|status|restart}"
+      exit 1
+      ;;
+esac
+exit $RETVAL
+
+
