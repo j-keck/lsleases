@@ -10,3 +10,17 @@ export DH_GOPKG := github.com/j-keck/lsleases
 
 %:
 	dh $@  --buildsystem=golang --with=golang
+
+override_dh_installman:
+	mkdir -p debian/lsleases/usr/share/man/man1
+	pandoc -s -t man MANUAL.md -o debian/lsleases/usr/share/man/man1/lsleases.1
+
+override_dh_auto_build:
+	dh_auto_build
+
+#TODO: go cross compile into bin/<CROSS COMPILE OS_ARCH> - how to disable that behavior?
+	if test -d obj-i486-linux-gnu/bin/linux_amd64; then \
+	  mv obj-i486-linux-gnu/bin/linux_amd64/lsleases obj-i486-linux-gnu/bin; \
+	  rmdir obj-i486-linux-gnu/bin/linux_amd64; \
+	fi
+

@@ -2,7 +2,7 @@ Source: lsleases
 Section: utils
 Priority: optional
 Maintainer: j <jhyphenkeck@gmail.com>
-Build-Depends: debhelper (>= 8.0.0)
+Build-Depends: debhelper (>= 8.0.0), dh-golang, golang-go, arping
 Standards-Version: 3.9.4
 Homepage: github.com/j-keck/lsleases
 Vcs-Git: git://github.com/j-keck/lsleases.git
