@@ -29,7 +29,7 @@ func server() {
 	var clearOfflineHosts <-chan time.Time
 
 	if !*expireBasedFlag {
-		log.Printf("enable active check - ping every: %s\n", *cleanupLeaseTimerFlag)
+		log.Printf("enable active check - arping every: %s\n", *cleanupLeaseTimerFlag)
 		if hasPermission, err := hasRawSocketPermission(); hasPermission {
 			clearOfflineHosts = time.NewTicker(*cleanupLeaseTimerFlag).C
 		} else {
@@ -91,7 +91,7 @@ func server() {
 			})
 
 		case <-clearOfflineHosts:
-			verboseLog.Println("ping hosts")
+			verboseLog.Println("arping hosts")
 			pingHosts(&leases)
 
 			leases.Foreach(func(l *DHCPLease) {

@@ -54,11 +54,11 @@ func main() {
 		fmt.Println("  -x: shutdown server")
 		fmt.Println("Server mode:")
 		fmt.Println("  -s: server mode")
-		fmt.Println("  -p: passive - no active availability host check - clear leases expire based")
+		fmt.Println("  -p: passive mode - no active availability host check - clear leases expire based")
 		fmt.Println("  -e: in passive mode: lease expire duration (valid units: 'd', 'h', 'm', 's') - default:",
 			*leaseExpiredDurationFlag)
-		fmt.Println("  -t: cleanup leases timer - default:", *cleanupLeaseTimerFlag)
-		fmt.Println("  -m: in active mode: missed pings threshold - default:", *missedPingsThresholdFlag)
+		fmt.Println("  -t: interval for checking of leases validity (valid units: 'd', 'h', 'm', 's') - default:", *cleanupLeaseTimerFlag)
+		fmt.Println("  -m: in active mode: missed arpings threshold - default:", *missedPingsThresholdFlag)
 	}
 	flag.Parse()
 

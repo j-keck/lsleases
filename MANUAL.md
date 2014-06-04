@@ -4,19 +4,20 @@
   
 # NAME
 
-lsleases - dhcp leases sniffer
+**lsleases** -- dhcp leases sniffer
 
 
    
 # SYNOPSIS
 
-lsleases [*options*]
-
+**lsleases** [-hvV] \
+**lsleases** -s [-m missed arpings threshold]  [-t ping interval] \
+**lsleases** -s -p [-e expire duration]  [-t check expired leases interval] \
   
   
 # DESCRIPTION
 
-lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.
+**lsleases** captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.
 
   
 
@@ -24,22 +25,22 @@ lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host nam
 
 *client:*
 
-in client mode, lsleases connects to a running lsleases server instance and displays captured ip, mac and host names. 
+in client mode, **lsleases** connects to a running **lsleases** server instance and displays captured ip, mac and host names. 
 
 
 *server:*
 
-in server mode, lsleases captures 'DHCP Request' datagrams.
+in server mode, **lsleases** captures broadcast 'DHCP Request' datagrams.
 
 
-  
-Because 'DHCP Release' datagrams are no broadcasts, `lsleases` needs to clear expired leases by self. For this task, there are two  modes available:
 
-'aktive mode': check per arp ping if host online (default) 
+Because 'DHCP Release' datagrams are no broadcasts, **lsleases** can not know about invalidated leases. To workaround this problem, there are two methods implemented:
+
+'active mode': check per arping if host online (default) 
 
 'passive mode': clear old leases expire based (-p flag)
 
-The check interval (ping / verify expired leases) is with the flag '-t' configurable.
+The expiration check interval (arping / verify expired leases) is with the flag '-t' configurable.
 
 
   
@@ -81,22 +82,34 @@ The check interval (ping / verify expired leases) is with the flag '-t' configur
 :   in passive mode: lease expire duration (valid units: 'd', 'h', 'm', 's') 
   
 -t
-:   cleanup leases timer duration (valid units: 'd', 'h', 'm', 's') 
+:   interval for checking of leases validity (valid units: 'd', 'h', 'm', 's') 
 
-in active mode: ping timer
+in active mode: arping interval
 
-in passive mode: check expired leases timer
+in passive mode: check expired leases interval
 
 -m
-:   in active mode: missed pings threshold
+:   in active mode: missed arpings threshold \
 remove lease if threshold reached
 
 
 
 # EXAMPLES
 
-        j@main:~> lsleases
-        Ip               Mac                Name
-        192.168.1.189    10:bf:48:xx:xx:xx  android-f6c6dca2130b287
-        192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
-        192.168.1.178    00:22:fb:xx:xx:xx  laptop  
+list captured leases
+  
+    j@main:~> lsleases
+    Ip               Mac                Name
+    192.168.1.189    10:bf:48:xx:xx:xx  android-f6c6dca2130b287
+    192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
+    192.168.1.178    00:22:fb:xx:xx:xx  laptop
+
+  
+start server in active mode - arping interval every 10 minutes, remove offline hosts after 5 missed pings
+
+    j@main:~> lsleases -s -t 10m -m 5
+
+  
+start server in passive mode - expire leases after 3 days
+
+    j@mail:~> lsleases -s -e 3d
