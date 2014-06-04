@@ -66,6 +66,9 @@ The check interval (ping / verify expired leases) is with the flag '-t' configur
 -n
 :    list newest leases first
 
+-x
+:    shutdown server
+
     
 ## server
 -s

@@ -17,6 +17,8 @@ func client() {
 		fmt.Printf("client: %s, server: %s\n", clientVersion, serverVersion)
 	} else if *clearLeasesFlag {
 		tellServer("clearLeases")
+	} else if *shutdownServerFlag {
+		tellServer("shutdown")
 	} else {
 		var leases DHCPLeases
 		b, err := askServer("leases")

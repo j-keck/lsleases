@@ -33,6 +33,7 @@ var (
 	scriptedModeFlag          = flag.Bool("H", false, "")
 	clearLeasesFlag           = flag.Bool("c", false, "")
 	listNewestLeasesFirstFlag = flag.Bool("n", false, "")
+	shutdownServerFlag        = flag.Bool("x", false, "")
 )
 
 var (
@@ -50,6 +51,7 @@ func main() {
 		fmt.Println("  -c: clear leases")
 		fmt.Println("  -H: scripted mode: no headers, dates as unix time")
 		fmt.Println("  -n: list newest leases first")
+		fmt.Println("  -x: shutdown server")
 		fmt.Println("Server mode:")
 		fmt.Println("  -s: server mode")
 		fmt.Println("  -p: passive - no active availability host check - clear leases expire based")
