@@ -1,6 +1,11 @@
 # lsleases - dhcp leases sniffer
+lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
 
-lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.
+
+  
+##### ...and for what? #####
+Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or any thing else with dynamic ip adresss (dhcp) and you need that address? Than this is for you - check the [Usage](#usage).
+
 
 
 ## Installation
@@ -32,13 +37,14 @@ lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac an
 ### Binary packages
   1. download from http://github.com/j-keck/lsleases/releases/latest
 
-  *deb packages register and starts an server instance on installation*
+  *deb, rpm packages register and starts an server instance on installation*
+  *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
 
   
 ## Usage
 
 1. start an server instance if not installed from package `j@main:~> nohup lsleases -s &`
-2. replug / startup any device with dynamic addresses
+2. replug / startup any device with dynamic ip address
 3. display captured ip, mac and host names. 
 
         j@main:~> lsleases
@@ -48,10 +54,24 @@ lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac an
         192.168.1.178    00:22:fb:xx:xx:xx  laptop
 
 
-## Hints
+## Notes
 
 - CentOS / RHEL based distros doesn't send the hostname in the 'DHCP Request' datagram by default.
   To include the hostname in the datagram:
 
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
-        
+
+- arping under windows are not supported
+ 
+
+## Changelog
+
+####1.1####
+- shutdown server from client per '-x' flag
+- rewording help usage
+- rpm packages
+- FreeBSD packages
+- windows zip with hacky .bat scripts to start/stop an server instance and list leases 
+  
+####1.0####
+- initial public release
