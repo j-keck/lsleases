@@ -148,8 +148,8 @@ func dhcpListener(dhcpLeaseChan chan<- *DHCPLease) {
 				}
 				hostName, err := datagram.HostName()
 				if err != nil {
-					fmt.Println("HostName not found! - error: ", err)
-					continue
+					fmt.Println("HostName not found! use <UNKNOW> - error: ", err)
+					hostName = "<UNKNOW>"
 				}
 
 				var expire time.Time

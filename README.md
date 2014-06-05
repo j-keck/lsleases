@@ -71,7 +71,8 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 - rewording help usage
 - rpm packages
 - FreeBSD packages
-- windows zip with hacky .bat scripts to start/stop an server instance and list leases 
+- windows zip with hacky .bat scripts to start/stop an server instance and list leases
+- set host name to <UNKNOW> if not existing in the datagram
   
 ####1.0####
 - initial public release
