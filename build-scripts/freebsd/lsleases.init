@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+#
+
+# PROVIDE: lsleases
+# REQUIRE: networking
+# BEFORE:  LOGIN
+#
+
+#
+# Set the following settings in /etc/rc.conf or /etc/rc.conf.local
+#
+# lsleases_enable (bool):
+#   Set to "NO" by default.
+#   Set it to "YES" to enable lsleases
+#
+# lsleases_flags (str):
+#   Set to "" by default
+#   Flags to use
+#
+
+
+. /etc/rc.subr
+
+name="lsleases"
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+rcvar=`set_rcvar`
+
+load_rc_config $name
+: ${lsleases_enable:=no}
+: ${lsleases_args:=""}
+
+    
+
+lsleases_start(){
+    touch /var/log/${name}.log && chown nobody /var/log/${name}.log
+    
+    retval=$(daemon -u nobody /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1)
+    return $retval
+}
+
+lsleases_stop(){
+    /usr/local/bin/lsleases -x
+    retval=$?
+
+    # Remove sock file
+    rm -f /tmp/${name}.sock
+
+    return $retval
+}
+
+
+run_rc_command "$1"
+    

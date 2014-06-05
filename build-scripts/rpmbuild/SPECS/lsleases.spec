@@ -1,7 +1,8 @@
 %define name lsleases
 %define version 1.0
 %define release 1
-%define srcdir %(echo $PWD)
+%define srcdir %(echo $BUILD_DIR)
+%define _rpmdir %(echo $PACKAGE_DIR)
 
 Name: %{name}
 Version: %{version}
@@ -31,7 +32,7 @@ export GOARCH=386
 export GOARCH=%{_target_cpu}
 %endif
 
-go build
+go build -v 
 pandoc -s -t man MANUAL.md -o lsleases.1
 
 %install
@@ -41,7 +42,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 install -m 0755 $RPM_BUILD_DIR/%{name}/%{name} $RPM_BUILD_ROOT/usr/bin
 
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
-install -m 0755 $RPM_BUILD_DIR/%{name}/rpmbuild/init.d/%{name} $RPM_BUILD_ROOT/etc/init.d
+install -m 0755 %{srcdir}/rpmbuild/init.d/%{name} $RPM_BUILD_ROOT/etc/init.d
 
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 install -m 0755 $RPM_BUILD_DIR/%{name}/%{name}.1 $RPM_BUILD_ROOT/%{_mandir}/man1

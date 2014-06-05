@@ -24,3 +24,5 @@ override_dh_auto_build:
 	  rmdir obj-i486-linux-gnu/bin/linux_amd64; \
 	fi
 
+override_dh_builddeb:
+	dh_builddeb --destdir ../build-output/${DEB_HOST_ARCH}
