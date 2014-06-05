@@ -33,6 +33,9 @@ pandoc -s -t man MANUAL.md -o $BUILD_ROOT/usr/local/man/man1/lsleases.1
 mkdir -p $BUILD_ROOT/usr/local/etc/rc.d
 cp freebsd/lsleases.init $BUILD_ROOT/usr/local/etc/rc.d/lsleases
 
+# update version
+sed -i .bak "s/version:.*/version: $VERSION/" freebsd/manifest/+MANIFEST
+
 # create package
 echo "create package in $PACKAGE_DIR/$BUILD_ARCH"
 pkg create -r $BUILD_ROOT -m freebsd/manifest -o $PACKAGE_DIR/$BUILD_ARCH

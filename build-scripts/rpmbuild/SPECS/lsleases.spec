@@ -1,5 +1,5 @@
 %define name lsleases
-%define version 1.0
+%define version %(echo $VERSION)
 %define release 1
 %define srcdir %(echo $BUILD_DIR)
 %define _rpmdir %(echo $PACKAGE_DIR)

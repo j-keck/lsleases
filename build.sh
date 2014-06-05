@@ -17,6 +17,7 @@ test -d $PACKAGE_DIR/amd64 || mkdir -p $PACKAGE_DIR/amd64
 
 # clone into working dir
 git ls-remote -h $BUILD_DIR >/dev/null 2>&1 || git clone . $BUILD_DIR
+export VERSION=$(grep VERSION $BUILD_DIR/lsleases.go | awk '{print $NF}' | tr -d \")
 
 case "$1" in
     Linux)

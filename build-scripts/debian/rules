@@ -11,6 +11,10 @@ export DH_GOPKG := github.com/j-keck/lsleases
 %:
 	dh $@  --buildsystem=golang --with=golang
 
+override_dh_installchangelogs:
+	dch -v ${VERSION} -u low -D unstable -m "Release ${VERSION}"
+	dh_installchangelogs
+
 override_dh_installman:
 	mkdir -p debian/lsleases/usr/share/man/man1
 	pandoc -s -t man MANUAL.md -o debian/lsleases/usr/share/man/man1/lsleases.1
