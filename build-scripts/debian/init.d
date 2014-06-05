@@ -52,7 +52,7 @@ do_start()
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
 		|| return 1
 	start-stop-daemon --start --quiet --pidfile $PIDFILE  --background --chuid nobody -m   \
-		--exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS > $LOGDIR/$NAME.log 2>&1" \
+		--exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS $DAEMON_OPTS > $LOGDIR/$NAME.log 2>&1" \
 		|| return 2
 
 }
@@ -78,10 +78,12 @@ do_stop()
 	# sleep for some time.
 	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
 	[ "$?" = 2 ] && return 2
+
 	# Many daemons don't delete their pidfiles when they exit.
 	rm -f $PIDFILE
-        # Remove sock file
-        rm -f /tmp/$NAME.sock
+
+  # Remove sock file
+  rm -f /tmp/$NAME.sock
 	return "$RETVAL"
 }
 
