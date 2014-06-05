@@ -68,8 +68,22 @@ case "$1" in
         $BUILD_DIR/freebsd/build-freebsd-packages.sh amd64
         
         ;;
+    Windows)
+        cp -a build-scripts/windows $BUILD_DIR
+
+        echo 
+        echo '###############################################################################################################'
+        echo '# 32bit exe'
+        $BUILD_DIR/windows/build-windows-packages.sh i386
+
+        echo 
+        echo '###############################################################################################################'
+        echo '# 64bit exe'
+        $BUILD_DIR/windows/build-windows-packages.sh amd64
+        ;;
+ 
     *)
-        echo "unsupported platform - supported: [Linux,FreeBSD]"
+        echo "unsupported platform - supported: [Linux,FreeBSD|Windows]"
 esac
 
 rm -rf $BUILD_DIR
