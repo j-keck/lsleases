@@ -36,5 +36,5 @@ cp windows/list-leases.bat $BUILD_ROOT
 
 # create zip
 echo "create zip in $PACKAGE_DIR/$BUILD_ARCH"
-(cd $BUILD_ROOT/..; zip -r $PACKAGE_DIR/$BUILD_ARCH/lsleases_$VERSION.$BUILD_ARCH.zip lsleases)
+(cd ${BUILD_ROOT}/..; zip -r ${PACKAGE_DIR}/${BUILD_ARCH}/lsleases_windows_${VERSION}_${BUILD_ARCH}.zip lsleases)
 
