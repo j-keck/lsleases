@@ -4,7 +4,7 @@ lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac an
 
   
 ##### ...and for what? #####
-Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or any thing else with dynamic ip adresss (dhcp) and you need that address? Than this is for you - check the [Usage](#usage).
+Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip adresss (dhcp) and you need that address? Then this tool is for your toolbox - check the [Usage](#usage).
 
 
 
@@ -21,6 +21,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
      `setcap 'cap_net_raw,cap_net_bind_service+ep' $HOME/bin/lsleases`
 
+  
   **FreeBSD**
   4. allow non-root users to open port less than 1024 (dhcp sniffer)
   
@@ -29,7 +30,10 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
   *arping as non-root under FreeBSD not supported*  
 
+  
   **Windows**
+
+    
   *no additional steps necessary*
 
 
@@ -37,7 +41,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 ### Binary packages
   1. download from http://github.com/j-keck/lsleases/releases/latest
 
-  *deb, rpm packages register and starts an server instance on installation*
+  *deb, rpm packages register and starts an server instance on installation* \
   *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
 
   
@@ -72,7 +76,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 - rpm packages
 - FreeBSD packages
 - windows zip with hacky .bat scripts to start/stop an server instance and list leases
-- set host name to <UNKNOW> if not existing in the datagram
+- set host name to \<UNKNOW\> if not existing in the datagram
   
 ####1.0####
 - initial public release
