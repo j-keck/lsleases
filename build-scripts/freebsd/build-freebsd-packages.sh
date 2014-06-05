@@ -40,6 +40,6 @@ sed -i .bak "s/version:.*/version: $VERSION/" freebsd/manifest/+MANIFEST
 echo "create package in $PACKAGE_DIR/$BUILD_ARCH"
 pkg create -r $BUILD_ROOT -m freebsd/manifest -o $PACKAGE_DIR/$BUILD_ARCH
 
-# add arch to filename
-(cd $PACKAGE_DIR/$BUILD_ARCH; mv lsleases-${VERSION}.txz lsleases-${VERSION}_${BUILD_ARCH}.txz)
+# add arch / os to filename
+(cd $PACKAGE_DIR/$BUILD_ARCH; mv lsleases-${VERSION}.txz lsleases-${VERSION}_freebsd_${BUILD_ARCH}.txz)
 
