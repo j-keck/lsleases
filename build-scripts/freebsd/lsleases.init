@@ -23,6 +23,7 @@
 . /etc/rc.subr
 
 name="lsleases"
+command="/usr/local/bin/${name}"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
@@ -36,18 +37,20 @@ load_rc_config $name
 lsleases_start(){
     touch /var/log/${name}.log && chown nobody /var/log/${name}.log
     
-    retval=$(daemon -u nobody /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1)
-    return $retval
+    daemon -u nobody /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1
+
+    sleep 0.5
+    ${command} > /dev/null 2>&1
+    if [ $? != 0 ]; then
+        warn "not stated - see /var/log/${name.log}"
+    fi
 }
 
 lsleases_stop(){
-    /usr/local/bin/lsleases -x
-    retval=$?
+    /usr/local/bin/{$name} -x
 
     # Remove sock file
     rm -f /tmp/${name}.sock
-
-    return $retval
 }
 
 
