@@ -22,6 +22,9 @@ cd $BUILD_DIR
 # delete old build artifacts
 rm -rf $BUILD_ROOT
 
+# get dependencies
+go get -v -u -x
+
 # build code
 go build -v -o $BUILD_ROOT/lsleases.exe
 
