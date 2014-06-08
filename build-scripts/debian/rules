@@ -9,7 +9,7 @@ export DH_OPTIONS
 export DH_GOPKG := github.com/j-keck/lsleases
 
 %:
-	dh $@  --buildsystem=golang --with=golang
+	dh $@  --buildsystem=golang --with=golang --with=systemd
 
 override_dh_installchangelogs:
 	dch -v ${VERSION} -u low -D unstable -m "Release ${VERSION}"
