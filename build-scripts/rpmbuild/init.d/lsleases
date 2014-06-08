@@ -16,14 +16,14 @@ NAME=lsleases
 DAEMON=/usr/bin/lsleases
 DAEMON_ARGS="-s"
 DAEMON_USER="nobody"
-LOGDIR=/var/log
+LOGFILE="/var/log/${NAME}.log"
 
 
 start(){
-    touch $LOGDIR/$NAME.log && chown $DAEMON_USER $LOGDIR/$NAME.log
+    touch $LOGFILE && chown $DAEMON_USER $LOGFILE
 
     echo -n "Starting $NAME: "
-    daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS > $LOGDIR/$NAME.log 2>&1 &
+    daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1 &
     RETVAL=$?
     test $RETVAL = 0 && success || failure    
     echo

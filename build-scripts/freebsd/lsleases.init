@@ -25,30 +25,31 @@
 name="lsleases"
 command="/usr/local/bin/${name}"
 daemon_user="nobody"
+logfile="/var/log/${name}"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
 
 load_rc_config $name
 : ${lsleases_enable:=no}
-: ${lsleases_args:=""}
+: ${lsleases_flags:=""}
 
     
 
 lsleases_start(){
-    touch /var/log/${name}.log && chown ${daemon_user} /var/log/${name}.log
+    touch ${logfile} && chown ${daemon_user} ${logfile}
     
-    daemon -u ${daemon_user} /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1
+    daemon -u ${daemon_user} ${command} -s ${lsleases_flags} > ${logfile} 2>&1
 
     sleep 0.5
     ${command} > /dev/null 2>&1
     if [ $? != 0 ]; then
-        warn "not stated - see /var/log/${name.log}"
+        warn "not started - see ${logfile}"
     fi
 }
 
 lsleases_stop(){
-    /usr/local/bin/{$name} -x
+    ${command} -x
 
     # Remove sock file
     rm -f /tmp/${name}.sock

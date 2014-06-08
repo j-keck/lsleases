@@ -23,7 +23,7 @@ DAEMON_ARGS="-s"
 DAEMON_USER="nobody"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-LOGDIR=/var/log
+LOGFILE="/var/log/${NAME}.log"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -45,7 +45,7 @@ LOGDIR=/var/log
 do_start()
 {
     # create logfile and set ownership
-    touch $LOGDIR/$NAME.log && chown $DAEMON_USER $LOGDIR/$NAME.log
+    touch $LOGFILE && chown $DAEMON_USER $LOGFILE
 
     # Return
     #   0 if daemon has been started
@@ -54,7 +54,7 @@ do_start()
     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
         || return 1
     start-stop-daemon --start --quiet --pidfile $PIDFILE  --background --chuid $DAEMON_USER \
-        --exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS $DAEMON_OPTS > $LOGDIR/$NAME.log 2>&1" \
+        --exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS $DAEMON_OPTS > $LOGFILE 2>&1" \
         || return 2
 
 }
