@@ -32,10 +32,14 @@ start(){
 
 stop(){
     echo -n "Shutting down $NAME: "
-    lsleases -x
+    $DAEMON -x
     RETVAL=$?
     test $RETVAL = 0 && success || failure        
     echo
+
+    # Remove sock file
+    rm -f /tmp/${NAME}.sock
+    
     return $RETVAL
 }
 
