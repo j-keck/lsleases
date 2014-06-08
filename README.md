@@ -4,7 +4,7 @@ lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac an
 
   
 ##### ...and for what? #####
-Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip adresss (dhcp) and you need that address? Then this tool is for your toolbox - check the [Usage](#usage).
+Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip address (dhcp) and you need that address? Then this tool is for your toolbox - check the [Usage](#usage).
 
 
 
@@ -41,8 +41,8 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 ### Binary packages
   1. download from http://github.com/j-keck/lsleases/releases/latest
 
-  *deb, rpm packages register and starts an server instance on installation* \
-  *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
+- *deb, rpm packages register and starts an server instance on installation*
+- *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
 
   
 ## Usage
@@ -74,7 +74,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
     - systemd based: `journalctl -u lsleases` 
 
   
-- which other prog (pid/name) listen on port 67? (if you get '...: address already in use' in the logs')
+- which other prog (pid/name) listen on port 67? (if you get '...: address already in use' in the logs)
 
         sudo netstat -taupen | grep ":67 " | awk '{print $NF}'
 
