@@ -6,8 +6,8 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: dhcp leases sniffer
-# Description:       lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host name 
-                     from computers in the local network with dynamic addresses.
+# Description:       lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host name
+#                    from computers in the local network with dynamic addresses.
 ### END INIT INFO
 
 # Author: j <jhyphenkeck@gmail.com>
