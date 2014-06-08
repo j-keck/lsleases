@@ -20,6 +20,7 @@ DESC="lsleases"
 NAME=lsleases
 DAEMON=/usr/bin/lsleases
 DAEMON_ARGS="-s"
+DAEMON_USER="nobody"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LOGDIR=/var/log
@@ -44,15 +45,15 @@ LOGDIR=/var/log
 do_start()
 {
     # create logfile and set ownership
-    touch $LOGDIR/$NAME.log && chown nobody $LOGDIR/$NAME.log
-    
+    touch $LOGDIR/$NAME.log && chown $DAEMON_USER $LOGDIR/$NAME.log
+
     # Return
     #   0 if daemon has been started
     #   1 if daemon was already running
     #   2 if daemon could not be started
     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
         || return 1
-    start-stop-daemon --start --quiet --pidfile $PIDFILE  --background --chuid nobody
+    start-stop-daemon --start --quiet --pidfile $PIDFILE  --background --chuid $DAEMON_USER \
         --exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS $DAEMON_OPTS > $LOGDIR/$NAME.log 2>&1" \
         || return 2
 

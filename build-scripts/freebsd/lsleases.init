@@ -24,6 +24,7 @@
 
 name="lsleases"
 command="/usr/local/bin/${name}"
+daemon_user="nobody"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
@@ -35,9 +36,9 @@ load_rc_config $name
     
 
 lsleases_start(){
-    touch /var/log/${name}.log && chown nobody /var/log/${name}.log
+    touch /var/log/${name}.log && chown ${daemon_user} /var/log/${name}.log
     
-    daemon -u nobody /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1
+    daemon -u ${daemon_user} /usr/local/bin/${name} -s ${lsleases_flags} > /var/log/${name}.log 2>&1
 
     sleep 0.5
     ${command} > /dev/null 2>&1
