@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/signal"
 	"time"
 )
 
@@ -47,6 +48,16 @@ func server() {
 		clearExpiredLeasesTickerChan = time.NewTicker(timer).C
 	}
 
+	// cleanup on CTRL-C
+	go func() {
+		sigchan := make(chan os.Signal, 1)
+		signal.Notify(sigchan, os.Interrupt)
+		// block
+		<-sigchan
+		closeListener()
+		os.Exit(0)
+	}()
+
 	var leases DHCPLeases
 	for {
 		select {
@@ -54,6 +65,7 @@ func server() {
 			switch string(cmd) {
 			case "shutdown":
 				log.Println("shutdown")
+				closeListener()
 				os.Exit(0)
 
 			case "clearLeases":

@@ -2,3 +2,4 @@ lsleases
 \#*#
 build-output
 build-work
+*.log

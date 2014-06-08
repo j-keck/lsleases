@@ -12,6 +12,9 @@ const sockFileName = `\\.\pipe\lsleases`
 func openListener() (net.Listener, error) {
 	return npipe.Listen(sockFileName)
 }
+func closeListener() {
+	// nothing to do
+}
 
 func bind() (net.Conn, error) {
 	return npipe.DialTimeout(sockFileName, time.Second)
