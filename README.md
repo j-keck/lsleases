@@ -65,9 +65,21 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 
+  
 - arping under windows are not supported
- 
 
+  
+- server logs
+    - init / SysVinit based: `/var/log/lsleases.log`
+    - systemd based: `journalctl -u lsleases` 
+
+  
+- which other prog (pid/name) listen on port 67? (if you get '...: address already in use' in the logs')
+
+        sudo netstat -taupen | grep ":67 " | awk '{print $NF}'
+
+
+  
 ## Changelog
 
 ####1.1####
