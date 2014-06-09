@@ -1,9 +1,9 @@
 # lsleases - dhcp leases sniffer
-lsleases captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
+**lsleases** captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
 
 
   
-##### ...and for what? #####
+##### ...and for what? 
 Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip address (dhcp) and you need that address? Then this tool is for your toolbox - check the [Usage](#usage).
 
 
@@ -12,14 +12,14 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
 ### From source
 
-  1. export GOPATH: `export GOPATH=<PATH>/lsleases-build`
-  2. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
-  3. copy the binary to your preferred bin dir `cp $GOPATH/bin/lsleases $HOME/bin/`
+  1. install Go toolset from http://golang.org if not already
+  2. ensure [`$GOPATH`](http://golang.org/doc/code.html#GOPATH) is properly set and `$GOPATH/bin` is in your `$PATH` 
+  3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
 
   **Linux**
-  4. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (arping) set the corresponding capabilities
+  4. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
   
-     `setcap 'cap_net_raw,cap_net_bind_service+ep' $HOME/bin/lsleases`
+     `sudo setcap 'cap_net_raw,cap_net_bind_service+ep' $GOPATH/bin/lsleases`
 
   
   **FreeBSD**
@@ -28,7 +28,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
         echo net.inet.ip.portrange.reservedhigh=0 >> /etc/sysctl.conf
         service sysctl restart
 
-  *arping as non-root under FreeBSD not supported*  
+  *active availability host check (per arping) as non-root under FreeBSD not supported*  
 
   
   **Windows**
@@ -47,7 +47,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
 ## Usage
 
-1. start an server instance if not installed from package `j@main:~> nohup lsleases -s &`
+1. start an server instance if not installed from a package `j@main:~> nohup lsleases -s &`
 2. replug / startup any device with dynamic ip address
 3. display captured ip, mac and host names. 
 
@@ -58,6 +58,8 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
         192.168.1.178    00:22:fb:xx:xx:xx  laptop
 
 
+*for more info check the [MANUAL](MANUAL.md)*
+  
 ## Notes
 
 - CentOS / RHEL based distros doesn't send the hostname in the 'DHCP Request' datagram by default.
@@ -66,7 +68,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 
   
-- arping under windows are not supported
+- active availability host check (per arping) under windows are not supported
 
   
 - server logs
@@ -76,7 +78,13 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
 - which other prog (pid/name) listen on port 67? (if you get '...: address already in use' in the logs)
 
-        sudo netstat -taupen | grep ":67 " | awk '{print $NF}'
+    - Linux:
+  
+          sudo netstat -taupen | grep ":67 " | awk '{print $NF}'
+
+    - FreeBSD:
+
+          sockstat -l -P udp -p 67
 
 
   
