@@ -32,7 +32,7 @@ func server() {
 	if !*expireBasedFlag {
 		log.Printf("enable active check - arping every: %s\n", *cleanupLeaseTimerFlag)
 		if hasPermission, err := hasRawSocketPermission(); hasPermission {
-			clearOfflineHosts = time.NewTicker(*cleanupLeaseTimerFlag).C
+			clearOfflineHosts = time.NewTicker(cleanupLeaseTimer).C
 		} else {
 			log.Printf("enable active check failed: '%s' -  fallback to passive mode\n", err)
 			*expireBasedFlag = true
@@ -40,7 +40,7 @@ func server() {
 	}
 
 	if *expireBasedFlag {
-		timer := *cleanupLeaseTimerFlag
+		timer := cleanupLeaseTimer
 		if leaseExpiredDuration < timer {
 			timer = leaseExpiredDuration / 2
 		}

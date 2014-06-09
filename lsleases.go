@@ -24,9 +24,9 @@ var (
 	// server
 	serverModeFlag  = flag.Bool("s", false, "")
 	expireBasedFlag = flag.Bool("p", false, "")
-	// flag.Duration for expire duration not useful because 'd' are no valid unit
+	// flag.Duration not useful because there is not unit for days
 	leaseExpiredDurationFlag = flag.String("e", "7d", "")
-	cleanupLeaseTimerFlag    = flag.Duration("t", time.Minute*30, "")
+	cleanupLeaseTimerFlag    = flag.String("t", "30m", "")
 	missedPingsThresholdFlag = flag.Int("m", 3, "")
 
 	// client
@@ -39,6 +39,7 @@ var (
 var (
 	verboseLog           *log.Logger
 	leaseExpiredDuration time.Duration
+	cleanupLeaseTimer    time.Duration
 )
 
 func main() {
@@ -69,10 +70,10 @@ func main() {
 
 	var err error
 	leaseExpiredDuration, err = parseDuration(*leaseExpiredDurationFlag)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	exitOnError(err)
+
+	cleanupLeaseTimer, err = parseDuration(*cleanupLeaseTimerFlag)
+	exitOnError(err)
 
 	if *serverModeFlag {
 		server()
