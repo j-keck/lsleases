@@ -71,12 +71,12 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 - active availability host check (per arping) under windows are not supported
 
   
-- server logs
+- server logs location
     - init / SysVinit based: `/var/log/lsleases.log`
     - systemd based: `journalctl -u lsleases` 
 
   
-- which other prog (pid/name) listen on port 67? (if you get '...: address already in use' in the logs)
+- if you get '... listen udp :67: bind: address already in use' error at server startup - check which program already listen on port 67
 
     - Linux:
   
@@ -86,6 +86,15 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
           sockstat -l -P udp -p 67
 
+  
+- if you get '... listen udp :67: bind: permission denied' error at server startup
+
+    - installed from source: reread [installation guide](#from-source)
+
+    - binary installation: [open and issue](http://github.com/j-keck/lsleases/issues)
+
+
+     
 
   
 ## Changelog
