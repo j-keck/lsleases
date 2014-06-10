@@ -2,10 +2,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net"
+	"strings"
 )
+
+var ErrNoServerInstanceRunning = errors.New("no running server instance found - start one with 'lsleases -s'")
 
 func clientListener(clientChan chan []byte) {
 	ln, err := openListener()
@@ -55,6 +59,11 @@ func askServer(cmd string) ([]byte, error) {
 func tellServerAndThen(cmd string, andThen func(net.Conn) ([]byte, error)) ([]byte, error) {
 	con, err := bind()
 	if err != nil {
+		if strings.Contains(err.Error(), "no such file or directory") || // no sock file
+			strings.Contains(err.Error(), "connection refused") || // sock file without running listener
+			strings.Contains(err.Error(), "Timed out waiting for pipe") { // windows - no running server
+			return nil, ErrNoServerInstanceRunning
+		}
 		return nil, err
 	}
 	defer con.Close()
