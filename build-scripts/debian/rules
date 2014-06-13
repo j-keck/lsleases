@@ -9,7 +9,7 @@ export DH_OPTIONS
 export DH_GOPKG := github.com/j-keck/lsleases
 
 %:
-	dh $@  --buildsystem=golang --with=golang --with=systemd
+	dh $@ --with=systemd
 
 override_dh_installchangelogs:
 	dch -v ${VERSION} -u low -D unstable -m "Release ${VERSION}"
@@ -20,13 +20,9 @@ override_dh_installman:
 	pandoc -s -t man MANUAL.md -o debian/lsleases/usr/share/man/man1/lsleases.1
 
 override_dh_auto_build:
-	dh_auto_build
+	go get -x
+	go build -v
 
-#TODO: go cross compile into bin/<CROSS COMPILE OS_ARCH> - how to disable that behavior?
-	if test -d obj-i486-linux-gnu/bin/linux_amd64; then \
-	  mv obj-i486-linux-gnu/bin/linux_amd64/lsleases obj-i486-linux-gnu/bin; \
-	  rmdir obj-i486-linux-gnu/bin/linux_amd64; \
-	fi
 
 override_dh_builddeb:
 	dh_builddeb --destdir ../build-output/${DEB_HOST_ARCH}
