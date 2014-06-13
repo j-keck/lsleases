@@ -41,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 install -m 0755 $RPM_BUILD_DIR/%{name}/%{name} $RPM_BUILD_ROOT/usr/bin
 
+mkdir -p %{buildroot}/%{_libdir}/systemd/system
+install %{srcdir}/rpmbuild/%{name}.service %{buildroot}/%{_libdir}/systemd/system
+
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 install -m 0755 %{srcdir}/rpmbuild/init.d/%{name} $RPM_BUILD_ROOT/etc/init.d
 
@@ -51,6 +54,7 @@ install -m 0755 $RPM_BUILD_DIR/%{name}/%{name}.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 %files
 /etc/init.d/%{name}
 %{_bindir}/%{name}
+%{_libdir}/systemd/system/%{name}.service
 %{_mandir}/man1/%{name}.1.gz
 
 
