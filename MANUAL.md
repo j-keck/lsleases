@@ -112,4 +112,4 @@ start server in active mode - arping interval every 10 minutes, remove offline h
   
 start server in passive mode - expire leases after 3 days
 
-    j@mail:~> lsleases -s -e 3d
+    j@mail:~> lsleases -s -p -e 3d
