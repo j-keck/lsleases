@@ -3,6 +3,7 @@
 %define release 1
 %define srcdir %(echo $BUILD_DIR)
 %define _rpmdir %(echo $PACKAGE_DIR)
+%define gopath $RPM_BUILD_DIR/%{name}/gobuild
 
 Name: %{name}
 Version: %{version}
@@ -20,11 +21,19 @@ dhcp leases sniffer
 %prep
 rm -rf $RPM_BUILD_DIR/%{name}
 mkdir -p $RPM_BUILD_DIR/%{name}
-git clone %{srcdir} $RPM_BUILD_DIR/%{name}
+
+mkdir -p %{gopath}
+export GOPATH=%{gopath}
+
+git clone %{srcdir} %{gopath}/src/%{name}
+cd %{gopath}/src/%{name}
+
+go get -v -d
 
 
 %build
-cd $RPM_BUILD_DIR/%{name}
+cd %{gopath}/src/%{name}
+export GOPATH=%{gopath}
 
 %ifarch i386
 export GOARCH=386
@@ -39,7 +48,7 @@ pandoc -s -t man MANUAL.md -o lsleases.1
 rm -rf $RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-install -m 0755 $RPM_BUILD_DIR/%{name}/%{name} $RPM_BUILD_ROOT/usr/bin
+install -m 0755 %{gopath}/src/%{name}/%{name} $RPM_BUILD_ROOT/usr/bin
 
 mkdir -p %{buildroot}/%{_libdir}/systemd/system
 install %{srcdir}/rpmbuild/%{name}.service %{buildroot}/%{_libdir}/systemd/system
@@ -48,7 +57,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/init.d
 install -m 0755 %{srcdir}/rpmbuild/init.d/%{name} $RPM_BUILD_ROOT/etc/init.d
 
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
-install -m 0755 $RPM_BUILD_DIR/%{name}/%{name}.1 $RPM_BUILD_ROOT/%{_mandir}/man1
+install -m 0755 %{gopath}/src/%{name}/%{name}.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 
 
 %files
