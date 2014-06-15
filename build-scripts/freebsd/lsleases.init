@@ -25,7 +25,7 @@
 name="lsleases"
 command="/usr/local/bin/${name}"
 daemon_user="nobody"
-logfile="/var/log/${name}"
+logfile="/var/log/${name}.log"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
