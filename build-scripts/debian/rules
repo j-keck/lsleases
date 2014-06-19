@@ -9,20 +9,15 @@ export DH_OPTIONS
 export DH_GOPKG := github.com/j-keck/lsleases
 
 %:
-	dh $@ --with=systemd
+	dh $@
 
 override_dh_installchangelogs:
 	dch -v ${VERSION} -u low -D unstable -m "Release ${VERSION}"
 	dh_installchangelogs
 
 override_dh_installman:
-	mkdir -p debian/lsleases/usr/share/man/man1
-	pandoc -s -t man MANUAL.md -o debian/lsleases/usr/share/man/man1/lsleases.1
-
-override_dh_auto_build:
-	go get -x
-	go build -v
-
+	mkdir -p ${PACKAGE_ROOT}/usr/share/man/man1
+	pandoc -s -t man ${BUILD_DIR}/MANUAL.md -o ${PACKAGE_ROOT}/usr/share/man/man1/lsleases.1
 
 override_dh_builddeb:
-	dh_builddeb --destdir ../build-output/${DEB_HOST_ARCH}
+	dh_builddeb --destdir ${BUILD_OUTPUT}/${DEB_HOST_ARCH}

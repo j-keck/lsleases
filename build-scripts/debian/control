@@ -10,6 +10,6 @@ Vcs-Browser: http://github.com/j-keck/lsleases
 
 Package: lsleases
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin (>= 2.22)
 Description: dhcp leases sniffer
  lsleases captures 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.
