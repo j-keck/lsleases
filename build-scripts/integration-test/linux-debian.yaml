@@ -1,0 +1,8 @@
+---
+install: sudo /usr/bin/dpkg -i --force-all <PKG>
+start: echo "nothing to do - autostart!"
+stop: sudo /bin/systemctl stop lsleases 
+remove: sudo /usr/bin/dpkg -r lsleases
+print_version: lsleases -V
+list_leases: lsleases -H
+clear_leases: lsleases -c

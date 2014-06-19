@@ -1,0 +1,8 @@
+---
+install: sudo /usr/bin/yum install -y <PKG>
+start: echo "nothing to do - autostart!"
+stop: sudo /bin/systemctl stop lsleases 
+remove: sudo /usr/bin/yum remove -y lsleases
+print_version: lsleases -V
+list_leases: lsleases -H
+clear_leases: lsleases -c

@@ -1,0 +1,8 @@
+---
+install: unzip <PKG>
+start: lsleases\start-server.bat
+stop: lsleases\stop-server.bat
+remove: rm -rf lsleases
+print_version: lsleases\lsleases.exe -V
+list_leases: lsleases\lsleases.exe -H
+clear_leases: lsleases\lsleases.exe -c
