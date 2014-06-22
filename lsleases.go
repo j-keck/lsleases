@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const VERSION = "1.2.dev"
+const VERSION = "1.2"
 
 var (
 	//

@@ -41,7 +41,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 ### Binary packages
   1. download from http://github.com/j-keck/lsleases/releases/latest
 
-- *deb, rpm packages register and starts an server instance on installation*
+- *deb, rpm packages and windows installer registers and starts an server instance on installation*
 - *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
 
   
@@ -62,7 +62,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
 ## Notes
 
-- CentOS / RHEL based distros doesn't send the hostname in the 'DHCP Request' datagram by default.
+- CentOS / RHEL distros doesn't send the hostname in the 'DHCP Request' datagram by default.
   To include the hostname in the datagram:
 
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
@@ -99,6 +99,10 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
 ## Changelog
 
+####1.2####
+- windows installer
+- rework binary packages
+- internal build / test structure perl based
 ####1.1####
 - shutdown server from client per '-x' flag
 - rewording help usage
