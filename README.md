@@ -103,6 +103,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 - windows installer
 - rework binary packages
 - internal build / test structure perl based
+
 ####1.1####
 - shutdown server from client per '-x' flag
 - rewording help usage
