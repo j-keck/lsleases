@@ -81,6 +81,7 @@ send_dummy_dhcp_request();
 is(exec_get_stdout($cmds->{list_leases}), "1.1.1.1          08:00:27:f2:97:5a  testhost\n", 'dummy should be in the output');
 is(exec_get_ec($cmds->{stop}), 0, 'stopping lsleases service should return code: 0');
 isnt(exec_get_ec($cmds->{list_leases}), 0, 'list leases should return an error if no server instance running');
+is(exec_get_ec($cmds->{manpage}), 0, "manpage should be installed");
 is(exec_get_ec($cmds->{remove}), 0, 'remove should return exit code: 0');
         
 done_testing();

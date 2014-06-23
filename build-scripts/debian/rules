@@ -18,6 +18,7 @@ override_dh_installchangelogs:
 override_dh_installman:
 	mkdir -p ${PACKAGE_ROOT}/usr/share/man/man1
 	pandoc -s -t man ${BUILD_DIR}/MANUAL.md -o ${PACKAGE_ROOT}/usr/share/man/man1/lsleases.1
+	dh_installman
 
 override_dh_builddeb:
 	dh_builddeb --destdir ${BUILD_OUTPUT}/${DEB_HOST_ARCH}
