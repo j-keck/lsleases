@@ -129,7 +129,7 @@ sub find_last_package_from_dir{
         #   c         : 0 if dev version, else 1
         #
         my $file_name = shift;
-        $file_name =~ /.*lsleases-(\d+)\.(\d+)(\.([a-z]+))?_.*/;
+        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)(\.([a-z]+))?_.*/;
         my ($major, $minor, $dev_suffix) = ($1, $2, $4);
         my $has_not_dev_suffix = (defined $dev_suffix && $dev_suffix =~ m/dev/ ? 0 : 1);
         return sprintf("%010d.%010d%1d", $major, $minor, $has_not_dev_suffix);
