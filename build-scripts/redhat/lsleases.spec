@@ -33,3 +33,11 @@ echo "enable autostart ..."
 echo "startup server ..."
 /sbin/service %{name} start
 
+%postun
+if [ -f /var/log/lsleases.log ]; then
+    rm -f /var/log/lsleases.log
+fi
+
+if [ -f /var/db/lsleases.json ]; then
+    rm -f /var/db/lsleases.json
+fi
