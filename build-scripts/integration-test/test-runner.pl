@@ -89,6 +89,7 @@ eval{
 }; 
 if($@){
   say "TEST FAILED - CLEANUP";
+  exec_get_ec($cmds->{stop});
   exec_get_ec($cmds->{remove});
 }
         
