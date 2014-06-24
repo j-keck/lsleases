@@ -25,9 +25,10 @@ var (
 	serverModeFlag  = flag.Bool("s", false, "")
 	expireBasedFlag = flag.Bool("p", false, "")
 	// flag.Duration not useful because there is not unit for days
-	leaseExpiredDurationFlag = flag.String("e", "7d", "")
-	cleanupLeaseTimerFlag    = flag.String("t", "30m", "")
-	missedPingsThresholdFlag = flag.Int("m", 3, "")
+	leaseExpiredDurationFlag  = flag.String("e", "7d", "")
+	cleanupLeaseTimerFlag     = flag.String("t", "30m", "")
+	missedPingsThresholdFlag  = flag.Int("m", 3, "")
+	keepLeasesOverRestartFlag = flag.Bool("k", false, "")
 
 	// client
 	scriptedModeFlag          = flag.Bool("H", false, "")
@@ -60,6 +61,7 @@ func main() {
 			*leaseExpiredDurationFlag)
 		fmt.Println("  -t: interval for checking of leases validity (valid units: 'd', 'h', 'm', 's') - default:", *cleanupLeaseTimerFlag)
 		fmt.Println("  -m: in active mode: missed arpings threshold - default:", *missedPingsThresholdFlag)
+		fmt.Println("  -k: keep leases over restart")
 	}
 	flag.Parse()
 

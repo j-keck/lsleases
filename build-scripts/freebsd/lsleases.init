@@ -26,6 +26,7 @@ name="lsleases"
 command="/usr/local/bin/${name}"
 daemon_user="nobody"
 logfile="/var/log/${name}.log"
+persistence_cache="/var/db/${name}.json"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
@@ -37,8 +38,13 @@ load_rc_config $name
     
 
 lsleases_start(){
+    # create logfile and set ownership    
     touch ${logfile} && chown ${daemon_user} ${logfile}
-    
+
+    # create persistence cache file and set ownership
+    touch ${persistence_cache} && chown ${daemon_user} ${persistence_cache}
+
+    # startup
     daemon -u ${daemon_user} ${command} -s ${lsleases_flags} > ${logfile} 2>&1
 
     sleep 0.5

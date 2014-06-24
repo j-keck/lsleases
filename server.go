@@ -2,12 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/j-keck/arping"
 	"io/ioutil"
 	"log"
 	"net"
 	"os"
 	"os/signal"
+	"runtime"
 	"time"
 )
 
@@ -48,26 +50,28 @@ func server() {
 		clearExpiredLeasesTickerChan = time.NewTicker(timer).C
 	}
 
-	// cleanup on CTRL-C
+	var leases DHCPLeases
+	if *keepLeasesOverRestartFlag {
+		var err error
+		leases, err = loadLeases()
+		logOnError(err, "unable to load leases - start with emtpy leases")
+	}
+
+	// CTRL-C - catcher
 	go func() {
 		sigchan := make(chan os.Signal, 1)
 		signal.Notify(sigchan, os.Interrupt)
 		// block
 		<-sigchan
-		closeListener()
-		os.Exit(0)
+		shutdown(leases)
 	}()
 
-	var leases DHCPLeases
 	for {
 		select {
 		case cmd := <-clientChan:
 			switch string(cmd) {
 			case "shutdown":
-				log.Println("shutdown")
-				closeListener()
-				os.Exit(0)
-
+				shutdown(leases)
 			case "clearLeases":
 				log.Println("clear leases")
 				leases.Clear()
@@ -117,6 +121,15 @@ func server() {
 	}
 }
 
+func shutdown(leases DHCPLeases) {
+	log.Println("save leases")
+	logOnError(saveLeases(leases), "unable to save leases")
+
+	log.Println("shutdown")
+	closeListener()
+	os.Exit(0)
+}
+
 func pingHosts(leases *DHCPLeases) {
 	leases.Foreach(func(l *DHCPLease) {
 		if _, _, err := arping.Ping(net.ParseIP(l.IP)); err == arping.ErrTimeout {
@@ -155,4 +168,47 @@ func hasRawSocketPermission() (bool, error) {
 	}
 
 	return false, err
+}
+
+func saveLeases(leases DHCPLeases) error {
+	j, err := json.Marshal(leases)
+	if err != nil {
+		return err
+	}
+
+	path := leasesPersistenceFilePath()
+
+	verboseLog.Printf("save leases under %s\n", path)
+	return ioutil.WriteFile(path, []byte(j), 0644)
+}
+
+func loadLeases() (DHCPLeases, error) {
+	var leases DHCPLeases
+
+	path := leasesPersistenceFilePath()
+
+	verboseLog.Printf("load saved leases from %s\n", path)
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return leases, fmt.Errorf("no persistence file found under %s\n", path)
+	}
+
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return leases, err
+	}
+
+	err = json.Unmarshal(b, &leases)
+	return leases, err
+}
+
+func leasesPersistenceFilePath() string {
+
+	var basePath string
+	if runtime.GOOS == "windows" {
+		basePath = os.Getenv("APPDATA")
+	} else {
+		basePath = "/var/db"
+	}
+	return fmt.Sprintf("%s/lsleases.json", basePath)
 }

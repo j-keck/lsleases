@@ -10,9 +10,14 @@
    
 # SYNOPSIS
 
-**lsleases** [-hvV] \
-**lsleases** -s [-m missed arpings threshold]  [-t ping interval] \
-**lsleases** -s -p [-e expire duration]  [-t check expired leases interval] \
+## CLIENT
+  
+**lsleases** [-hvVcHnx] 
+
+## SERVER
+  
+**lsleases** -s [-k]  [-m missed arpings threshold]  [-t ping interval]\
+**lsleases** -s -p [-k]  [-e expire duration]  [-t check expired leases interval]
   
   
 # DESCRIPTION
@@ -91,6 +96,10 @@ in passive mode: check expired leases interval
 -m
 :   in active mode: missed arpings threshold \
 remove lease if threshold reached
+
+-k
+:   keep leases over restart\
+save leases on shutdown / load on startup
 
 
 

@@ -24,6 +24,7 @@ DAEMON_USER="nobody"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LOGFILE="/var/log/${NAME}.log"
+PERSISTENCE_CACHE="/var/db/${NAME}.json"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -46,6 +47,9 @@ do_start()
 {
     # create logfile and set ownership
     touch $LOGFILE && chown $DAEMON_USER $LOGFILE
+
+    # create persistence cache file and set ownership
+    touch $PERSISTENCE_CACHE && chown $DAEMON_USER $PERSISTENCE_CACHE
 
     # Return
     #   0 if daemon has been started

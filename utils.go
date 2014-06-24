@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+func logOnError(err error, msg ...string) {
+	if err != nil {
+		log.Println(msg, ": ", err)
+	}
+}
+
 func exitOnError(err error, msg ...string) {
 	if err != nil {
 		log.Println(msg, ": ", err)

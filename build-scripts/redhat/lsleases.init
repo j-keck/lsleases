@@ -17,10 +17,14 @@ DAEMON=/usr/bin/lsleases
 DAEMON_ARGS="-s"
 DAEMON_USER="nobody"
 LOGFILE="/var/log/${NAME}.log"
-
+PERSISTENCE_CACHE="/var/db/${NAME}.json"
 
 start(){
+    # create logfile and set ownership    
     touch $LOGFILE && chown $DAEMON_USER $LOGFILE
+
+    # create persistence cache file and set ownership
+    touch $PERSISTENCE_CACHE && chown $DAEMON_USER $PERSISTENCE_CACHE
 
     echo -n "Starting $NAME: "
     daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1 &
