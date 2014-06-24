@@ -7,4 +7,4 @@ remove: sudo /usr/bin/dpkg -r lsleases
 print_version: lsleases -V
 list_leases: lsleases -H
 clear_leases: lsleases -c
-manpage: man -P cat lsleases > /dev/null 2>&1
+manpagecheck: man -P cat lsleases > /dev/null 2>&1

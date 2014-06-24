@@ -7,4 +7,4 @@ remove: (rm -rf lsleases && rm "%APPDATA%/lsleases.json")
 print_version: lsleases\lsleases.exe -V
 list_leases: lsleases\lsleases.exe -H
 clear_leases: lsleases\lsleases.exe -c
-manpage: echo "no manpage"
+manpagecheck: echo "no manpage"
