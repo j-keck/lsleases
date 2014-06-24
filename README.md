@@ -17,13 +17,20 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
 
   **Linux**
-  4. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
+  4. create the runtime application data dir (for unix domain socket, persistent leases)
+
+     `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WITH STARTS THE SERVER> /var/lib/lsleases
+  
+  5. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
   
      `sudo setcap 'cap_net_raw,cap_net_bind_service+ep' $GOPATH/bin/lsleases`
-
   
   **FreeBSD**
-  4. allow non-root users to open port less than 1024 (dhcp sniffer)
+  4. create the runtime application data dir (for unix domain socket, persistent leases)
+
+     `mkdir -p /var/lib/lsleases && chown <USER WITH STARTS THE SERVER> /var/lib/lsleases`
+  
+  5. allow non-root users to open port less than 1024 (dhcp sniffer)
   
         echo net.inet.ip.portrange.reservedhigh=0 >> /etc/sysctl.conf
         service sysctl restart

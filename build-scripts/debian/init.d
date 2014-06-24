@@ -24,7 +24,7 @@ DAEMON_USER="nobody"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LOGFILE="/var/log/${NAME}.log"
-PERSISTENCE_CACHE="/var/db/${NAME}.json"
+APP_DATADIR="/var/lib/${NAME}"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -48,8 +48,8 @@ do_start()
     # create logfile and set ownership
     touch $LOGFILE && chown $DAEMON_USER $LOGFILE
 
-    # create persistence cache file and set ownership
-    touch $PERSISTENCE_CACHE && chown $DAEMON_USER $PERSISTENCE_CACHE
+    # create app datadir and set ownership
+    mkdir -p $APP_DATADIR && chown $DAEMON_USER $APP_DATADIR
 
     # Return
     #   0 if daemon has been started
@@ -75,7 +75,7 @@ do_stop()
     rm -f $PIDFILE
 
     # Remove sock file
-    rm -f /tmp/$NAME.sock
+    rm -f ${APP_DATADIR}/${NAME}.sock
     
     return "$RETVAL"
 }

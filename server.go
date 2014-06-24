@@ -208,7 +208,7 @@ func leasesPersistenceFilePath() string {
 	if runtime.GOOS == "windows" {
 		basePath = os.Getenv("APPDATA")
 	} else {
-		basePath = "/var/db"
+		basePath = "/var/lib/lsleases"
 	}
 	return fmt.Sprintf("%s/lsleases.json", basePath)
 }

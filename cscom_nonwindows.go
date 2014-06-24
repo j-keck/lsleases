@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const sockFileName = "/tmp/lsleases.sock"
+const sockFileName = "/var/lib/lsleases/lsleases.sock"
 
 func openListener() (net.Listener, error) {
 	// remove old stale sock file if no other instance is running

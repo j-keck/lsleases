@@ -38,6 +38,6 @@ if [ -f /var/log/lsleases.log ]; then
     rm -f /var/log/lsleases.log
 fi
 
-if [ -f /var/db/lsleases.json ]; then
-    rm -f /var/db/lsleases.json
+if [ -d /var/lib/lsleases ]; then
+    rm -rf /var/lib/lsleases
 fi

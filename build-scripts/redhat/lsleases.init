@@ -17,15 +17,15 @@ DAEMON=/usr/bin/lsleases
 DAEMON_ARGS="-s"
 DAEMON_USER="nobody"
 LOGFILE="/var/log/${NAME}.log"
-PERSISTENCE_CACHE="/var/db/${NAME}.json"
+APP_DATADIR="/var/lib/${NAME}"
 
 start(){
     # create logfile and set ownership    
     touch $LOGFILE && chown $DAEMON_USER $LOGFILE
 
-    # create persistence cache file and set ownership
-    touch $PERSISTENCE_CACHE && chown $DAEMON_USER $PERSISTENCE_CACHE
-
+    # create app datadir and set ownership
+    mkdir -p $APP_DATADIR && chown $DAEMON_USER $APP_DATADIR
+    
     echo -n "Starting $NAME: "
     daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1 &
     RETVAL=$?
@@ -42,14 +42,14 @@ stop(){
     echo
 
     # Remove sock file
-    rm -f /tmp/${NAME}.sock
+    rm -f ${APP_DATADIR}/${NAME}.sock
     
     return $RETVAL
 }
 
 status(){
     echo -n "Checking $NAME status: "
-    lsleases > /dev/null 2>&1
+    ${DAEMON} > /dev/null 2>&1
     RETVAL=$?
     test $RETVAL = 0 && echo "running" || echo "stopped"
     return $RETVAL
