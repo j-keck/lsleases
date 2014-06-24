@@ -19,9 +19,15 @@ func openListener() (net.Listener, error) {
 
 	// open listener
 	ln, err := net.Listen("unix", sockFileName)
+	if err != nil {
+		return nil, err
+	}
 
 	// change permissions
-	exitOnError(os.Chmod(sockFileName, 0666), "uds chmod")
+	err = os.Chmod(sockFileName, 0666)
+	if err != nil {
+		return nil, err
+	}
 
 	return ln, err
 }
