@@ -75,7 +75,9 @@ $cmds->{install} =~ s/<PKG>/$last_package_path/;
 isnt(exec_get_ec($cmds->{print_version}), 0, 'lsleases should not be installed');
 is(exec_get_ec($cmds->{install}), 0, 'installation should return exit code: 0');
 eval{
-  is(exec_get_ec($cmds->{start}), 0, 'startup should return code: 0');
+  if($cmds->{start_after_install}){
+    is(exec_get_ec($cmds->{start}), 0, 'startup should return code: 0');
+  }
   is(exec_get_ec($cmds->{print_version}), 0, 'lsleases should be installed and running');
   is(exec_get_stdout($cmds->{list_leases}), '', 'should be empty after installation');
   send_dummy_dhcp_request();

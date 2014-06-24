@@ -1,5 +1,6 @@
 ---
 install: unzip <PKG>
+start_after_install: true
 start: lsleases\start-server.bat
 stop: lsleases\stop-server.bat
 remove: (rm -rf lsleases && rm "%APPDATA%/lsleases.json")

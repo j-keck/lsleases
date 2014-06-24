@@ -1,6 +1,7 @@
 ---
 install: sudo /usr/bin/dpkg -i --force-all <PKG>
-start: echo "nothing to do - autostart!"
+start_after_install: false
+start: sudo /usr/bin/service lsleases start
 stop: sudo /usr/bin/service lsleases stop
 remove: sudo /usr/bin/dpkg -r lsleases
 print_version: lsleases -V

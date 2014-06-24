@@ -1,5 +1,6 @@
 ---
 install: sudo /usr/sbin/pkg add <PKG>
+start_after_install: true
 start: sudo /usr/sbin/service lsleases start
 stop: sudo /usr/sbin/service lsleases stop
 remove: sudo /usr/sbin/pkg remove -y lsleases
