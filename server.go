@@ -147,7 +147,7 @@ func clearExpiredLeases() {
 	})
 }
 func clearOfflineHosts() {
-	verboseLog.Println("arping hosts")
+	verboseLog.Println("check offline hosts per ping")
 	pingHosts()
 
 	leases.Foreach(func(l *DHCPLease) {
