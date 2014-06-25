@@ -18,6 +18,7 @@ dhcp leases sniffer
 
 %files
 /etc/init.d/%{name}
+/etc/default/%{name}
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1
 

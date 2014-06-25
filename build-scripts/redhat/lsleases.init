@@ -19,6 +19,9 @@ DAEMON_USER="nobody"
 LOGFILE="/var/log/${NAME}.log"
 APP_DATADIR="/var/lib/${NAME}"
 
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
 start(){
     # create logfile and set ownership    
     touch $LOGFILE && chown $DAEMON_USER $LOGFILE
@@ -27,7 +30,7 @@ start(){
     mkdir -p $APP_DATADIR && chown $DAEMON_USER $APP_DATADIR
     
     echo -n "Starting $NAME: "
-    daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1 &
+    daemon --user $DAEMON_USER $DAEMON $DAEMON_ARGS $DAEMON_OPTS > $LOGFILE 2>&1 &
     RETVAL=$?
     test $RETVAL = 0 && success || failure    
     echo

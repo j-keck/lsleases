@@ -266,6 +266,11 @@ sub build_redhat{
     system("install -m 0755 redhat/lsleases.init $package_root/etc/init.d/lsleases") && die "init script error";
 
     #
+    say "- copy defaults script";
+    make_path("$package_root/etc/default");
+    system("install -m 0755 redhat/lsleases.default $package_root/etc/default/lsleases") && die "defaults script error";
+
+    #
     say "- call rpmbuild";
     system("rpmbuild -bb --buildroot $package_root --target $arch redhat/lsleases.spec") && die "packaging error";
 }
