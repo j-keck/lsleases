@@ -123,6 +123,7 @@ Section "install"
   createShortCut  "$SMPROGRAMS\${APPNAME}\list leases.lnk" "$INSTDIR\list-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\clear leases.lnk" "$INSTDIR\clear-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe"
+  createShortCut  "$SMPROGRAMS\${APPNAME}\manual.lnk" "$INSTDIR\manual.html"
 
   ${If} $autostartCheckboxState == ${BST_CHECKED}
     # register service per nssm wrapper
@@ -164,6 +165,7 @@ Section "uninstall"
   delete "$SMPROGRAMS\${APPNAME}\uninstall.lnk"
   delete "$SMPROGRAMS\${APPNAME}\start server.lnk"
   delete "$SMPROGRAMS\${APPNAME}\stop server.lnk"
+  delete "$SMPROGRAMS\${APPNAME}\manual.lnk"
 
   rmDir  "$SMPROGRAMS\${APPNAME}"
 
