@@ -17,6 +17,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
 
   **Linux**
+  
   4. create the runtime application data dir (for unix domain socket, persistent leases)
 
      `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WITH STARTS THE SERVER> /var/lib/lsleases
@@ -26,6 +27,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
      `sudo setcap 'cap_net_raw,cap_net_bind_service+ep' $GOPATH/bin/lsleases`
   
   **FreeBSD**
+  
   4. create the runtime application data dir (for unix domain socket, persistent leases)
 
      `mkdir -p /var/lib/lsleases && chown <USER WITH STARTS THE SERVER> /var/lib/lsleases`
@@ -80,7 +82,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   
 - server logs location
     - init / SysVinit based: `/var/log/lsleases.log`
-    - systemd based: `journalctl -u lsleases` 
+    - systemd based: `journalctl -u lsleases` and `/var/log/lsleases.log`
 
   
 - if you get '... listen udp :67: bind: address already in use' error at server startup - check which program already listen on port 67
