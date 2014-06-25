@@ -127,8 +127,10 @@ func server() {
 }
 
 func shutdown() {
-	log.Println("save leases")
-	logOnError(saveLeases(), "unable to save leases")
+	if *keepLeasesOverRestartFlag {
+		log.Println("save leases")
+		logOnError(saveLeases(), "unable to save leases")
+	}
 
 	log.Println("shutdown")
 	closeListener()
