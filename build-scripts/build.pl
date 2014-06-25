@@ -289,7 +289,7 @@ sub build_windows_zip{
 
     #
     say "- generate help";
-    system(qq{pandoc -s -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate doc .html error";
+    system(qq{pandoc -s -S --toc -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate doc .html error";
     system(qq{pandoc -s MANUAL.md -o "$package_root/lsleases/manual.txt"}) && die "generate doc .txt error error";
 
 
@@ -321,7 +321,7 @@ sub build_windows_exe{
 
     #
     say "- generate doc";
-    system(qq{pandoc -s -t html MANUAL.md -o "$package_root/manual.html"}) && die "generate doc .html error";
+    system(qq{pandoc -s -S --toc -t html MANUAL.md -o "$package_root/manual.html"}) && die "generate doc .html error";
     system(qq{pandoc -s MANUAL.md -o "$package_root/manual.txt"}) && die "generate doc .txt error error";
 
     #
