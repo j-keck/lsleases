@@ -102,6 +102,23 @@ remove lease if threshold reached
 save leases on shutdown / load on startup
 
 
+# CONFIGURATION
+
+To configure the server, set the corresponding option flags under:
+
+### FreeBSD
+  in the file `/etc/rc.conf`:
+
+    `lsleases_flags=""`
+
+### Linux
+  in the file `/etc/default/lsleases`:
+
+    `DAEMON_OPTS=""`
+
+### Windows
+  in the file `<INSTALL PATH>\start-server.bat`
+  
 
 # EXAMPLES
 
