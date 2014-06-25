@@ -128,7 +128,7 @@ func server() {
 
 func shutdown() {
 	log.Println("save leases")
-	logOnError(saveLeases(leases), "unable to save leases")
+	logOnError(saveLeases(), "unable to save leases")
 
 	log.Println("shutdown")
 	closeListener()
@@ -146,7 +146,7 @@ func clearExpiredLeases() {
 }
 func clearOfflineHosts() {
 	verboseLog.Println("arping hosts")
-	pingHosts(&leases)
+	pingHosts()
 
 	leases.Foreach(func(l *DHCPLease) {
 		if l.MissedPings > *missedPingsThresholdFlag {
@@ -156,7 +156,7 @@ func clearOfflineHosts() {
 	})
 }
 
-func pingHosts(leases *DHCPLeases) {
+func pingHosts() {
 	leases.Foreach(func(l *DHCPLease) {
 		if _, _, err := arping.Ping(net.ParseIP(l.IP)); err == arping.ErrTimeout {
 			l.MissedPings++
@@ -196,7 +196,7 @@ func hasRawSocketPermission() (bool, error) {
 	return false, err
 }
 
-func saveLeases(leases DHCPLeases) error {
+func saveLeases() error {
 	j, err := json.Marshal(leases)
 	if err != nil {
 		return err
