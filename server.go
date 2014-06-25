@@ -13,6 +13,8 @@ import (
 	"time"
 )
 
+var leases DHCPLeases
+
 func server() {
 	log.Println("startup -  version: ", VERSION)
 
@@ -22,19 +24,27 @@ func server() {
 		verboseLog = log.New(ioutil.Discard, "", 0)
 	}
 
+	//
+	// init listeners
+	//
 	dhcpLeaseChan := make(chan *DHCPLease)
 	go dhcpListener(dhcpLeaseChan)
 
 	clientChan := make(chan []byte)
 	go clientListener(clientChan)
 
+	//
+	// init cleanup old leases routine
+	//
 	var clearExpiredLeasesTickerChan <-chan time.Time
-	var clearOfflineHosts <-chan time.Time
+	var clearOfflineHostsTickerChan <-chan time.Time
 
 	if !*expireBasedFlag {
 		log.Printf("enable active check - arping every: %s\n", *cleanupLeaseTimerFlag)
 		if hasPermission, err := hasRawSocketPermission(); hasPermission {
-			clearOfflineHosts = time.NewTicker(cleanupLeaseTimer).C
+			clearOfflineHostsTickerChan = time.NewTicker(cleanupLeaseTimer).C
+			// clear one time on startup
+			clearOfflineHosts()
 		} else {
 			log.Printf("enable active check failed: '%s' -  fallback to passive mode\n", err)
 			*expireBasedFlag = true
@@ -48,30 +58,40 @@ func server() {
 		}
 		log.Printf("enable expired based - check timer: %s, expire duation: %s\n", timer, leaseExpiredDuration)
 		clearExpiredLeasesTickerChan = time.NewTicker(timer).C
+		// clear on time on startup
+		clearExpiredLeases()
 	}
 
-	var leases DHCPLeases
+	//
+	// if persistent leases are enable, load saved leases
+	//
 	if *keepLeasesOverRestartFlag {
 		var err error
 		leases, err = loadLeases()
 		logOnError(err, "unable to load leases - start with emtpy leases")
 	}
 
-	// CTRL-C - catcher
+	//
+	// init CTRL-C - catcher
+	//
 	go func() {
 		sigchan := make(chan os.Signal, 1)
 		signal.Notify(sigchan, os.Interrupt)
 		// block
 		<-sigchan
-		shutdown(leases)
+		shutdown()
 	}()
 
+	//
+	// main loop
+	//
 	for {
 		select {
 		case cmd := <-clientChan:
 			switch string(cmd) {
 			case "shutdown":
-				shutdown(leases)
+				shutdown()
+
 			case "clearLeases":
 				log.Println("clear leases")
 				leases.Clear()
@@ -98,36 +118,42 @@ func server() {
 			leases.UpdateOrAdd(l)
 
 		case <-clearExpiredLeasesTickerChan:
-			verboseLog.Println("check expired leases")
-			leases.Foreach(func(l *DHCPLease) {
-				if time.Now().After(l.Expire) {
-					log.Printf("expired: '%s'\n", l.String())
-					leases.Delete(l)
-				}
-			})
+			clearExpiredLeases()
 
-		case <-clearOfflineHosts:
-			verboseLog.Println("arping hosts")
-			pingHosts(&leases)
-
-			leases.Foreach(func(l *DHCPLease) {
-				if l.MissedPings > *missedPingsThresholdFlag {
-					log.Printf("remove lease: '%s'\n", l.String())
-					leases.Delete(l)
-				}
-			})
-
+		case <-clearOfflineHostsTickerChan:
+			clearOfflineHosts()
 		}
 	}
 }
 
-func shutdown(leases DHCPLeases) {
+func shutdown() {
 	log.Println("save leases")
 	logOnError(saveLeases(leases), "unable to save leases")
 
 	log.Println("shutdown")
 	closeListener()
 	os.Exit(0)
+}
+
+func clearExpiredLeases() {
+	verboseLog.Println("check expired leases")
+	leases.Foreach(func(l *DHCPLease) {
+		if time.Now().After(l.Expire) {
+			log.Printf("expired: '%s'\n", l.String())
+			leases.Delete(l)
+		}
+	})
+}
+func clearOfflineHosts() {
+	verboseLog.Println("arping hosts")
+	pingHosts(&leases)
+
+	leases.Foreach(func(l *DHCPLease) {
+		if l.MissedPings > *missedPingsThresholdFlag {
+			log.Printf("remove lease: '%s'\n", l.String())
+			leases.Delete(l)
+		}
+	})
 }
 
 func pingHosts(leases *DHCPLeases) {
