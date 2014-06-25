@@ -40,7 +40,7 @@ use LWP::Simple;
 
 
 # args
-my $package_dir_flag; # local directory with packages (--package-dir-flag ../../build-output/<ARCH>)
+my $package_dir_flag; # local directory with packages (--package-dir-flag <BASE_DIR>/build-output/)
 my $jenkins_url_flag; # jenkins url (--jenkins-url http://<IP>:<PORT>/job/<JOB>)
 GetOptions("package-dir:s" => \$package_dir_flag,
            "jenkins-url:s" => \$jenkins_url_flag);

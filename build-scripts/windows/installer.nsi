@@ -5,7 +5,7 @@
 
 
 # installer location
-Outfile "$%BUILD_OUTPUT%\$%BUILD_ARCH%\lsleases_installer_$%VERSION%_$%BUILD_ARCH%.exe"
+Outfile "$%BUILD_OUTPUT%\lsleases_installer_$%VERSION%_$%BUILD_ARCH%.exe"
 
 InstallDir $PROGRAMFILES\${APPNAME}
 

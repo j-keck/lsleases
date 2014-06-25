@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# script builds packages under 'build-output/<ARCH>'
+# script builds packages under 'build-output'
 #
 #
 # to build platform depend packages, it uses platform specific tools:
@@ -101,8 +101,7 @@ say "# prepare";
 
 #
 say "- create package output dir";
-make_path("$build_output/i386"); 
-make_path("$build_output/amd64");
+make_path("$build_output"); 
 
 
 #
@@ -207,11 +206,11 @@ sub build_freebsd{
 
     #
     say "- build package";
-    system("pkg create -r $package_root -m freebsd/manifest -o $build_output/$arch") && die "packaging error";
+    system("pkg create -r $package_root -m freebsd/manifest -o $build_output") && die "packaging error";
 
     #
     say "- add osname / arch to package";
-    system("(cd $build_output/$arch && mv -v lsleases-${version}.txz lsleases-${version}_freebsd_${arch}.txz)") && die "rename error";
+    system("(cd $build_output && mv -v lsleases-${version}.txz lsleases-${version}_freebsd_${arch}.txz)") && die "rename error";
 }
 
 
@@ -273,6 +272,10 @@ sub build_redhat{
     #
     say "- call rpmbuild";
     system("rpmbuild -bb --buildroot $package_root --target $arch redhat/lsleases.spec") && die "packaging error";
+
+    #
+    say "- move package";
+    system("mv $build_output/$arch/* $build_output && rmdir $build_output/$arch") && die "move package error";
 }
 
 sub build_windows_zip{
@@ -301,7 +304,7 @@ sub build_windows_zip{
     #
     say "- create zip";
     chdir($package_root);
-    system(qq{zip -r "${build_output}/${arch}/lsleases_${version}_windows_${arch}.zip" lsleases}) && die "create zip error";
+    system(qq{zip -r "${build_output}/lsleases_${version}_windows_${arch}.zip" lsleases}) && die "create zip error";
     chdir($build_dir);
 }
 
