@@ -2,14 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/j-keck/arping"
 	"io/ioutil"
 	"log"
 	"net"
 	"os"
 	"os/signal"
-	"runtime"
 	"time"
 )
 
@@ -23,6 +21,11 @@ func server() {
 	} else {
 		verboseLog = log.New(ioutil.Discard, "", 0)
 	}
+
+	//
+	// create application data directory if not existent
+	//
+	exitOnError(createAppData(), "unable to create application data directory", appDataPath)
 
 	//
 	// init listeners
@@ -67,7 +70,7 @@ func server() {
 	//
 	if *keepLeasesOverRestartFlag {
 		var err error
-		leases, err = loadLeases()
+		leases, err = LoadLeases()
 		logOnError(err, "unable to load leases - start with emtpy leases")
 	}
 
@@ -129,7 +132,7 @@ func server() {
 func shutdown() {
 	if *keepLeasesOverRestartFlag {
 		log.Println("save leases")
-		logOnError(saveLeases(), "unable to save leases")
+		logOnError(leases.SaveLeases(), "unable to save leases")
 	}
 
 	log.Println("shutdown")
@@ -156,6 +159,13 @@ func clearOfflineHosts() {
 			leases.Delete(l)
 		}
 	})
+}
+
+func createAppData() error {
+	if _, err := os.Stat(appDataPath); os.IsNotExist(err) {
+		return os.MkdirAll(appDataPath, 0644)
+	}
+	return nil
 }
 
 func pingHosts() {
@@ -196,47 +206,4 @@ func hasRawSocketPermission() (bool, error) {
 	}
 
 	return false, err
-}
-
-func saveLeases() error {
-	j, err := json.Marshal(leases)
-	if err != nil {
-		return err
-	}
-
-	path := leasesPersistenceFilePath()
-
-	verboseLog.Printf("save leases under %s\n", path)
-	return ioutil.WriteFile(path, []byte(j), 0644)
-}
-
-func loadLeases() (DHCPLeases, error) {
-	var leases DHCPLeases
-
-	path := leasesPersistenceFilePath()
-
-	verboseLog.Printf("load saved leases from %s\n", path)
-
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return leases, fmt.Errorf("no persistence file found under %s\n", path)
-	}
-
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return leases, err
-	}
-
-	err = json.Unmarshal(b, &leases)
-	return leases, err
-}
-
-func leasesPersistenceFilePath() string {
-
-	var basePath string
-	if runtime.GOOS == "windows" {
-		basePath = os.Getenv("APPDATA")
-	} else {
-		basePath = "/var/lib/lsleases"
-	}
-	return fmt.Sprintf("%s/lsleases.json", basePath)
 }

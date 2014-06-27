@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"time"
 )
 
@@ -73,4 +76,36 @@ func (ls *DHCPLeases) IndexOfMac(mac string) (int, bool) {
 	return ls.IndexOf(func(l *DHCPLease) bool {
 		return l.Mac == mac
 	})
+}
+
+func (ls *DHCPLeases) SaveLeases() error {
+	j, err := json.Marshal(ls)
+	if err != nil {
+		return err
+	}
+
+	path := appDataPath + "/lsleases.json"
+
+	verboseLog.Printf("save leases under %s\n", path)
+	return ioutil.WriteFile(path, []byte(j), 0644)
+}
+
+func LoadLeases() (DHCPLeases, error) {
+	var leases DHCPLeases
+
+	path := appDataPath + "/lsleases.json"
+
+	verboseLog.Printf("load saved leases from %s\n", path)
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return leases, fmt.Errorf("no persistence file found under %s\n", path)
+	}
+
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return leases, err
+	}
+
+	err = json.Unmarshal(b, &leases)
+	return leases, err
 }

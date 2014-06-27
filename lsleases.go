@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"time"
 )
 
@@ -43,6 +44,8 @@ var (
 	cleanupLeaseTimer    time.Duration
 )
 
+var appDataPath = osDependAppDataPath()
+
 func main() {
 	flag.Usage = func() {
 		fmt.Println("Common:")
@@ -77,9 +80,23 @@ func main() {
 	cleanupLeaseTimer, err = parseDuration(*cleanupLeaseTimerFlag)
 	exitOnError(err)
 
+	//
+	// action
+	//
 	if *serverModeFlag {
 		server()
 	} else {
 		client()
+	}
+}
+
+func osDependAppDataPath() string {
+	//
+	// set os depend application data path
+	//
+	if runtime.GOOS == "windows" {
+		return os.Getenv("APPDATA") + "/lsleases"
+	} else {
+		return "/var/lib/lsleases"
 	}
 }
