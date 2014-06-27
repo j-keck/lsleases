@@ -297,8 +297,22 @@ sub build_windows_zip{
 
 
     #
-    say "- copy helper scripts";
-    system(qq{cp -va windows/*.bat "$package_root/lsleases"}) && die "copy helper scripts error";
+    say "- convert line endings and copy helper scripts";
+    for my $bat_file(<windows/*.bat>){
+      # read content
+      open SRC_FH, "<", $bat_file;
+      my @content = <SRC_FH>;
+      close SRC_FH;
+
+      # convert \r to \r\n
+      @content = map{$_ =~ s/\R/\015\012/; $_} @content;
+
+      # write content
+      my $file_name = pop([split(q^/^, $bat_file)]);
+      open DST_FH, ">", "${package_root}/${file_name}";
+      print DST_FH $_ for @content;
+      close DST_FH;
+    }
 
 
     #
@@ -335,9 +349,25 @@ sub build_windows_exe{
     say "- copy nsis script";
     system(qq{cp -va windows/installer.nsi "$package_root"}) && die "copy nsis script error";
 
+
     #
-    say "- copy helper scripts";
-    system(qq{cp -va windows/*.bat "$package_root"}) && die "copy helper scripts error";
+    say "- convert line endings and copy helper scripts";
+    for my $bat_file(<windows/*.bat>){
+      # read content
+      open SRC_FH, "<", $bat_file;
+      my @content = <SRC_FH>;
+      close SRC_FH;
+
+      # convert \r to \r\n
+      @content = map{$_ =~ s/\R/\015\012/; $_} @content;
+
+
+      # write content
+      my $file_name = pop([split(q^/^, $bat_file)]);
+      open DST_FH, ">", "${package_root}/${file_name}";
+      print DST_FH $_ for @content;
+      close DST_FH;
+    }
 
 
     #
