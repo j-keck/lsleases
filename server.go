@@ -1,11 +1,10 @@
+// dhcp leases sniffer
 package main
 
 import (
 	"encoding/json"
-	"github.com/j-keck/arping"
 	"io/ioutil"
 	"log"
-	"net"
 	"os"
 	"os/signal"
 	"time"
@@ -43,10 +42,10 @@ func server() {
 	var clearOfflineHostsTickerChan <-chan time.Time
 
 	if !*expireBasedFlag {
-		log.Printf("enable active check - arping every: %s\n", *cleanupLeaseTimerFlag)
-		if hasPermission, err := hasRawSocketPermission(); hasPermission {
+		log.Printf("enable active check - ping every: %s\n", *cleanupLeaseTimerFlag)
+		if hasPermission, err := hasPermissionForAliveCheck(); hasPermission {
 			clearOfflineHostsTickerChan = time.NewTicker(cleanupLeaseTimer).C
-			// clear one time on startup
+			// clear on startup
 			clearOfflineHosts()
 		} else {
 			log.Printf("enable active check failed: '%s' -  fallback to passive mode\n", err)
@@ -61,7 +60,7 @@ func server() {
 		}
 		log.Printf("enable expired based - check timer: %s, expire duation: %s\n", timer, leaseExpiredDuration)
 		clearExpiredLeasesTickerChan = time.NewTicker(timer).C
-		// clear on time on startup
+		// clear on startup
 		clearExpiredLeases()
 	}
 
@@ -170,40 +169,15 @@ func createAppData() error {
 
 func pingHosts() {
 	leases.Foreach(func(l *DHCPLease) {
-		if _, _, err := arping.Ping(net.ParseIP(l.IP)); err == arping.ErrTimeout {
-			l.MissedPings++
-			verboseLog.Printf("%s is offline\n", l.String())
-		} else if err != nil {
+		if hostIsAlive, err := isAlive(l.IP); err != nil {
 			log.Printf("unable to execute ping: '%s'\n", err.Error())
-		} else {
+			// noop
+		} else if hostIsAlive {
 			verboseLog.Printf("%s is online", l.String())
 			l.MissedPings = 0
+		} else {
+			l.MissedPings++
+			verboseLog.Printf("%s is offline\n", l.String())
 		}
 	})
-}
-func hasRawSocketPermission() (bool, error) {
-	var localIP net.IP
-
-	// find any local ip
-	addrs, err := net.InterfaceAddrs()
-	panicOnError(err)
-
-	for _, addr := range addrs {
-		if ipNet, ok := addr.(*net.IPNet); ok {
-			if ipNet.IP.IsLoopback() {
-				continue
-			}
-
-			localIP = ipNet.IP
-			break
-		}
-	}
-
-	// arping any local ip results always in timeout
-	verboseLog.Printf("arping '%s' to check permission\n", localIP.String())
-	if _, _, err = arping.Ping(localIP); err == arping.ErrTimeout {
-		return true, nil
-	}
-
-	return false, err
 }

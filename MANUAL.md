@@ -16,7 +16,7 @@
 
 ## SERVER
   
-**lsleases** -s [-k]  [-m missed arpings threshold]  [-t ping interval]\
+**lsleases** -s [-k]  [-m missed pings threshold]  [-t ping interval]\
 **lsleases** -s -p [-k]  [-e expire duration]  [-t check expired leases interval]
   
   
@@ -41,11 +41,13 @@ in server mode, **lsleases** captures broadcast 'DHCP Request' datagrams.
 
 Because 'DHCP Release' datagrams are no broadcasts, **lsleases** can not know about invalidated leases. To workaround this problem, there are two methods implemented:
 
-'active mode': check per arping if host online (default) 
+'active mode': check per ping (icmp on windows, arping others) if host online (default)
+
+
 
 'passive mode': clear old leases expire based (-p flag)
 
-The expiration check interval (arping / verify expired leases) is with the flag '-t' configurable.
+The expiration check interval (ping / verify expired leases) is with the flag '-t' configurable.
 
 
   
@@ -89,12 +91,12 @@ The expiration check interval (arping / verify expired leases) is with the flag 
 -t
 :   interval for checking of leases validity (valid units: 'd', 'h', 'm', 's') 
 
-in active mode: arping interval
+in active mode: ping interval
 
 in passive mode: check expired leases interval
 
 -m
-:   in active mode: missed arpings threshold \
+:   in active mode: missed pings threshold \
 remove lease if threshold reached
 
 -k
@@ -131,7 +133,7 @@ list captured leases
     192.168.1.178    00:22:fb:xx:xx:xx  laptop
 
   
-start server in active mode - arping interval every 10 minutes, remove offline hosts after 5 missed pings
+start server in active mode - ping interval every 10 minutes, remove offline hosts after 5 missed pings
 
     j@main:~> lsleases -s -t 10m -m 5
 
