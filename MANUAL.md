@@ -22,7 +22,7 @@
   
 # DESCRIPTION
 
-**lsleases** captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic addresses.
+**lsleases** captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
 
   
 
