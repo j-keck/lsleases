@@ -111,7 +111,6 @@ Section "install"
 
   File "lsleases.exe"
   File "manual.html"
-  File "manual.txt"
   File "nssm.exe"
   File "list-leases.bat"
   File "clear-leases.bat"

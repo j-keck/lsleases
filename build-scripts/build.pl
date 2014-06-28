@@ -311,8 +311,7 @@ sub build_windows_zip{
 
     #
     say "- generate help";
-    system(qq{pandoc -s -S --toc -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate doc .html error";
-    system(qq{pandoc -s MANUAL.md -o "$package_root/lsleases/manual.txt"}) && die "generate doc .txt error error";
+    system(qq{pandoc -s -S --toc --toc-depth=1 -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate help error";
 
     #
     say "- copy helper scripts";
@@ -346,10 +345,11 @@ sub build_windows_exe{
     say "- build code";
     system(qq{go build -v -o "$package_root/lsleases.exe"}) && die "build error";
 
+
     #
-    say "- generate doc";
-    system(qq{pandoc -s -S --toc -t html MANUAL.md -o "$package_root/manual.html"}) && die "generate doc .html error";
-    system(qq{pandoc -s MANUAL.md -o "$package_root/manual.txt"}) && die "generate doc .txt error error";
+    say "- generate help";
+    system(qq{pandoc -s -S --toc --toc-depth=1 -t html MANUAL.md -o "$package_root/manual.html"}) && die "generate help error";
+    
 
     #
     say "- copy LICENSE";
