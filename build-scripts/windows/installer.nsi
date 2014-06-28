@@ -115,9 +115,7 @@ Section "install"
   File "nssm.exe"
   File "list-leases.bat"
   File "clear-leases.bat"
-  File "start-server.bat"
-  File "stop-server.bat"
-
+  
   # start menu
   createDirectory "$SMPROGRAMS\${APPNAME}"
   createShortCut  "$SMPROGRAMS\${APPNAME}\list leases.lnk" "$INSTDIR\list-leases.bat"
@@ -127,10 +125,20 @@ Section "install"
 
   ${If} $autostartCheckboxState == ${BST_CHECKED}
     # register service per nssm wrapper
-    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\start-server.bat"'
+    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleases.exe -s"'
     Sleep 1000
     Exec '"$INSTDIR\nssm.exe" start ${APPNAME}'
-  ${Else}  
+
+    # service controller scripts
+    File "start-service.bat"
+    File "stop-service.bat"
+    File "restart-service.bat"
+
+  ${Else}
+    # server start / stop scripts
+    File "start-server.bat"
+    File "stop-server.bat"
+  
     # install start / stop server link in start menu
     createShortCut  "$SMPROGRAMS\${APPNAME}\start server.lnk" "$INSTDIR\start-server.bat"
     createShortCut  "$SMPROGRAMS\${APPNAME}\stop server.lnk" "$INSTDIR\stop-server.bat"

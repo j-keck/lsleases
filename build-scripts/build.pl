@@ -278,6 +278,25 @@ sub build_redhat{
     system("mv $build_output/$arch/* $build_output && rmdir $build_output/$arch") && die "move package error";
 }
 
+sub convert_bat_files{
+    my $dir = shift;
+
+    for my $bat_file(<$dir/*.bat>){
+      # read content
+      open SRC_FH, "<", $bat_file;
+      my @content = <SRC_FH>;
+      close SRC_FH;
+
+      # convert \r to \r\n
+      @content = map{$_ =~ s/\R/\015\012/; $_} @content;
+
+      # write content
+      open DST_FH, ">", $bat_file;
+      print DST_FH $_ for @content;
+      close DST_FH;
+    }
+
+}
 sub build_windows_zip{
     my $arch = shift;
 
@@ -295,26 +314,17 @@ sub build_windows_zip{
     system(qq{pandoc -s -S --toc -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate doc .html error";
     system(qq{pandoc -s MANUAL.md -o "$package_root/lsleases/manual.txt"}) && die "generate doc .txt error error";
 
-
     #
-    say "- convert line endings and copy helper scripts";
-    for my $bat_file(<windows/*.bat>){
-      # read content
-      open SRC_FH, "<", $bat_file;
-      my @content = <SRC_FH>;
-      close SRC_FH;
-
-      # convert \r to \r\n
-      @content = map{$_ =~ s/\R/\015\012/; $_} @content;
-
-      # write content
-      my $file_name = pop([split(q^/^, $bat_file)]);
-      open DST_FH, ">", "${package_root}/${file_name}";
-      print DST_FH $_ for @content;
-      close DST_FH;
-    }
-
-
+    say "- copy helper scripts";
+    system(qq{cp -v windows/list-leases.bat "${package_root}/lsleases"}) && die "cp list-leases.bat error";
+    system(qq{cp -v windows/clear-leases.bat "${package_root}/lsleases"}) && die "cp clear-leases.bat error";
+    system(qq{cp -v windows/start-server.bat "${package_root}/lsleases"}) && die "cp start-server.bat error";
+    system(qq{cp -v windows/stop-server.bat "${package_root}/lsleases"}) && die "cp stop-server.bat error";
+   
+    #    
+    say "- convert line endings from helper scripts";
+    convert_bat_files("${package_root}/lsleases");
+    
     #
     say "- create zip";
     chdir($package_root);
@@ -351,24 +361,19 @@ sub build_windows_exe{
 
 
     #
-    say "- convert line endings and copy helper scripts";
-    for my $bat_file(<windows/*.bat>){
-      # read content
-      open SRC_FH, "<", $bat_file;
-      my @content = <SRC_FH>;
-      close SRC_FH;
-
-      # convert \r to \r\n
-      @content = map{$_ =~ s/\R/\015\012/; $_} @content;
-
-
-      # write content
-      my $file_name = pop([split(q^/^, $bat_file)]);
-      open DST_FH, ">", "${package_root}/${file_name}";
-      print DST_FH $_ for @content;
-      close DST_FH;
-    }
-
+    say "- copy helper scripts";
+    system(qq{cp -v windows/list-leases.bat "${package_root}"}) && die "cp list-leases.bat error";
+    system(qq{cp -v windows/clear-leases.bat "${package_root}"}) && die "cp clear-leases.bat error";
+    system(qq{cp -v windows/start-server.bat "${package_root}"}) && die "cp start-server.bat error";
+    system(qq{cp -v windows/stop-server.bat "${package_root}"}) && die "cp stop-server.bat error";
+    system(qq{cp -v windows/start-service.bat "${package_root}"}) && die "cp start-service.bat error";
+    system(qq{cp -v windows/stop-service.bat "${package_root}"}) && die "cp stop-service.bat error";
+    system(qq{cp -v windows/restart-service.bat "${package_root}"}) && die "cp restart-service.bat error";        
+   
+    #    
+    say "- convert line endings from helper scripts";
+    convert_bat_files("${package_root}/lsleases");
+    
 
     #
     say "- copy nssm.exe (service wrapper)";
