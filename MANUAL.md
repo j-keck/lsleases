@@ -106,7 +106,7 @@ save leases on shutdown / load on startup
 
 # CONFIGURATION
 
-To configure the server, set the corresponding option flags under:
+To configure the server, set the corresponding option flags:
 
 ### FreeBSD
   in the file `/etc/rc.conf`:
@@ -119,8 +119,17 @@ To configure the server, set the corresponding option flags under:
     `DAEMON_OPTS=""`
 
 ### Windows
-  in the file `<INSTALL PATH>\start-server.bat`
+  ***!keep in mind to let the parameter '-s' untouched!***
+
+  **standalone**
   
+    in the file `<INSTALL_PATH>\start-server.bat`
+
+  **installed as service**
+  
+    in the Registry under: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lsleases\Parameters\AppParameters`
+
+    restart the service per `<INSTALL_PATH>\restart-service.bat`
 
 # EXAMPLES
 
