@@ -124,7 +124,7 @@ Section "install"
 
   ${If} $autostartCheckboxState == ${BST_CHECKED}
     # register service per nssm wrapper
-    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleases.exe -s"'
+    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleases.exe" -s'
     Sleep 1000
     Exec '"$INSTDIR\nssm.exe" start ${APPNAME}'
 
@@ -159,6 +159,7 @@ functionEnd
 Section "uninstall"
   # stop server instance
   ExecWait "$INSTDIR\stop-server.bat"
+  ExecWait "$INSTDIR\stop-service.bat"
   Sleep 500
 
   # remove service
