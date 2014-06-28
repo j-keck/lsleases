@@ -95,7 +95,7 @@ func osDependAppDataPath() string {
 	// set os depend application data path
 	//
 	if runtime.GOOS == "windows" {
-		return os.Getenv("APPDATA") + "/lsleases"
+		return os.Getenv("USERPROFILE") + "/lsleases"
 	} else {
 		return "/var/lib/lsleases"
 	}
