@@ -48,8 +48,12 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
   
 ### Binary packages
-  1. download from http://github.com/j-keck/lsleases/releases/latest
+  
+  * download from http://github.com/j-keck/lsleases/releases/latest
 
+  * or get it from [bintray](https://bintray.com/j-keck)
+
+  
 - *deb, rpm packages and windows installer registers and starts an server instance on installation*
 - *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
 
