@@ -27,7 +27,7 @@ var (
 	expireBasedFlag = flag.Bool("p", false, "")
 	// flag.Duration not useful because there is not unit for days
 	leaseExpiredDurationFlag  = flag.String("e", "7d", "")
-	cleanupLeaseTimerFlag     = flag.String("t", "30m", "")
+	cleanupLeaseTimerFlag     = flag.String("t", "15m", "")
 	missedPingsThresholdFlag  = flag.Int("m", 3, "")
 	keepLeasesOverRestartFlag = flag.Bool("k", false, "")
 
