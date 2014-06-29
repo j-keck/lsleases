@@ -152,13 +152,8 @@ func dhcpListener(dhcpLeaseChan chan<- *DHCPLease) {
 					hostName = "<UNKNOW>"
 				}
 
-				var expire time.Time
-				if *expireBasedFlag {
-					expire = time.Now().Add(leaseExpiredDuration)
-				}
 				lease := &DHCPLease{
 					Created: time.Now(),
-					Expire:  expire,
 					IP:      reqIPAddr,
 					Mac:     datagram.Mac(),
 					Name:    hostName}

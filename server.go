@@ -41,6 +41,9 @@ func server() {
 	var clearExpiredLeasesTickerChan <-chan time.Time
 	var clearOfflineHostsTickerChan <-chan time.Time
 
+	cleanupLeaseTimer, err := parseDuration(*cleanupLeaseTimerFlag)
+	exitOnError(err)
+
 	if !*expireBasedFlag {
 		log.Printf("enable active check - ping every: %s\n", *cleanupLeaseTimerFlag)
 		if hasPermission, err := hasPermissionForAliveCheck(); hasPermission {
@@ -53,7 +56,11 @@ func server() {
 		}
 	}
 
+	var leaseExpiredDuration time.Duration
 	if *expireBasedFlag {
+		leaseExpiredDuration, err = parseDuration(*leaseExpiredDurationFlag)
+		exitOnError(err)
+
 		timer := cleanupLeaseTimer
 		if leaseExpiredDuration < timer {
 			timer = leaseExpiredDuration / 2
@@ -116,6 +123,11 @@ func server() {
 			}
 
 		case l := <-dhcpLeaseChan:
+			// update expire entry
+			if *expireBasedFlag {
+				l.Expire = time.Now().Add(leaseExpiredDuration)
+			}
+
 			log.Printf("new DHCP Lease: '%s'\n", l.String())
 			leases.UpdateOrAdd(l)
 

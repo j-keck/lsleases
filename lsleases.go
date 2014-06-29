@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"runtime"
-	"time"
 )
 
 const VERSION = "1.3.dev"
@@ -39,9 +38,7 @@ var (
 )
 
 var (
-	verboseLog           *log.Logger
-	leaseExpiredDuration time.Duration
-	cleanupLeaseTimer    time.Duration
+	verboseLog *log.Logger
 )
 
 var appDataPath = osDependAppDataPath()
@@ -72,13 +69,6 @@ func main() {
 		flag.Usage()
 		os.Exit(0)
 	}
-
-	var err error
-	leaseExpiredDuration, err = parseDuration(*leaseExpiredDurationFlag)
-	exitOnError(err)
-
-	cleanupLeaseTimer, err = parseDuration(*cleanupLeaseTimerFlag)
-	exitOnError(err)
 
 	//
 	// action
