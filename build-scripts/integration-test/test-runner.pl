@@ -133,26 +133,9 @@ sub find_last_package_from_dir{
     my @packages = <$path/*>;
     my $matched_package_pattern =  sprintf(".*%s.%s\$", arch(), platform_depend_package_suffix());    
     my @platform_depend_packages = grep(/$matched_package_pattern/, @packages);
-    
-    my $extract_version = sub {
-        #
-        # extract version and format as:
-        #   aaaaaaaaaa.bbbbbbbbbbc
-        # where
-        #   aaaaaaaaaa: major version
-        #   bbbbbbbbbb: minor version
-        #   c         : 0 if dev version, else 1
-        #
-        my $file_name = shift;
-        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)(\.([a-z]+))?_.*/;
-        my ($major, $minor, $dev_suffix) = ($1, $2, $4);
-        my $has_not_dev_suffix = (defined $dev_suffix && $dev_suffix =~ m/dev/ ? 0 : 1);
-        return sprintf("%010d.%010d%1d", $major, $minor, $has_not_dev_suffix);
-    };
-    
-    my ($last_package) = sort { $extract_version->($a) < $extract_version->($b) } @platform_depend_packages;
+    die "no matching package found" unless $#platform_depend_packages;
 
-    die "no matching package found" if(! defined($last_package));
+    my ($last_package) = sort_packages_by_version(\@platform_depend_packages);
     return $last_package;
 }
 
@@ -172,21 +155,43 @@ sub find_package_from_jenkins{
 
     
     my $matched_package_pattern =  sprintf(".*%s.%s\$", arch(), platform_depend_package_suffix());
-    my ($matched_package) = grep(/$matched_package_pattern/, @artifact_path);
+    my @matched_packages = grep(/$matched_package_pattern/, @artifact_path);
+    die "no matching packages found" unless $#matched_packages;
 
-    die "no matching package found" if(! defined($matched_package));
+    my ($last_package) = sort_packages_by_version(\@matched_packages);
 
-    my @path_segments = split(q^/^, $matched_package);
-    my $file_name = $path_segments[-1];
+    my $file_name = pop([split(q^/^, $last_package)]);
 
     my $tmp_dir = tempdir(CLEANUP => 1);
     my $download_file_path = "$tmp_dir/$file_name";
     
     # download the file
-    say "download $matched_package to $download_file_path ...";
-    getstore($matched_package, $download_file_path) || die $!;
+    say "download $last_package to $download_file_path ...";
+    getstore($last_package, $download_file_path) || die $!;
     
     return $download_file_path;
+}
+
+sub sort_packages_by_version{
+    my @packages = @{$_[0]};
+
+    my $extract_version = sub {
+        #
+        # extract version and format as:
+        #   aaaaaaaaaa.bbbbbbbbbbc
+        # where
+        #   aaaaaaaaaa: major version
+        #   bbbbbbbbbb: minor version
+        #   c         : 0 if dev version, else 1
+        #
+        my $file_name = shift;
+        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)(\.([a-z]+))?_.*/;
+        my ($major, $minor, $dev_suffix) = ($1, $2, $4);
+        my $has_not_dev_suffix = (defined $dev_suffix && $dev_suffix =~ m/dev/ ? 0 : 1);
+        return sprintf("%010d.%010d%1d", $major, $minor, $has_not_dev_suffix);
+    };
+    
+    return sort { $extract_version->($a) < $extract_version->($b) } @packages;
 }
 
 #
