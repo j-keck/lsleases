@@ -81,9 +81,6 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 
   
-- active availability host check (per arping) under windows are not supported
-
-  
 - server logs location
     - init / SysVinit based: `/var/log/lsleases.log`
     - systemd based: `journalctl -u lsleases` and `/var/log/lsleases.log`
