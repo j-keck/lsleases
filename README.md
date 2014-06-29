@@ -71,7 +71,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
         192.168.1.178    00:22:fb:xx:xx:xx  laptop
 
 
-*for more info check the [MANUAL](MANUAL.md)*
+*for more info check the [MANUAL](https://github.com/j-keck/lsleases/blob/master/MANUAL.md)*
   
 ## Notes
 
