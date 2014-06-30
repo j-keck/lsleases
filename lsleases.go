@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-const VERSION = "1.3.dev"
+const VERSION = "1.3"
 
 var (
 	//
