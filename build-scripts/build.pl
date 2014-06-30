@@ -327,7 +327,7 @@ sub build_windows_zip{
     #
     say "- create zip";
     chdir($package_root);
-    system(qq{zip -r "${build_output}/lsleases_${version}_windows_${arch}.zip" lsleases}) && die "create zip error";
+    system(qq{zip -r "${build_output}/lsleases_${version}_win_standalone_${arch}.zip" lsleases}) && die "create zip error";
     chdir($build_dir);
 }
 
