@@ -1,6 +1,6 @@
 ## Changelog
   
-*only notable changes*  
+*only notable changes are listed*  
 
 ####1.3####
 - persist leases over restarts per '-k' flag (disable by default)
