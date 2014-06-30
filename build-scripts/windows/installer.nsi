@@ -12,7 +12,7 @@ InstallDir $PROGRAMFILES\${APPNAME}
 LicenseData LICENSE
 
 # installer title bar in installer / uninstaller
-Name ${APPNAME}
+Name "${APPNAME} Version: $%VERSION%"
 
 var customDialogPage
 var welcomeLabel
