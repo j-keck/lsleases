@@ -2,7 +2,7 @@ package main
 
 import (
 	// native named pipe in stdlib missing: http://code.google.com/p/go/issues/detail?id=3599
-	"github.com/natefinch/npipe"
+	"github.com/j-keck/npipe"
 	"net"
 	"time"
 )
