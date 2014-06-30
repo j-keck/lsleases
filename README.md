@@ -8,8 +8,37 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
 
 
+## Usage
+
+1. start an server instance if not installed from a package `j@main:~> nohup lsleases -s &`
+2. replug / startup any device with dynamic ip address
+3. display captured ip, mac and host names. 
+
+        j@main:~> lsleases
+        Ip               Mac                Name
+        192.168.1.189    10:bf:48:xx:xx:xx  android-f6c6dca2130b287
+        192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
+        192.168.1.178    00:22:fb:xx:xx:xx  laptop
+
+
+*for more info check the [MANUAL](https://github.com/j-keck/lsleases/blob/master/MANUAL.md)*
+  
+
 ## Installation
 
+### Binary packages
+  
+  * download from http://github.com/j-keck/lsleases/releases/latest
+
+  * or get it from [bintray](https://bintray.com/j-keck)
+
+<hr/>
+  
+- *linux packages and windows installer registers and starts an server instance on installation*
+- *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
+
+
+    
 ### From source
 
   1. install Go toolset from http://golang.org if not already
@@ -47,31 +76,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
 
   
-### Binary packages
   
-  * download from http://github.com/j-keck/lsleases/releases/latest
-
-  * or get it from [bintray](https://bintray.com/j-keck)
-
-  
-- *deb, rpm packages and windows installer registers and starts an server instance on installation*
-- *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
-
-  
-## Usage
-
-1. start an server instance if not installed from a package `j@main:~> nohup lsleases -s &`
-2. replug / startup any device with dynamic ip address
-3. display captured ip, mac and host names. 
-
-        j@main:~> lsleases
-        Ip               Mac                Name
-        192.168.1.189    10:bf:48:xx:xx:xx  android-f6c6dca2130b287
-        192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
-        192.168.1.178    00:22:fb:xx:xx:xx  laptop
-
-
-*for more info check the [MANUAL](https://github.com/j-keck/lsleases/blob/master/MANUAL.md)*
   
 ## Notes
 
