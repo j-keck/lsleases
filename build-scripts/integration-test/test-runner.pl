@@ -178,17 +178,18 @@ sub sort_packages_by_version{
     my $extract_version = sub {
         #
         # extract version and format as:
-        #   aaaaaaaaaa.bbbbbbbbbbc
+        #   aaaaaaaaaabbbbbbbbbbccccccccccd
         # where
         #   aaaaaaaaaa: major version
         #   bbbbbbbbbb: minor version
-        #   c         : 0 if dev version, else 1
+        #   cccccccccc: patch level
+        #   d         : 0 if dev version, else 1
         #
         my $file_name = shift;
-        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)(\.([a-z]+))?_.*/;
-        my ($major, $minor, $dev_suffix) = ($1, $2, $4);
+        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)\.(\d+)(\.([a-z]+))?_.*/;
+        my ($major, $minor, $patch, $dev_suffix) = ($1, $2, $3, $5);
         my $has_not_dev_suffix = (defined $dev_suffix && $dev_suffix =~ m/dev/ ? 0 : 1);
-        return sprintf("%010d.%010d%1d", $major, $minor, $has_not_dev_suffix);
+        return sprintf("%010d%010d%010d%1d", $major, $minor, $patch, $has_not_dev_suffix);
     };
     
     return sort { $extract_version->($a) < $extract_version->($b) } @packages;
