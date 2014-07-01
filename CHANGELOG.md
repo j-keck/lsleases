@@ -5,6 +5,10 @@
 ####1.3####
 - persist leases over restarts per '-k' flag (disable by default)
 - active alive check under windows (per icmp ping) (enabled by default)
+
+*1.3.1 (windows only)*
+
+  - fix pipe permission issue if running as windows service
  
 ####1.2####
 - windows installer
