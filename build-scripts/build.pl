@@ -187,8 +187,7 @@ sub build_freebsd{
     
 
     #
-    say "- build code";
-    system("go build -v -o $package_root/usr/local/bin/lsleases") && die "build error";
+    build_go("$package_root/usr/local/bin/lsleases");
 
     #
     say "- generate man page";
@@ -228,8 +227,7 @@ sub build_debian{
 
     
     #
-    say ". build code";
-    system("go build -v -o $package_root/usr/bin/lsleases") && die "build error";
+    build_go("$package_root/usr/bin/lsleases");
 
     
     #
@@ -251,8 +249,7 @@ sub build_redhat{
     dircopy("$build_dir/build-scripts/redhat", "redhat");
 
     #
-    say "- build code";
-    system("go build -v -o $package_root/usr/bin/lsleases") && die "build error";
+    build_go("$package_root/usr/bin/lsleases");
 
     #
     say "- generate man page";
@@ -306,8 +303,7 @@ sub build_windows_zip{
     dircopy("$build_dir/build-scripts/windows", "windows");
 
     #
-    say "- build code";
-    system(qq{go build -v -o "$package_root/lsleases/lsleases.exe"}) && die "build error";
+    build_go("$package_root/lsleases/lsleases.exe");
 
     #
     say "- generate help";
@@ -342,8 +338,7 @@ sub build_windows_exe{
 
 
     #
-    say "- build code";
-    system(qq{go build -v -o "$package_root/lsleases.exe"}) && die "build error";
+    build_go("$package_root/lsleases.exe");
 
 
     #
@@ -386,6 +381,19 @@ sub build_windows_exe{
     my $makensis_flag = (osflavor() eq "windows" ? "/NOCD" : "-NOCD");
     system(qq{makensis $makensis_flag "$build_dir/windows/installer.nsi"}) && die "nsis error";
     chdir($build_dir);
+}
+
+
+#
+# execute go build
+#
+sub build_go{
+  my $build_out_file = shift;
+
+  my $go_version = `go version`;
+  chomp($go_version);
+  say "- build code (go version: $go_version)";
+  system(qq{go build -v -o "$build_out_file"}) && die "build error";
 }
 
 
