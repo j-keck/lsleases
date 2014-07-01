@@ -129,7 +129,7 @@ To configure the server, set the corresponding option flags:
   
     in the Registry under: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lsleases\Parameters\AppParameters`
 
-    restart the service per `<INSTALL_PATH>\restart-service.bat`
+    restart the service per `<INSTALL_PATH>\restart-service.bat` (per right mouse click and "Run as Administrator")
 
 # EXAMPLES
 
