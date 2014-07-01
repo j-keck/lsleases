@@ -49,13 +49,13 @@ Function CustomDialogPage
   ShowWindow $autostartCheckboxDisabledDescriptionLabel ${SW_HIDE} # hidden by default
 
 
-  ${NSD_CreateCheckBox} 0 -80 100% 12u "autostart lsleases server on boot"
+  ${NSD_CreateCheckBox} 0 -90 100% 12u "autostart lsleases server on boot"
   pop $autostartCheckbox
   GetFunctionAddress $0 OnClick
   nsDialogs::OnClick $autostartCheckbox $0
 
 
-  ${NSD_CreateLabel} 0 -50 100% 12u "to start an lsleases server instance go to: 'Start/Programms/lsleases/start server'"
+  ${NSD_CreateLabel} 0 -60 100% 15u "to start an lsleases server instance go to: 'Start/Programms/lsleases/start server'"
   pop $howToStartServerInstanceLabel
   ShowWindow $howToStartServerInstanceLabel ${SW_HIDE} # hidden by default
 
