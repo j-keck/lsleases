@@ -45,17 +45,17 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
   2. ensure [`$GOPATH`](http://golang.org/doc/code.html#GOPATH) is properly set and `$GOPATH/bin` is in your `$PATH` 
   3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
 
-  **Linux**
+  **Linux (if not running as root)**
   
   4. create the runtime application data dir (for unix domain socket, persistent leases)
 
-     `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WITH STARTS THE SERVER> /var/lib/lsleases
+     `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WITH STARTS THE SERVER> /var/lib/lsleases`
   
   5. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
   
      `sudo setcap 'cap_net_raw,cap_net_bind_service+ep' $GOPATH/bin/lsleases`
   
-  **FreeBSD**
+  **FreeBSD (if not running as root)**
   
   4. create the runtime application data dir (for unix domain socket, persistent leases)
 
