@@ -3,6 +3,7 @@
 
 !define APPNAME "lsleases"
 
+RequestExecutionLevel admin
 
 # installer location
 Outfile "$%BUILD_OUTPUT%\lsleases_$%VERSION%_win_installer_$%BUILD_ARCH%.exe"
@@ -106,6 +107,7 @@ FunctionEnd
 
 
 Section "install"
+  SetShellVarContext all
 
   SetOutPath $INSTDIR
 
@@ -157,6 +159,8 @@ function un.onInit
 functionEnd
 
 Section "uninstall"
+  SetShellVarContext all
+
   # stop server instance
   ExecWait "$INSTDIR\stop-server.bat"
   ExecWait "$INSTDIR\stop-service.bat"
