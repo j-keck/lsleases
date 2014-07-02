@@ -105,7 +105,9 @@ save leases on shutdown / load on startup
 
 
 # CONFIGURATION
-
+  
+  **!keep every flag separate - so to enable persistent leases and passive mode, write: "-k -p" - see EXAMPLES!**
+  
 To configure the server, set the corresponding option flags:
 
 ### FreeBSD
