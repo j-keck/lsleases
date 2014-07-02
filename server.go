@@ -174,7 +174,13 @@ func clearOfflineHosts() {
 
 func createAppData() error {
 	if _, err := os.Stat(appDataPath); os.IsNotExist(err) {
-		return os.MkdirAll(appDataPath, 0644)
+		err = os.MkdirAll(appDataPath, 0644)
+		if err != nil {
+			return err
+		}
+
+		// set permission
+		return os.Chmod(appDataPath, 0755)
 	}
 	return nil
 }
