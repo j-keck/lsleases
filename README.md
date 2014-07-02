@@ -10,7 +10,7 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
 ## Usage
 
-1. start an server instance if not installed from a package `j@main:~> nohup lsleases -s &`
+1. install `lsleases` - see [Installation](#installation)
 2. replug / startup any device with dynamic ip address
 3. display captured ip, mac and host names. 
 
@@ -27,18 +27,38 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 ## Installation
 
 ### Binary packages
-  
-  * download from http://github.com/j-keck/lsleases/releases/latest
 
-  * or get it from [bintray](https://bintray.com/j-keck)
-
-<hr/>
-  
-- *linux packages and windows installer registers and starts an server instance on installation*
-- *FreeBSD packages installs an rc script under `/usr/local/etc/rc.d`*
-
-
+#### per package (from github.com)
     
+Download the corresponding package for your platfrom from http://github.com/j-keck/lsleases/releases/latest.
+
+Install per:
+  
+  * Debian based: `sudo dpkg -i <PKG_NAME>.deb`
+  * RedHat based: `sudo rpm -i <PKG_NAME>.rpm`
+  * Windows: use the installer: `lsleases_installer_<VERSION>_<ARCH>.exe`
+
+  
+#### per package manager repository (from bintray.com)
+
+Debian based:
+
+  * add the bintray repository:
+  
+    `echo "deb http://dl.bintray.com/j-keck/deb /" | sudo tee /etc/apt/sources.list`
+  
+  * update your index: `sudo apt-get update`
+  * install: `sudo apt-get install lsleases`
+
+RedHat based:
+
+  * add the bintray repository:
+  
+   `wget https://bintray.com/j-keck/rpm/rpm -O - | sudo tee /etc/yum.repos.d/bintray-j-keck-rpm.repo`
+  
+  * install: `sudo yum install lsleases`
+
+  
 ### From source
 
   1. install Go toolset from http://golang.org if not already
