@@ -22,7 +22,8 @@
   
 # DESCRIPTION
 
-**lsleases** captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
+**lsleases** watches your dhcp network traffic and gives you easy access to assigned adresses and active devices.
+It captures broadcast 'DHCP Request' datagrams and displays the ip, mac and host name from computers in the local network with dynamic ip address.
 
   
 
@@ -30,7 +31,7 @@
 
 *client:*
 
-in client mode, **lsleases** connects to a running **lsleases** server instance and displays captured ip, mac and host names. 
+in client mode, **lsleases** connects to a running **lsleases** server instance and displays captured ips, macs and host names. 
 
 
 *server:*
@@ -39,20 +40,20 @@ in server mode, **lsleases** captures broadcast 'DHCP Request' datagrams.
 
 
 
-Because 'DHCP Release' datagrams are no broadcasts, **lsleases** can not know about invalidated leases. To workaround this problem, there are two methods implemented:
+Because - unlike 'DHCP Request' - 'DHCP Release' datagrams are no broadcasts, **lsleases** can not know about invalidated leases. To workaround this problem, there are two methods implemented:
 
-'active mode': check per ping (icmp on windows, arping others) if host online (default)
+'active mode': use ping (icmp on windows, arping others) to check if host online (default)
 
 
 
-'passive mode': clear old leases expire based (-p flag)
+'passive mode'  (-p flag) : clear old leases based on expiration time (-e flag)
 
-The expiration check interval (ping / verify expired leases) is with the flag '-t' configurable.
+The expiration check interval (ping / verify expired leases) is configurable with the -t flag.
 
 
   
 # OPTIONS
-  
+    ** Multiple Flags have to be specifyed individually and separated by blanks (see Examples) **
 ## common
 -h
 :    print help
@@ -83,13 +84,13 @@ The expiration check interval (ping / verify expired leases) is with the flag '-
 :    server mode
 
 -p
-:    passive mode - no active availability host check - clear leases expire based
+:    passive mode - no active availability checking - clear leases expiration based
 
 -e
-:   in passive mode: lease expire duration (valid units: 'd', 'h', 'm', 's') 
+:   in passive mode: lease expiration duration (valid units: 'd', 'h', 'm', 's') 
   
 -t
-:   interval for checking of leases validity (valid units: 'd', 'h', 'm', 's') 
+:   interval for checking of leases validity / reachability (valid units: 'd', 'h', 'm', 's') 
 
 in active mode: ping interval
 
@@ -100,13 +101,10 @@ in passive mode: check expired leases interval
 remove lease if threshold reached
 
 -k
-:   keep leases over restart\
-save leases on shutdown / load on startup
+:   keep leases over restart (save leases on shutdown and load on startup )
 
 
 # CONFIGURATION
-  
-  **!keep every flag separate - so to enable persistent leases and passive mode, write: "-k -p" - see EXAMPLES!**
   
 To configure the server, set the corresponding option flags:
 
@@ -135,6 +133,12 @@ To configure the server, set the corresponding option flags:
 
 # EXAMPLES
 
+
+Specify Flags separately (here: Server in passive mode with persistent leases) 
+
+     j@main:~> lsleases -s -k -p  (-skp or -s-k-p  DO NOT WORK)
+    
+    
 list captured leases
   
     j@main:~> lsleases
