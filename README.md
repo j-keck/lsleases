@@ -3,8 +3,9 @@
 
 
   
-##### ...and for what? 
-Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip address (dhcp) and you need that address? Then this tool is for your toolbox - check the [Usage](#usage).
+##### ...but why would you want to do that ? 
+Did you ever boot up an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip address (dhcp) ? 
+And now you want to know that ip adress ? Then lsleases is for your toolbox - check the [Usage](#usage).
 
 
 
@@ -28,18 +29,19 @@ Have you ever boot an embedded system (rasperry-pi, cubie, ...), an android devi
 
 ### Binary packages
 
-#### per package (from github.com)
+ ("per" ist passt irgendwie nicht richtig (gilt auch für die nächsten zwei "per"s)
+#### direct package Installation (from github.com)
     
 Download the corresponding package for your platfrom from http://github.com/j-keck/lsleases/releases/latest.
 
-Install per:
+Install command:
   
   * Debian based: `sudo dpkg -i <PKG_NAME>.deb`
   * RedHat based: `sudo rpm -i <PKG_NAME>.rpm`
   * Windows: use the installer: `lsleases_installer_<VERSION>_<ARCH>.exe`
 
   
-#### per package manager repository (from bintray.com)
+#### Installation via package manager repository (from bintray.com)
 
 Debian based:
 
@@ -59,12 +61,13 @@ RedHat based:
   * install: `sudo yum install lsleases`
 
   
-### From source
+  (hier würd ich einen neuen Abschnitt machen, sonst ist nicht richtig klar, ob nicht irgendwas was hier kommt noch(wieder) zu den oberen install-varianten gehört
+### Installation From source
   
-  1. install Go toolset from http://golang.org if not already
+  1. install Go toolset from http://golang.org if not already done
   2. ensure [`$GOPATH`](http://golang.org/doc/code.html#GOPATH) is properly set and `$GOPATH/bin` is in your `$PATH` 
   3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
-  4. start an server instance: `sudo nohup $GOPATH/bin/lsleases -s &`
+  4. start a server instance: `sudo nohup $GOPATH/bin/lsleases -s &`
   5. see [Usage](#usage)
 
 
@@ -75,11 +78,11 @@ RedHat based:
 
 *Linux*
   
-  1. create the runtime application data dir (for unix domain socket, persistent leases)
+  1. create the runtime application data dir (for unix domain socket and to store persistent leases)
 
-     `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WITH STARTS THE SERVER> /var/lib/lsleases`
+     `sudo mkdir -p /var/lib/lsleases && sudo chown <USER WHO STARTS THE SERVER> /var/lib/lsleases`
   
-  2. to allow non-root users to open port less than 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
+  2. to allow non-root users to open a port below 1024 (dhcp sniffer) and use raw sockets (active availability host check (per arping)) set the corresponding capabilities
   
      `sudo setcap 'cap_net_raw,cap_net_bind_service+ep' $GOPATH/bin/lsleases`
 
@@ -89,11 +92,11 @@ RedHat based:
     
 *FreeBSD*
   
-  1. create the runtime application data dir (for unix domain socket, persistent leases)
+  1. create the runtime application data dir (for unix domain socket and to store persistent leases)
 
-     `mkdir -p /var/lib/lsleases && chown <USER WITH STARTS THE SERVER> /var/lib/lsleases`
+     `mkdir -p /var/lib/lsleases && chown <USER WHO STARTS THE SERVER> /var/lib/lsleases`
   
-  2. allow non-root users to open port less than 1024 (dhcp sniffer)
+  2. allow non-root users to open a port below 1024 (dhcp sniffer)
   
         echo net.inet.ip.portrange.reservedhigh=0 >> /etc/sysctl.conf
         service sysctl restart
@@ -110,8 +113,8 @@ RedHat based:
   
 ## Notes
 
-- CentOS / RHEL distros doesn't send the hostname in the 'DHCP Request' datagram by default.
-  To include the hostname in the datagram:
+- CentOS / RHEL distros do not send the hostname in the 'DHCP Request' datagram by default.
+  To include the hostname in the datagram, use:
 
         echo 'DHCP_HOSTNAME=$(hostname -s)' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 
@@ -120,8 +123,8 @@ RedHat based:
     - init / SysVinit based: `/var/log/lsleases.log`
     - systemd based: `journalctl -u lsleases` and `/var/log/lsleases.log`
 
-  
-- if you get '... listen udp :67: bind: address already in use' error at server startup - check which program already listen on port 67
+  (address already in use vielleicht irgendwie hervorheben?)
+- if you get '... listen udp :67: bind: address already in use' error at server startup - check which program is already listening on port 67
 
     - Linux:
   
