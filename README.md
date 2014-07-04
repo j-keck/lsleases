@@ -46,7 +46,7 @@ Debian based:
 
   * add the bintray repository:
   
-    `echo "deb http://dl.bintray.com/j-keck/deb /" | sudo tee /etc/apt/sources.list`
+    `echo "deb http://dl.bintray.com/j-keck/deb /" | sudo tee /etc/apt/sources.list.d/bintray-j-keck-deb.list`
   
   * update your index: `sudo apt-get update`
   * install: `sudo apt-get install lsleases`
