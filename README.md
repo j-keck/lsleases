@@ -12,7 +12,9 @@ And now you want to know that ip adress ? Then lsleases is for your toolbox - ch
 ## Usage
 
 1. install `lsleases` - see [Installation](#installation)
+
 2. replug / startup any device with dynamic ip address
+
 3. display captured ip, mac and host names. 
 
         j@main:~> lsleases
@@ -65,9 +67,21 @@ RedHat based:
 ### Installation From source
   
   1. install Go toolset from http://golang.org if not already done
+
   2. ensure [`$GOPATH`](http://golang.org/doc/code.html#GOPATH) is properly set and `$GOPATH/bin` is in your `$PATH` 
-  3. download and build: `go get github.com/j-keck/lsleases`. This will build the binary in `$GOPATH/bin`
+
+  3. download the source code:
+
+        go get -u -d github.com/j-keck/lsleases
+  
+  4. build the source code:
+  
+        (cd $GOPATH/src/github.com/j-keck/lsleases; go install -ldflags "-X main.VERSION $(git describe)")
+
+     This will build and install the binary under `$GOPATH/bin`
+  
   4. start a server instance: `sudo nohup $GOPATH/bin/lsleases -s &`
+
   5. see [Usage](#usage)
 
 

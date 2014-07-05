@@ -124,8 +124,9 @@ if(defined($commit)){
     system("git checkout $commit") && die "unable to checkout commit: $commit";
 }
 
-# extract version from new cloned project
-my $version = extractVersion("$build_dir/lsleases.go");
+# get version from git
+my $version = `git describe`;
+chomp($version);
 
 
 #
@@ -393,7 +394,7 @@ sub build_go{
   my $go_version = `go version`;
   chomp($go_version);
   say "- build code (go version: $go_version)";
-  system(qq{go build -v -o "$build_out_file"}) && die "build error";
+  system(qq{go build -ldflags "-X main.VERSION $version" -v -o "$build_out_file"}) && die "build error";
 }
 
 
@@ -425,21 +426,6 @@ sub recreate_package_root{
 
 
 
-#
-# extracts the version from lsleases.go
-#
-sub extractVersion {
-    my $file = shift;
-    open(my $fh, "<$file");
-    my ($version_line) = grep /.*VERSION.*/, <$fh>;
-    close($fh);
-
-    die "version line not found" if(! defined $version_line);
-    $version_line =~ /VERSION\s*=\s*"(.*)"/;
-    die "version not found" if(! defined $1);
-
-    return $1;
-}
 
 #
 # returns the osflavor: freebsd, windows, linux/debian, linux/redhat

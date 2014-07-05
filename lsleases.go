@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-const VERSION = "1.4.0.dev"
+var VERSION string
 
 var (
 	//

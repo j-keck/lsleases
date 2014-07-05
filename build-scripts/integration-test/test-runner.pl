@@ -177,18 +177,18 @@ sub sort_packages_by_version{
     my $extract_version = sub {
         #
         # extract version and format as:
-        #   aaaaaaaaaabbbbbbbbbbccccccccccd
+        #   aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd
         # where
         #   aaaaaaaaaa: major version
         #   bbbbbbbbbb: minor version
         #   cccccccccc: patch level
-        #   d         : 0 if dev version, else 1
+        #   dddddddddd: additinal commits
         #
         my $file_name = shift;
-        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)\.(\d+)(\.([a-z]+))?_.*/;
-        my ($major, $minor, $patch, $dev_suffix) = ($1, $2, $3, $5);
-        my $has_not_dev_suffix = (defined $dev_suffix && $dev_suffix =~ m/dev/ ? 0 : 1);
-        return sprintf("%010d%010d%010d%1d", $major, $minor, $patch, $has_not_dev_suffix);
+        $file_name =~ /.*lsleases[-|_](\d+)\.(\d+)\.(\d+)([-|\.](\d+))?.*/;
+        my ($major, $minor, $patch, $additinal_commits) = ($1, $2, $3, $5);
+        $additinal_commits = 0 unless defined($additinal_commits);
+        return sprintf("%010d%010d%010d%010d", $major, $minor, $patch, $additinal_commits);
     };
     
     return sort { $extract_version->($a) < $extract_version->($b) } @packages;
