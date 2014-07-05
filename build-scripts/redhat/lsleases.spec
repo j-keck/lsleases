@@ -1,5 +1,5 @@
 %define name lsleases
-%define version %(echo $VERSION)
+%define version %(echo $VERSION | tr '-' '.')
 %define release 1
 %define _rpmdir %(echo $BUILD_OUTPUT)
 
