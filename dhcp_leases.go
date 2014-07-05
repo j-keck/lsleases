@@ -56,6 +56,16 @@ func (ls *DHCPLeases) Foreach(f func(*DHCPLease)) {
 	}
 }
 
+func (ls *DHCPLeases) Filter(f func(*DHCPLease) bool) *DHCPLeases {
+	var nls DHCPLeases
+	for _, l := range ls.Leases {
+		if f(l) {
+			nls.Leases = append(nls.Leases, l)
+		}
+	}
+	return &nls
+}
+
 func (ls *DHCPLeases) UpdateOrAdd(l *DHCPLease) {
 	if i, ok := ls.IndexOfMac(l.Mac); ok {
 		ls.Leases[i] = l
