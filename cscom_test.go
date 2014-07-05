@@ -4,11 +4,11 @@ import (
 	"testing"
 )
 
-func TestNoServerInstanceRunning(t *testing.T) {
+func IgnoreTestNoServerInstanceRunning(t *testing.T) {
 
-	_, err := askServer("version")
+	version, err := askServer("version")
 	if err != ErrNoServerInstanceRunning {
-		t.Errorf("expected: '%s', received: '%s'", ErrNoServerInstanceRunning, err)
+		t.Errorf("expected: '%s', received: '%s'", ErrNoServerInstanceRunning, version)
 	}
 
 }
