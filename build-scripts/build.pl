@@ -370,7 +370,7 @@ sub build_windows_exe{
    
     #    
     say "- convert line endings from helper scripts";
-    convert_bat_files("${package_root}/lsleases");
+    convert_bat_files("${package_root}");
     
 
     #
