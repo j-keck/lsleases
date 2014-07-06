@@ -161,3 +161,9 @@ start server in active mode - ping interval every 10 minutes, remove offline hos
 start server in passive mode - expire leases after 3 days
 
     j@mail:~> lsleases -s -p -e 3d
+
+
+
+# SEE ALSO
+
+  http://github.com/j-keck/lsleases
