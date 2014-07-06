@@ -147,14 +147,31 @@ Section "install"
     createShortCut  "$SMPROGRAMS\${APPNAME}\stop server.lnk" "$INSTDIR\stop-server.bat"
   ${EndIf}
 
+  # write installed flag in registry
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "curVer" $%VERSION%
   WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
+function .onInit 
+  # check installed flag in registry
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "curVer"
+  ${If} $R0 != "" 
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+    "${APPNAME} is already in version $R0 installed. $\n$\nClick 'OK' to remove the previous version or 'Cancel' to cancel this upgrade." \
+    IDOK uninst
+    Abort
+
+    uninst:
+      ClearErrors
+      ExecWait '"$INSTDIR\uninstall.exe" /S'
+  ${EndIf}
+functionEnd
 
 # uninstaller
 
 function un.onInit
 
+  IfSilent next
   MessageBox MB_OKCANCEL "uninstall ${APPNAME}?" IDOK next
     abort
   next:
@@ -183,6 +200,9 @@ Section "uninstall"
   delete "$SMPROGRAMS\${APPNAME}\manual.lnk"
 
   rmDir  "$SMPROGRAMS\${APPNAME}"
+
+  # remove installed flag in registry
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 
   # programm files
   rmDir /r "$INSTDIR\*.*"
