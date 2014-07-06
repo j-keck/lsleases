@@ -7,3 +7,7 @@ IF NOT %ERRORLEVEL% == 0 (
 )  
 SET BASE_PATH=%~dp0
 "%BASE_PATH%nssm.exe" restart lsleases
+IF NOT %ERRORLEVEL% == 0 (
+  PAUSE
+)
+
