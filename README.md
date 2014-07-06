@@ -73,16 +73,20 @@ RedHat based:
   3. download the source code:
 
         go get -u -d github.com/j-keck/lsleases
+
+  4. query git to export the current lsleases version 
+
+        export LSLEASES_VERSION=$(git --git-dir $GOPATH/src/github.com/j-keck/lsleases.git describe)
+            
+  5. build the source code:
   
-  4. build the source code:
-  
-        (cd $GOPATH/src/github.com/j-keck/lsleases; go install -ldflags "-X main.VERSION $(git describe)")
+        go install -ldflags "-X main.VERSION ${LSLEASES_VERSION}"
 
      This will build and install the binary under `$GOPATH/bin`
   
-  4. start a server instance: `sudo nohup $GOPATH/bin/lsleases -s &`
+  6. start a server instance: `sudo nohup $GOPATH/bin/lsleases -s &`
 
-  5. see [Usage](#usage)
+  7. see [Usage](#usage) how to use it
 
 
 ***************************************************
