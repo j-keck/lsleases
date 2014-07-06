@@ -191,7 +191,7 @@ sub sort_packages_by_version{
         return sprintf("%010d%010d%010d%010d", $major, $minor, $patch, $additinal_commits);
     };
     
-    return sort { $extract_version->($a) < $extract_version->($b) } @packages;
+    return sort { $extract_version->($a) <=> $extract_version->($b) } @packages;
 }
 
 #
