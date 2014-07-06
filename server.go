@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -96,30 +98,49 @@ func server() {
 	//
 	for {
 		select {
-		case cmd := <-clientChan:
-			switch string(cmd) {
-			case "shutdown":
+		case cmdBytes := <-clientChan:
+			cmd := string(cmdBytes)
+			switch {
+			case cmd == "shutdown":
 				shutdown()
 
-			case "clearLeases":
+			case cmd == "clearLeases":
 				log.Println("clear leases")
 				leases.Clear()
 				clientChan <- []byte("done")
 
-			case "leases":
+			case cmd == "leases":
 				j, err := json.Marshal(leases)
 				panicOnError(err)
 				clientChan <- j
 
-			case "version":
+			case strings.HasPrefix(cmd, "leases-since:"):
+				fields := strings.Split(cmd, ":")
+				if ts, err := strconv.ParseInt(fields[1], 10, 64); err != nil {
+					log.Println("invalid ts in cmd 'leases-since", err)
+					clientChan <- []byte("invalid ts in cmd 'leases-since")
+				} else {
+					ls := leases.Filter(func(l *DHCPLease) bool {
+						return l.Created.UnixNano() >= ts
+					})
+					j, err := json.Marshal(ls)
+					panicOnError(err)
+					clientChan <- j
+				}
+
+			case cmd == "version":
 				clientChan <- []byte(VERSION)
 
-			case "mode":
+			case cmd == "mode":
 				if *expireBasedFlag {
 					clientChan <- []byte("passive")
 				} else {
 					clientChan <- []byte("active")
 				}
+
+			default:
+				log.Println("invalid cmd: ", cmd)
+				clientChan <- []byte("invalid cmdk")
 			}
 
 		case l := <-dhcpLeaseChan:

@@ -75,6 +75,11 @@ The expiration check interval (ping / verify expired leases) is configurable wit
 -n
 :    list newest leases first
 
+-w
+:    watch for new leases\
+client polls server every second for new leases  
+  
+
 -x
 :    shutdown server
 

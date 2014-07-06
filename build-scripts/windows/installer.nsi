@@ -115,11 +115,13 @@ Section "install"
   File "manual.html"
   File "nssm.exe"
   File "list-leases.bat"
+  File "watch-leases.bat"
   File "clear-leases.bat"
   
   # start menu
   createDirectory "$SMPROGRAMS\${APPNAME}"
   createShortCut  "$SMPROGRAMS\${APPNAME}\list leases.lnk" "$INSTDIR\list-leases.bat"
+  createShortCut  "$SMPROGRAMS\${APPNAME}\watch for new leases.lnk" "$INSTDIR\watch-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\clear leases.lnk" "$INSTDIR\clear-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe"
   createShortCut  "$SMPROGRAMS\${APPNAME}\manual.lnk" "$INSTDIR\manual.html"
@@ -173,6 +175,7 @@ Section "uninstall"
 
   # start menu
   delete "$SMPROGRAMS\${APPNAME}\list leases.lnk"
+  delete "$SMPROGRAMS\${APPNAME}\watch for new leases.lnk"
   delete "$SMPROGRAMS\${APPNAME}\clear leases.lnk"
   delete "$SMPROGRAMS\${APPNAME}\uninstall.lnk"
   delete "$SMPROGRAMS\${APPNAME}\start server.lnk"

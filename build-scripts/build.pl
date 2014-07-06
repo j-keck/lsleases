@@ -313,6 +313,7 @@ sub build_windows_zip{
     #
     say "- copy helper scripts";
     system(qq{cp -v windows/list-leases.bat "${package_root}/lsleases"}) && die "cp list-leases.bat error";
+    system(qq{cp -v windows/watch-leases.bat "${package_root}/lsleases"}) && die "cp watch-leases.bat error";
     system(qq{cp -v windows/clear-leases.bat "${package_root}/lsleases"}) && die "cp clear-leases.bat error";
     system(qq{cp -v windows/start-server.bat "${package_root}/lsleases"}) && die "cp start-server.bat error";
     system(qq{cp -v windows/stop-server.bat "${package_root}/lsleases"}) && die "cp stop-server.bat error";
@@ -359,6 +360,7 @@ sub build_windows_exe{
     #
     say "- copy helper scripts";
     system(qq{cp -v windows/list-leases.bat "${package_root}"}) && die "cp list-leases.bat error";
+    system(qq{cp -v windows/watch-leases.bat "${package_root}"}) && die "cp watch-leases.bat error";
     system(qq{cp -v windows/clear-leases.bat "${package_root}"}) && die "cp clear-leases.bat error";
     system(qq{cp -v windows/start-server.bat "${package_root}"}) && die "cp start-server.bat error";
     system(qq{cp -v windows/stop-server.bat "${package_root}"}) && die "cp stop-server.bat error";

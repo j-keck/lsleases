@@ -34,6 +34,7 @@ var (
 	scriptedModeFlag          = flag.Bool("H", false, "")
 	clearLeasesFlag           = flag.Bool("c", false, "")
 	listNewestLeasesFirstFlag = flag.Bool("n", false, "")
+	watchLeasesFlag           = flag.Bool("w", false, "")
 	shutdownServerFlag        = flag.Bool("x", false, "")
 )
 
@@ -53,6 +54,7 @@ func main() {
 		fmt.Println("  -c: clear leases")
 		fmt.Println("  -H: scripted mode: no headers, dates as unix time")
 		fmt.Println("  -n: list newest leases first")
+		fmt.Println("  -w: watch for new leases")
 		fmt.Println("  -x: shutdown server")
 		fmt.Println("Server mode:")
 		fmt.Println("  -s: server mode")

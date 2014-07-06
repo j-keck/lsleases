@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+var (
+	format               = "%-15s  %-17s  %s"
+	formatVerboseActive  = "%-11s  %-9s  %-15s  %-17s  %s"
+	formatVerbosePassive = "%-11s  %-11s  %-15s  %-17s  %s"
+)
+
 func client() {
 
 	if *printVersionFlag {
@@ -21,33 +27,54 @@ func client() {
 		tellServer("shutdown")
 	} else {
 		var leases DHCPLeases
-		b, err := askServer("leases")
+		leasesB, err := askServer("leases")
 		exitOnError(err, "query leases")
-		if err := json.Unmarshal(b, &leases); err != nil {
-			fmt.Println("unmarshall error - ", err)
+		exitOnError(json.Unmarshal(leasesB, &leases), "unmarshall errror")
+
+		// sort leases
+		if !*listNewestLeasesFirstFlag {
+			sort.Sort(SortedByCreated(leases))
 		} else {
+			sort.Sort(sort.Reverse(SortedByCreated(leases)))
+		}
 
-			// sort leases
-			if !*listNewestLeasesFirstFlag {
-				sort.Sort(SortedByCreated(leases))
-			} else {
-				sort.Sort(sort.Reverse(SortedByCreated(leases)))
+		serverModeB, err := askServer("mode")
+		exitOnError(err, "query mode")
+		serverMode := string(serverModeB)
+
+		// print header if is not in 'scriptedMode'
+		if !*scriptedModeFlag {
+			printHeader(serverMode)
+		}
+		listLeases(serverMode, leases)
+
+		if *watchLeasesFlag {
+			ts := time.Now().UnixNano()
+			for {
+				time.Sleep(1 * time.Second)
+				leasesB, err := askServer(fmt.Sprintf("leases-since:%d", ts))
+				ts = time.Now().UnixNano()
+				exitOnError(err, "query leases")
+				exitOnError(json.Unmarshal(leasesB, &leases), "unmarshall errror")
+
+				listLeases(serverMode, leases)
 			}
-
-			listLeases(leases)
 		}
 	}
 }
 
-func listLeases(leases DHCPLeases) {
-	format := "%-15s  %-17s  %s"
-	formatVerboseActive := "%-11s  %-9s  %-15s  %-17s  %s"
-	formatVerbosePassive := "%-11s  %-11s  %-15s  %-17s  %s"
+func printHeader(serverMode string) {
 
-	serverModeB, err := askServer("mode")
-	exitOnError(err, "query mode")
-	serverMode := string(serverModeB)
+	if *verboseFlag && serverMode == "active" {
+		fmt.Printf(formatVerboseActive, "Created", "Ping miss", "Ip", "Mac", "Name\n")
+	} else if *verboseFlag && serverMode == "passive" {
+		fmt.Printf(formatVerbosePassive, "Created", "Expire", "Ip", "Mac", "Name\n")
+	} else {
+		fmt.Printf(format, "Ip", "Mac", "Name\n")
+	}
 
+}
+func listLeases(serverMode string, leases DHCPLeases) {
 	// format a DHCPLease for output
 	leaseFormatter := func(l *DHCPLease) string {
 		dateFormatter := func(t time.Time) string {
@@ -70,17 +97,6 @@ func listLeases(leases DHCPLeases) {
 		}
 
 		return fmt.Sprintf(format, l.IP, l.Mac, l.Name)
-	}
-
-	// print header if is in 'scriptedMode'
-	if !*scriptedModeFlag {
-		if *verboseFlag && serverMode == "active" {
-			fmt.Printf(formatVerboseActive, "Created", "Ping miss", "Ip", "Mac", "Name\n")
-		} else if *verboseFlag && serverMode == "passive" {
-			fmt.Printf(formatVerbosePassive, "Created", "Expire", "Ip", "Mac", "Name\n")
-		} else {
-			fmt.Printf(format, "Ip", "Mac", "Name\n")
-		}
 	}
 
 	leases.Foreach(func(l *DHCPLease) {
