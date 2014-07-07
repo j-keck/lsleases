@@ -11,7 +11,7 @@ And now you want to know that ip adress ? Then lsleases is for your toolbox - ch
 
 ## Usage
 
-1. install `lsleases` - see [Installation](#installation)
+1. install **lsleases** - see [Installation](#installation)
 
 2. replug / startup any device with dynamic ip address
 
@@ -153,9 +153,9 @@ RedHat based:
           sockstat -l -P udp -p 67
 
   
-- if you get '... listen udp :67: bind: permission denied' error at server startup
+- if you get '... listen udp :67: bind: **permission denied**' error at server startup
 
-    - installed from source: reread [installation guide](#from-source)
+    - installed from source: reread [installation guide](#installation-from-source)
 
     - binary installation: [open and issue](http://github.com/j-keck/lsleases/issues)
 
