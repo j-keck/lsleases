@@ -2,6 +2,10 @@
   
 *only notable changes are listed*  
 
+####1.4####
+- watch new for new leases per '-w' flag - client polls server every second for new leases
+- windows installer uninstalls already installed old version
+
 ####1.3####
 - persist leases over restarts per '-k' flag (disable by default)
 - active alive check under windows (per icmp ping) (enabled by default)
