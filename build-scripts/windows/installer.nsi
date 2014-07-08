@@ -149,6 +149,9 @@ Section "install"
 
   # write installed flag in registry
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "curVer" $%VERSION%
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "instdir" $INSTDIR
+
+
   WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
@@ -162,8 +165,9 @@ function .onInit
     Abort
 
     uninst:
+      ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "instdir"
       ClearErrors
-      ExecWait '"$INSTDIR\uninstall.exe" /S'
+      ExecWait '"$R1\uninstall.exe" /S'
   ${EndIf}
 functionEnd
 
