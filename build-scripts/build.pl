@@ -276,6 +276,11 @@ sub build_redhat{
     system("mv $build_output/$arch/* $build_output && rmdir $build_output/$arch") && die "move package error";
 }
 
+#
+# replace:
+#   * \r with \r\n
+#   * the string LSLEASES_VERSION with the current version
+#
 sub convert_bat_files{
     my $dir = shift;
 
@@ -288,13 +293,17 @@ sub convert_bat_files{
       # convert \r to \r\n
       @content = map{$_ =~ s/\R/\015\012/; $_} @content;
 
+      # replace LSLEASES_VERSION with the current version
+      @content = map{$_ =~ s/LSLEASES_VERSION/$version/g; $_} @content;
+
       # write content
       open DST_FH, ">", $bat_file;
       print DST_FH $_ for @content;
       close DST_FH;
     }
-
 }
+
+    
 sub build_windows_zip{
     my $arch = shift;
 
@@ -319,7 +328,7 @@ sub build_windows_zip{
     system(qq{cp -v windows/stop-server.bat "${package_root}/lsleases"}) && die "cp stop-server.bat error";
    
     #    
-    say "- convert line endings from helper scripts";
+    say "- convert bat files";
     convert_bat_files("${package_root}/lsleases");
     
     #
@@ -369,7 +378,7 @@ sub build_windows_exe{
     system(qq{cp -v windows/restart-service.bat "${package_root}"}) && die "cp restart-service.bat error";        
    
     #    
-    say "- convert line endings from helper scripts";
+    say "- convert bat files";
     convert_bat_files("${package_root}");
     
 
