@@ -41,6 +41,9 @@ Install command:
   * RedHat based: `sudo rpm -i <PKG_NAME>.rpm`
   * Windows: use the installer: `lsleases_installer_<VERSION>_<ARCH>.exe`
 
+*These packages starts a server instance after installation and on boot.*
+
+
   
 #### Installation via package manager repository (from bintray.com)
 
@@ -74,13 +77,13 @@ RedHat based:
 
         go get -u -d github.com/j-keck/lsleases
 
-  4. query git to export the current lsleases version 
+  4. go into the source directory
 
-        export LSLEASES_VERSION=$(git --git-dir $GOPATH/src/github.com/j-keck/lsleases.git describe)
-            
+        cd $GOPATH/src/github.com/j-keck/lsleases
+
   5. build the source code:
   
-        go install -ldflags "-X main.VERSION ${LSLEASES_VERSION}"
+        go install -ldflags "-X main.VERSION $(git describe)"
 
      This will build and install the binary under `$GOPATH/bin`
   
