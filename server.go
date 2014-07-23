@@ -67,7 +67,7 @@ func server() {
 		if leaseExpiredDuration < timer {
 			timer = leaseExpiredDuration / 2
 		}
-		log.Printf("enable expired based - check timer: %s, expire duation: %s\n", timer, leaseExpiredDuration)
+		log.Printf("enable expired based (passive mode) - check timer: %s, expire duation: %s\n", timer, leaseExpiredDuration)
 		clearExpiredLeasesTickerChan = time.NewTicker(timer).C
 		// clear on startup
 		clearExpiredLeases()
