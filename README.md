@@ -5,7 +5,7 @@
   
 ##### ...but why would you want to do that ? 
 Did you ever boot up an embedded system (rasperry-pi, cubie, ...), an android device, an virtual machine or anything else with dynamic ip address (dhcp) ? 
-And now you want to know that ip adress ? Then lsleases is for your toolbox - check the [Usage](#usage).
+And now you want to know that ip address ? Then lsleases is for your toolbox - check the [Usage](#usage).
 
 
 
@@ -13,7 +13,7 @@ And now you want to know that ip adress ? Then lsleases is for your toolbox - ch
 
 1. install **lsleases** - see [Installation](#installation)
 
-2. replug / startup any device with dynamic ip address
+2. re-plug / start-up any device with dynamic ip address
 
 3. display captured ip, mac and host names. 
 
@@ -33,15 +33,17 @@ And now you want to know that ip adress ? Then lsleases is for your toolbox - ch
 
 #### direct package Installation (from github.com)
     
-Download the corresponding package for your platfrom from http://github.com/j-keck/lsleases/releases/latest.
+Download the corresponding package for your platform from http://github.com/j-keck/lsleases/releases/latest.
 
 Install command:
   
-  * Debian based: `sudo dpkg -i <PKG_NAME>.deb`
-  * RedHat based: `sudo rpm -i <PKG_NAME>.rpm`
-  * Windows: use the installer: `lsleases_installer_<VERSION>_<ARCH>.exe`
+  * Debian based: `sudo dpkg -i lsleases_<VERSION>_<ARCH>.deb`
+  * RedHat based: `sudo rpm -i lsleases-<VERSION>.<ARCH>.rpm`
+  * Windows: use the installer: `lsleases_<VERSION>_win_installer_<ARCH>.exe`
+  * FreeBSD: `sudo pkg add lsleases-<VERSION>_freebsd_<ARCH>.txz`
 
-*These packages starts a server instance after installation and on boot.*
+*These packages starts the necessary server instance after installation and on boot.*
+
 
 
   
@@ -69,7 +71,7 @@ RedHat based:
   
 ### Installation From source
   
-  1. install Go toolset from http://golang.org if not already done
+  1. install Go from http://golang.org if not already done
 
   2. ensure [`$GOPATH`](http://golang.org/doc/code.html#GOPATH) is properly set and `$GOPATH/bin` is in your `$PATH` 
 

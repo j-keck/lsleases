@@ -53,7 +53,7 @@ The expiration check interval (ping / verify expired leases) is configurable wit
 
   
 # OPTIONS
-    ** Multiple Flags have to be specifyed individually and separated by blanks (see Examples) **
+    ** Multiple Flags have to be specified individually and separated by blanks (see Examples) **
 ## common
 -h
 :    print help
