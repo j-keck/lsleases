@@ -138,6 +138,12 @@ RedHat based:
   
 ## Notes
 
+- if you don't see any leases - check your firewall rules. Port 67 (DHCP) needs to be open.
+  For testing you can temporary open port 67 per:
+
+        sudo iptables -I INPUT -p udp --dport 67  -j ACCEPT
+
+
 - CentOS / RHEL distros do not send the hostname in the 'DHCP Request' datagram by default.
   To include the hostname in the datagram, use:
 
