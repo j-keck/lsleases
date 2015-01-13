@@ -70,6 +70,8 @@ RedHat based:
 
   
 ### Installation From source
+
+*if you on NixOS see [lsleases.nix](https://github.com/j-keck/nixcfg-laptop/blob/master/home/j/.nixpkgs/lsleases.nix)*  
   
   1. install Go from http://golang.org if not already done
 
