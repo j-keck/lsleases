@@ -121,11 +121,11 @@ func parseDhcpDatagram(rawDatagram []byte) (datagram dhcpDatagram, err error) {
 }
 
 func dhcpListener(dhcpLeaseChan chan<- *DHCPLease) {
-	addr, err := net.ResolveUDPAddr("udp", ":67")
-	exitOnError(err, "resolve udp addr")
+	addr, err := net.ResolveUDPAddr("udp4", ":67")
+	exitOnError(err, "resolve udp4 addr")
 
-	con, err := net.ListenUDP("udp", addr)
-	exitOnError(err, "listen udp")
+	con, err := net.ListenUDP("udp4", addr)
+	exitOnError(err, "listen udp4")
 
 	for {
 		rawBuffer := make([]byte, 512)
