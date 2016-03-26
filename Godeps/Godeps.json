@@ -1,0 +1,15 @@
+{
+	"ImportPath": "github.com/j-keck/lsleases",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v60",
+	"Deps": [
+		{
+			"ImportPath": "github.com/j-keck/arping",
+			"Rev": "aa3681d07d8596764629576fddd9b489b211150b"
+		},
+		{
+			"ImportPath": "github.com/j-keck/npipe",
+			"Rev": "960540cf17da7a92c7faf9b816c106b1d3e04808"
+		}
+	]
+}
