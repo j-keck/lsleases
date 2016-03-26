@@ -7,12 +7,13 @@ prefix: /usr/local
 origin: sysutils
 desc: |-
   dhcp leases sniffer
-files:
-  /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555}
-  /usr/local/etc/rc.d/lsleases: {uname: root, gname: wheel, perm: 0555}
+files: {
+  /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555},
+  /usr/local/etc/rc.d/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/man/man1/lsleases.1: {uname: root, gname: wheel, perm: 0444}
-scripts:
-  deinstall: |-
+}  
+scripts: {
+  deinstall: <<EOD
     #!/bin/sh
     if [ -f /var/log/lsleases.log ]; then
       rm -f /var/log/lsleases.log
@@ -21,6 +22,5 @@ scripts:
     if [ -d /var/lib/lsleases ]; then
       rm -rf /var/lib/lsleases
     fi
-
-    
-
+EOD
+}
