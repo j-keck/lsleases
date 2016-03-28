@@ -8,6 +8,7 @@
 #   linux/debian: 'debhelper'
 #   linux/redhat: 'rpmbuild'
 #   windows     : 'NSIS'
+#   darwin      : only a zip package
 #
 # the corresponding tools need be installed.
 # 
@@ -24,7 +25,7 @@
 #
 #   build.pl -commit <COMMIT> -platform <PLATFORM> -platform <PLATFORM> ...
 #     * creates packages for the given <COMMIT> and <PLATFORM>
-#       <PLATFORM> can be: freebsd, linux/debian, linux/redhat or windows
+#       <PLATFORM> can be: freebsd, linux/debian, linux/redhat, windows or darwin
 #
 #
 # 
@@ -64,7 +65,7 @@
 #   BUILD_DIR    : build-work/gopath/src/lsleases
 #   PACKAGE_ROOT : build-work/lsleases
 #   VERSION      : <VERSION>
-#   GOOS         : os depend (freebsd, linux, windows)
+#   GOOS         : os depend (freebsd, linux, windows, darwin)
 #   GOARCH       : arch depend (386, amd64)
 #   BUILD_ARCH   : arch depend (i386, amd64)
 #
@@ -75,7 +76,6 @@ use warnings;
 use diagnostics;
 use Config;
 use autodie;
-use local::lib;
 use Path::Class;
 use File::Path qw/make_path remove_tree/;
 use File::Copy::Recursive qw/dircopy/;
@@ -164,14 +164,16 @@ for my $target_platform(@target_platforms){
         build_redhat($arch    )  if($target_platform eq "linux/redhat");
         
         build_windows_zip($arch) if($target_platform eq "windows");
-        build_windows_exe($arch) if($target_platform eq "windows");    
+        build_windows_exe($arch) if($target_platform eq "windows");
+
+        build_darwin($arch)      if($target_platform eq "darwin");
     }
 }
 
 say "=" x 80;
 say "# cleanup working dir";
 chdir($base_dir);
-remove_tree($build_work);
+#remove_tree($build_work);
 
 
 
@@ -396,6 +398,37 @@ sub build_windows_exe{
 }
 
 
+sub build_darwin{
+    my $arch = shift;
+
+    #
+    dircopy("$build_dir/build-scripts/darwin", "darwin");
+
+    #
+    build_go("$package_root/lsleases/lsleases");
+
+    #
+    say "- generate help";
+    system(qq{pandoc -s -S --toc --toc-depth=1 -t html MANUAL.md -o "$package_root/lsleases/manual.html"}) && die "generate help error";
+
+    #
+    say "- copy helper scripts";
+    system(qq{cp -v darwin/list-leases.sh "${package_root}/lsleases"}) && die "cp list-leases.sh error";
+    system(qq{cp -v darwin/watch-leases.sh "${package_root}/lsleases"}) && die "cp watch-leases.sh error";
+    system(qq{cp -v darwin/clear-leases.sh "${package_root}/lsleases"}) && die "cp clear-leases.sh error";
+    system(qq{cp -v darwin/start-server.sh "${package_root}/lsleases"}) && die "cp start-server.sh error";
+    system(qq{cp -v darwin/stop-server.sh "${package_root}/lsleases"}) && die "cp stop-server.sh error";
+   
+    #
+    say "- create zip";
+    chdir($package_root);
+    system(qq{zip -r "${build_output}/lsleases_${version}_osx_${arch}.zip" lsleases}) && die "create zip error";
+    chdir($build_dir);
+}
+
+
+
+
 #
 # execute go build
 #
@@ -405,7 +438,7 @@ sub build_go{
   my $go_version = `go version`;
   chomp($go_version);
   say "- build code (go version: $go_version)";
-  system(qq{go build -ldflags "-X main.VERSION $version" -v -o "$build_out_file"}) && die "build error";
+  system(qq{go build -ldflags "-X main.VERSION=$version" -v -o "$build_out_file"}) && die "build error";
 }
 
 
