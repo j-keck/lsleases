@@ -4,6 +4,13 @@
 
 ##1.4.x##
 
+####1.4.1####
+- bugfix in address selection if host has also a v6 address
+- windows: fix update in non default directory
+- windows: add version in title
+
+[all changes since 1.4.0](https://github.com/j-keck/lsleases/compare/1.4.0...1.4.1)
+
 ####1.4.0####
 - watch for new leases via '-w' flag - client polls server every second for new leases
 - windows installer uninstalls already installed old version

@@ -87,7 +87,7 @@ RedHat based:
 
   5. build the source code:
   
-        go install -ldflags "-X main.VERSION $(git describe)"
+        go install -ldflags "-X main.VERSION=$(git describe)"
 
      This will build and install the binary under `$GOPATH/bin`
   
