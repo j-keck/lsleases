@@ -4,6 +4,12 @@
 
 ##1.4.x##
 
+####1.4.2####
+
+- windows installer: add fw rule for lsleases
+
+[all changes since 1.4.1](https://github.com/j-keck/lsleases/compare/1.4.1...1.4.2)
+
 ####1.4.1####
 - bugfix in address selection if host has also a v6 address
 - windows: fix update in non default directory
