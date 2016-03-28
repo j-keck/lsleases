@@ -151,6 +151,9 @@ Section "install"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "curVer" $%VERSION%
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "instdir" $INSTDIR
 
+  # add firwall rule
+  Exec 'netsh advfirewall firewall add rule name=lsleases dir=in action=allow program="$INSTDIR\lsleases.exe" enable=yes'
+
 
   WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
@@ -207,6 +210,9 @@ Section "uninstall"
 
   # remove installed flag in registry
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
+
+  # remove firewall rule
+  Exec 'netsh advfirewall firewall delete rule name=lsleases program="$INSTDIR\lsleases.exe"'
 
   # programm files
   rmDir /r "$INSTDIR\*.*"
