@@ -91,8 +91,10 @@ my $package_root = "$build_work/lsleases";
 
 my @target_platforms;
 my $commit;
+my $keep_build_work;
 GetOptions("platform:s" => \@target_platforms,
-           "commit:s"   => \$commit);
+           "commit:s"   => \$commit,
+           "keep"       => \$keep_build_work);
 @target_platforms = (osflavor()) unless($#target_platforms >= 0);
 
 say "=" x 80;
@@ -171,9 +173,11 @@ for my $target_platform(@target_platforms){
 }
 
 say "=" x 80;
-say "# cleanup working dir";
-chdir($base_dir);
-#remove_tree($build_work);
+if(! defined($keep_build_work)){
+  say "# cleanup working dir";
+  chdir($base_dir);
+  remove_tree($build_work);
+}
 
 
 
