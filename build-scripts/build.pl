@@ -442,7 +442,7 @@ sub build_go{
   my $go_version = `go version`;
   chomp($go_version);
   say "- build code (go version: $go_version)";
-  system(qq{go build -ldflags "-X main.VERSION=$version" -v -o "$build_out_file"}) && die "build error";
+  system(qq{GO_EXTLINK_ENABLED=0 CGO_ENABLED=0 go build -ldflags "-X main.VERSION=$version" -v -o "$build_out_file"}) && die "build error";
 }
 
 
