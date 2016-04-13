@@ -4,6 +4,13 @@
 
 ##1.4.x##
 
+####1.4.3####
+
+- build statically linked binary
+
+[all changes since 1.4.1](https://github.com/j-keck/lsleases/compare/1.4.2...1.4.3)
+
+
 ####1.4.2####
 
 - windows installer: add fw rule for lsleases
