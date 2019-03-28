@@ -6,7 +6,7 @@
 RequestExecutionLevel admin
 
 # installer location
-Outfile "$%BUILD_OUTPUT%\lsleases_$%VERSION%_win_installer_$%BUILD_ARCH%.exe"
+Outfile "lsleases_$%VERSION%_win_installer.exe"
 
 InstallDir $PROGRAMFILES\${APPNAME}
 
@@ -26,7 +26,7 @@ var currentUserAccountType
 
 page license
 page custom CustomDialogPage CustomDialogPageLeave
-page directory 
+page directory
 page instfiles
 
 Function CustomDialogPage
@@ -79,7 +79,7 @@ Function CustomDialogPage
     ShowWindow $autostartCheckboxDisabledDescriptionLabel ${SW_SHOW}
 
     ShowWindow $howToStartServerInstanceLabel ${SW_SHOW}
-  ${EndIf}  
+  ${EndIf}
 
 
 
@@ -95,15 +95,15 @@ FunctionEnd
 
 Function OnClick
   pop $0
-  
+
   ${NSD_GetState} $0 $1
   ${If} $1 == 1
     ShowWindow $howToStartServerInstanceLabel ${SW_HIDE}
   ${Else}
     ShowWindow $howToStartServerInstanceLabel ${SW_SHOW}
-  ${EndIf}  
-FunctionEnd  
-    
+  ${EndIf}
+FunctionEnd
+
 
 
 Section "install"
@@ -117,7 +117,7 @@ Section "install"
   File "list-leases.bat"
   File "watch-leases.bat"
   File "clear-leases.bat"
-  
+
   # start menu
   createDirectory "$SMPROGRAMS\${APPNAME}"
   createShortCut  "$SMPROGRAMS\${APPNAME}\list leases.lnk" "$INSTDIR\list-leases.bat"
@@ -141,7 +141,7 @@ Section "install"
     # server start / stop scripts
     File "start-server.bat"
     File "stop-server.bat"
-  
+
     # install start / stop server link in start menu
     createShortCut  "$SMPROGRAMS\${APPNAME}\start server.lnk" "$INSTDIR\start-server.bat"
     createShortCut  "$SMPROGRAMS\${APPNAME}\stop server.lnk" "$INSTDIR\stop-server.bat"
@@ -158,10 +158,10 @@ Section "install"
   WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
-function .onInit 
+function .onInit
   # check installed flag in registry
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "curVer"
-  ${If} $R0 != "" 
+  ${If} $R0 != ""
     MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "${APPNAME} is already in version $R0 installed. $\n$\nClick 'OK' to remove the previous version or 'Cancel' to cancel this upgrade." \
     IDOK uninst

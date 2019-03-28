@@ -1,5 +1,5 @@
 name: lsleases
-version: 1.0
+version: "LSLEASES_VERSION"
 comment: dhcp leases sniffer
 www: http://github.com/j-keck/lsleases
 maintainer: jhypenkeck@gmail.com
@@ -11,7 +11,7 @@ files: {
   /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/etc/rc.d/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/man/man1/lsleases.1: {uname: root, gname: wheel, perm: 0444}
-}  
+}
 scripts: {
   deinstall: <<EOD
     #!/bin/sh
