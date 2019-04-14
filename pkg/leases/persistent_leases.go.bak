@@ -1,0 +1,39 @@
+package leases
+
+import (
+	"encoding/json"
+	"path"
+	"io/ioutil"
+	"fmt"
+	"os"
+)
+
+func loadPersistentLeases(filePath string) ([]Lease, error) {
+	var leases []Lease
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return leases, fmt.Errorf("no persistence file found under %s\n", filePath)
+	}
+
+	b, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return leases, err
+	}
+
+	err = json.Unmarshal(b, &leases)
+	return leases, err
+}
+
+
+func savePersistentLeases(filePath string, leases []Lease) error {
+	j, err := json.Marshal(leases)
+	if err != nil {
+		return err
+	}
+
+	fileDir := path.Dir(filePath)
+	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
+		os.MkdirAll(fileDir, os.ModePerm)
+	}
+
+	return ioutil.WriteFile(filePath, []byte(j), 0644)
+}

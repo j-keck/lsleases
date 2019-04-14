@@ -1,17 +1,29 @@
-package main
+// +build windows
+
+package leases
 
 import (
 	"bytes"
 	"encoding/binary"
+	"github.com/j-keck/plog"
 	"net"
 	"time"
 )
 
+func NewAliveChecker(log plog.Logger) (*aliveChecker, error) {
+	if con, err := net.Dial("ip4:icmp", "127.0.0.1"); err != nil {
+		return nil, err
+	} else {
+		con.Close()
+		return &aliveChecker{log}, nil
+	}
+}
+
 const ICMP_ECHO_REQUEST = 8
 const ICMP_ECHO_REPLY = 0
 
-func isAlive(host string) (bool, error) {
-	con, err := net.Dial("ip4:icmp", host)
+func (self *aliveChecker) IsAlive(ip string) (bool, error) {
+	con, err := net.Dial("ip4:icmp", ip)
 	if err != nil {
 		return false, err
 	}
@@ -43,7 +55,7 @@ func isAlive(host string) (bool, error) {
 	buffer := make([]byte, 512)
 	for {
 		if _, err = con.Read(buffer); err != nil {
-			// return nil for error (if host offline, we get an timeout error)
+			// return nil for error (if ip offline, we get an timeout error)
 			return false, nil
 		} else {
 			response, _ := ParseICMPPingMessage(buffer[20:])
@@ -51,15 +63,6 @@ func isAlive(host string) (bool, error) {
 				return true, nil
 			}
 		}
-	}
-}
-
-func hasPermissionForAliveCheck() (bool, error) {
-	if con, err := net.Dial("ip4:icmp", "127.0.0.1"); err != nil {
-		return false, err
-	} else {
-		con.Close()
-		return true, nil
 	}
 }
 
