@@ -8,20 +8,19 @@ import "github.com/j-keck/lsleases/pkg/config"
 import "github.com/j-keck/plog"
 
 type Cleaner interface {
-	FilterObsoleteLeases(Cache) Cache
+	FilterObsoleteLeases(Leases) Leases
 }
 
 func NewCleaner(cfg config.Config, log plog.Logger) Cleaner {
 	if cfg.CleanupMethod == config.PingBasedCleanup {
-		log.Infof("enable active check - ping every: %s", cfg.CleanupLeasesInterval)
-		if aliveChecker, err := NewAliveChecker(log); err != nil {
-			log.Warnf("ping test failed - fallback to time based cleanup - %s", err.Error())
-			return timeBasedCleanup{cfg, log}
-		} else {
+		log.Infof("enable ping based cleanup - ping every: %s", cfg.CleanupLeasesInterval)
+		if aliveChecker, err := NewAliveChecker(log); err == nil {
 			return pingBasedCleanup{cfg, log, *aliveChecker}
+		} else {
+			log.Warnf("ping test failed - fallback to time based cleanup - %s", err.Error())
 		}
 	}
-
+	log.Infof("enable time based timeout - cleanup lease after :%s", cfg.LeasesExpiryDuration)
 	return timeBasedCleanup{cfg, log}
 }
 
@@ -30,9 +29,9 @@ type timeBasedCleanup struct {
 	log plog.Logger
 }
 
-func (self timeBasedCleanup) FilterObsoleteLeases(leases Cache) Cache {
-	return leases.Filter(func(lease Lease) bool {
-		return time.Now().After(lease.ExpiryDate)
+func (self timeBasedCleanup) FilterObsoleteLeases(ls Leases) Leases {
+	return ls.Filter(func(lease Lease) bool {
+		return !time.Now().After(lease.ExpiryDate)
 	})
 }
 
@@ -42,9 +41,9 @@ type pingBasedCleanup struct {
 	aliveChecker aliveChecker
 }
 
-func (self pingBasedCleanup) FilterObsoleteLeases(leases Cache) Cache {
+func (self pingBasedCleanup) FilterObsoleteLeases(ls Leases) Leases {
 	self.log.Debug("check online hosts")
-	updated := leases.Map(func(lease Lease) Lease {
+	updated := ls.Map(func(lease Lease) Lease {
 		if hostIsAlive, err := self.aliveChecker.IsAlive(lease.IP); err != nil {
 			self.log.Warnf("unable to ping host: %s - %s", lease.String(), err.Error())
 			lease.MissedPings++

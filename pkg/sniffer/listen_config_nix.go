@@ -16,10 +16,8 @@ func listenConfig() net.ListenConfig {
 					return
 				}
 
-				err = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, 0xf /*syscall.SO_REUSEPORT*/, 1)
-				if err != nil {
-					return
-				}
+				// ignore errors, because not all systems support SO_REUSEPORT
+				syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, 0xf /*syscall.SO_REUSEPORT*/, 1)
 			})
 			return
 		},

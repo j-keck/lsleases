@@ -12,7 +12,7 @@ type ClientRequest string
 const (
 	GetVersion       = ClientRequest("get-version")
 	GetLeases        = ClientRequest("get-leases")
-	GetCleanupMethod = ClientRequest("get-cleanup-method")
+	GetLeasesSince   = ClientRequest("get-leases-since")
 	ClearLeases      = ClientRequest("clear-leases")
 	Shutdown         = ClientRequest("shutdown")
 )
@@ -25,6 +25,10 @@ type Version string
 
 func (self Version) Serialize() []byte {
 	return []byte(self)
+}
+
+func (self Version) String() string {
+	return string(self)
 }
 
 type Leases []leases.Lease

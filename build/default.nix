@@ -52,6 +52,7 @@ in with pkgs; rec {
       CGO_ENABLED = 0;
       buildFlagsArray = ''
         -ldflags=
+        -X main.version=${version}
         -X github.com/j-keck/lsleases/pkg/daemon.version=${version}
       '';
 

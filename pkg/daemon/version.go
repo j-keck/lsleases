@@ -1,6 +1,6 @@
 package daemon
 
-var version string = "1.5.0"
+var version string = "SNAPSHOT"
 
 func Version() string {
 	return version

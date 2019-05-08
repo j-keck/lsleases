@@ -12,3 +12,7 @@ import (
 func startListener(log plog.Logger) (net.Listener, error) {
 	return npipe.Listen(config.SOCK_PATH)
 }
+
+func stopListener(log plog.Logger) error {
+	return nil
+}

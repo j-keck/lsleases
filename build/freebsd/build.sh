@@ -7,7 +7,7 @@ ARTIFACT_NAME=$1
 echo "build"
 build() {
     MODULE=$1
-    LDFLAGS="-X github.com/j-keck/lsleases/pkg/daemon.version=${LSLEASES_VERSION}"
+    LDFLAGS="-X main.version=${LSLEASES_VERSION} -X github.com/j-keck/lsleases/pkg/daemon.version=${LSLEASES_VERSION}"
     GO_EXTLINK_ENABLED=0 CGO_ENABLED=0 GO111MODULES=on go build -ldflags "$LDFLAGS" -v $MODULE
 }
 build "github.com/j-keck/lsleases/cmd/lsleases"

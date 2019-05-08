@@ -41,7 +41,7 @@ func (self *sniffer) Subscribe(bufferSize int) <-chan leases.Lease {
 
 type cachedSniffer struct {
 	sniffer
-	cache *leases.Cache
+	cache *leases.Leases
 }
 
 func NewCachedSniffer(cfg config.Config, log plog.Logger) *cachedSniffer {
@@ -62,16 +62,16 @@ func NewCachedSniffer(cfg config.Config, log plog.Logger) *cachedSniffer {
 }
 
 func (self *cachedSniffer) LoadLeases() error {
-	self.log.Tracef("load lease from %s", config.PERSISTENT_LEASES_PATH)
+	self.log.Infof("load lease from %s", config.PERSISTENT_LEASES_PATH)
 	return self.cache.LoadLeases(config.PERSISTENT_LEASES_PATH)
 }
 
 func (self *cachedSniffer) SaveLeases() error {
-	self.log.Tracef("save lease to %s", config.PERSISTENT_LEASES_PATH)
+	self.log.Infof("save lease to %s", config.PERSISTENT_LEASES_PATH)
 	return self.cache.SaveLeases(config.PERSISTENT_LEASES_PATH)
 }
 
-func (self *cachedSniffer) ListLeases() []leases.Lease {
+func (self *cachedSniffer) ListLeases() leases.Leases {
 	return self.cache.List()
 }
 

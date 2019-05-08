@@ -28,7 +28,6 @@ func main() {
 	}
 
 	log := plog.NewConsoleLogger()
-	defer log.Flush()
 	log.SetLevel(cliCfg.logLevel)
 
 	if err := daemon.Start(daemonCfg, log); err != nil {
