@@ -76,7 +76,7 @@ func parseFlags() (CliConfig, config.Config) {
 	//
 	// daemon config
 	//
-	daemonCfg := config.DefaultConfig()
+	daemonCfg := config.NewDefaultConfig()
 
 	validDurationUnits := "(valid units: 'd', 'h', 'm', 's')"
 

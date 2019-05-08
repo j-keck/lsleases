@@ -23,7 +23,7 @@ type Config struct {
 
 
 
-func DefaultConfig() Config {
+func NewDefaultConfig() Config {
 	cleanupLeasesInterval,  _ := time.ParseDuration("30m")
 	leasesExpiryDuration, _ := time.ParseDuration(fmt.Sprintf("%dh", 7 * 24))
 
