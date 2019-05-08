@@ -24,14 +24,14 @@ pkgs.stdenv.mkDerivation rec {
       ''}" DEBIAN/control
 
       cp "${pkgs.writeScript "postinst" ''
-        mkdir -p /var/cache/lsleases && chown nobody:nogroup /var/cache/lsleases
+        mkdir -p /var/cache/lsleasesd && chown nobody:nogroup /var/cache/lsleasesd
 
         setcap cap_net_raw,cap_net_bind_service=+ep /usr/bin/lsleasesd
       ''}" DEBIAN/postinst
 
       cp "${pkgs.writeScript "postrm" ''
-        if [ -d /var/cache/lsleases ]; then rm -rf /var/cache/lsleases; fi
-        if [ -d /var/run/lsleases ]; then rm -rf /var/run/lsleases; fi
+        if [ -d /var/cache/lsleasesd ]; then rm -rf /var/cache/lsleasesd; fi
+        if [ -d /var/run/lsleasesd ]; then rm -rf /var/run/lsleasesd; fi
       ''}" DEBIAN/postrm
 
       mkdir -p usr/bin
@@ -42,7 +42,7 @@ pkgs.stdenv.mkDerivation rec {
       cp ${pkg}/share/man/man1/lsleases.1.gz usr/local/man/man1
 
       mkdir -p etc/systemd/system
-      cp "${pkgs.writeScript "lsleases.service" ''
+      cp "${pkgs.writeScript "lsleasesd.service" ''
         [Unit]
         Description=dhcp leases sniffer
         After=network.target
@@ -50,8 +50,8 @@ pkgs.stdenv.mkDerivation rec {
         [Service]
         Type=simple
         PermissionsStartOnly=true
-        ExecStartPre=-/bin/mkdir /var/run/lsleases
-        ExecStartPre=/bin/chown nobody:nogroup /var/run/lsleases
+        ExecStartPre=-/bin/mkdir /var/run/lsleasesd
+        ExecStartPre=/bin/chown nobody:nogroup /var/run/lsleasesd
         ExecStart=/usr/bin/lsleasesd -k
         ExecStop=/usr/bin/lsleases -x
         Restart=on-failure
@@ -60,7 +60,7 @@ pkgs.stdenv.mkDerivation rec {
 
         [Install]
         WantedBy=multi-user.target
-      ''}" etc/systemd/system/lsleases.service
+      ''}" etc/systemd/system/lsleasesd.service
 
       mkdir -p $out
       fakeroot dpkg -b . $out/lsleases-${pkg.version}-${arch}.deb

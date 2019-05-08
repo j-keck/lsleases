@@ -38,7 +38,7 @@ pkgs.stdenv.mkDerivation rec {
 
 
       %files
-      /etc/systemd/system/lsleases.service
+      /etc/systemd/system/lsleasesd.service
       /usr/bin/lsleases
       /usr/bin/lsleasesd
       /usr/local/man/man1/lsleases.1.gz
@@ -47,8 +47,8 @@ pkgs.stdenv.mkDerivation rec {
       /usr/sbin/setcap cap_net_raw,cap_net_bind_service=+ep /usr/bin/lsleasesd
 
       %postun
-      if [ -d /var/cache/lsleases ]; then rm -rf /var/cache/lsleases; fi
-      if [ -d /var/run/lsleases ]; then rm -rf /var/run/lsleases; fi
+      if [ -d /var/cache/lsleasesd ]; then rm -rf /var/cache/lsleasesd; fi
+      if [ -d /var/run/lsleasesd ]; then rm -rf /var/run/lsleasesd; fi
 
     ''}" lsleases.spec;
 
@@ -62,7 +62,7 @@ pkgs.stdenv.mkDerivation rec {
     cp ${pkg}/share/man/man1/lsleases.1.gz pkg/usr/local/man/man1
 
     mkdir -p pkg/etc/systemd/system
-    cp "${pkgs.writeScript "lsleases.service" ''
+    cp "${pkgs.writeScript "lsleasesd.service" ''
       [Unit]
       Description=dhcp leases sniffer
       After=network.target
@@ -70,8 +70,8 @@ pkgs.stdenv.mkDerivation rec {
       [Service]
       Type=simple
       PermissionsStartOnly=true
-      ExecStartPre=-/usr/bin/mkdir /var/run/lsleases
-      ExecStartPre=/usr/bin/chown nobody:nobody /var/run/lsleases
+      ExecStartPre=-/usr/bin/mkdir /var/run/lsleasesd
+      ExecStartPre=/usr/bin/chown nobody:nobody /var/run/lsleasesd
       ExecStart=/usr/bin/lsleasesd -k
       ExecStop=/usr/bin/lsleases -x
       Restart=on-failure
@@ -80,7 +80,7 @@ pkgs.stdenv.mkDerivation rec {
 
       [Install]
       WantedBy=multi-user.target
-    ''}" pkg/etc/systemd/system/lsleases.service
+    ''}" pkg/etc/systemd/system/lsleasesd.service
 
 
     # build the rpm package

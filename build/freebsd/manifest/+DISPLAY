@@ -1,4 +1,4 @@
 * the server instance run as user 'nobody' - to allow non privilged users open ports less then 1024 execute:
   echo net.inet.ip.portrange.reservedhigh=0 >> /etc/sysctl.conf && service sysctl restart
-* to start an server instance: service lsleases onestart
-* to autostart an server instance on boot: sysrc lsleases_enable=YES
+* to start an server instance: service lsleasesd onestart
+* to autostart an server instance on boot: sysrc lsleasesd_enable=YES

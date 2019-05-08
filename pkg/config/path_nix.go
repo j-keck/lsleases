@@ -3,6 +3,6 @@
 package config
 
 const (
-	SOCK_PATH              = "/var/run/lsleases/lsleases.sock"
-	PERSISTENT_LEASES_PATH = "/var/cache/lsleases/leases.json"
+	SOCK_PATH              = "/var/run/lsleasesd/lsleasesd.sock"
+	PERSISTENT_LEASES_PATH = "/var/cache/lsleasesd/leases.json"
 )

@@ -2,7 +2,7 @@
 #
 #
 
-# PROVIDE: lsleases
+# PROVIDE: lsleasesd
 # REQUIRE: networking
 # BEFORE:  LOGIN
 #
@@ -10,11 +10,11 @@
 #
 # Set the following settings in /etc/rc.conf or /etc/rc.conf.local
 #
-# lsleases_enable (bool):
+# lsleasesd_enable (bool):
 #   Set to "NO" by default.
 #   Set it to "YES" to enable lsleases
 #
-# lsleases_flags (str):
+# lsleasesd_flags (str):
 #   Set to "" by default
 #   Flags to use
 #
@@ -22,7 +22,7 @@
 
 . /etc/rc.subr
 
-name="lsleases"
+name="lsleasesd"
 daemon_cmd="/usr/local/bin/lsleasesd"
 ctrl_cmd="/usr/local/bin/lsleases"
 daemon_user="nobody"
@@ -34,12 +34,12 @@ stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
 
 load_rc_config $name
-: ${lsleases_enable:=no}
-: ${lsleases_flags:="-k -log-timestamps"}
+: ${lsleasesd_enable:=no}
+: ${lsleasesd_flags:="-k -log-timestamps"}
 
 
 
-lsleases_start(){
+lsleasesd_start(){
     # create logfile and set ownership
     touch ${logfile} && chown ${daemon_user} ${logfile}
 
@@ -51,7 +51,7 @@ lsleases_start(){
 
 
     # startup
-    daemon -u ${daemon_user} ${daemon_cmd} ${lsleases_flags} > ${logfile} 2>&1
+    daemon -u ${daemon_user} ${daemon_cmd} ${lsleasesd_flags} > ${logfile} 2>&1
 
     sleep 0.5
     ${command} > /dev/null 2>&1
@@ -60,7 +60,7 @@ lsleases_start(){
     fi
 }
 
-lsleases_stop(){
+lsleasesd_stop(){
     ${ctrl_cmd} -x
 
     # Remove sock file

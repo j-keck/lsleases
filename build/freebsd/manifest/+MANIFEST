@@ -10,18 +10,18 @@ desc: |-
 files: {
   /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/bin/lsleasesd: {uname: root, gname: wheel, perm: 0555},
-  /usr/local/etc/rc.d/lsleases: {uname: root, gname: wheel, perm: 0555},
+  /usr/local/etc/rc.d/lsleasesd: {uname: root, gname: wheel, perm: 0555},
   /usr/local/man/man1/lsleases.1: {uname: root, gname: wheel, perm: 0444}
 }
 scripts: {
   deinstall: <<EOD
     #!/bin/sh
-    if [ -f /var/log/lsleases.log ]; then
-      rm -f /var/log/lsleases.log
+    if [ -f /var/log/lsleasesd.log ]; then
+      rm -f /var/log/lsleasesd.log
     fi
 
-    if [ -d /var/lib/lsleases ]; then
-      rm -rf /var/lib/lsleases
+    if [ -d /var/lib/lsleasesd ]; then
+      rm -rf /var/lib/lsleasesd
     fi
 EOD
 }
