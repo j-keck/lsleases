@@ -1,4 +1,16 @@
-* the server instance run as user 'nobody' - to allow non privilged users open ports less then 1024 execute:
-  echo net.inet.ip.portrange.reservedhigh=0 >> /etc/sysctl.conf && service sysctl restart
-* to start an server instance: service lsleasesd onestart
-* to autostart an server instance on boot: sysrc lsleasesd_enable=YES
+The daemon runs as user 'nobody' by default.
+To allow non-privileged users to open ports less than 1024:
+
+  echo net.inet.ip.portrange.reservedhigh=0 | sudo tee -a /etc/sysctl.conf
+  sudo service sysctl restart
+
+
+Start the dameon:
+
+  sudo service lsleasesd onestart
+
+
+Automatic start the daemon after boot:
+
+  sudo sysrc lsleasesd_enable=YES
+

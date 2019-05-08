@@ -23,7 +23,7 @@ node("nix") {
 parallel(
     "freebsd": {
         node("freebsd") {
-          env.FREEBSD_PACKAGE = "lsleases-freebsd-${LSLEASES_VERSION}-amd64.txz"
+          env.FREEBSD_PACKAGE = "lsleases-${LSLEASES_VERSION}-amd64-freebsd.txz"
           dir("build-work/freebsd") {
             checkout scm
 

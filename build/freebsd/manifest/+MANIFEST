@@ -3,10 +3,13 @@ version: "LSLEASES_VERSION"
 comment: dhcp leases sniffer
 www: http://github.com/j-keck/lsleases
 maintainer: jhypenkeck@gmail.com
+licenselogic: single
+licenses: ["MIT"]
 prefix: /usr/local
-origin: sysutils
-desc: |-
-  dhcp leases sniffer
+origin: sysutils/lsleases
+desc: <<EOD
+lsleases captures broadcast DHCP Request datagrams from devices with dynamic ip addresses.
+EOD
 files: {
   /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/bin/lsleasesd: {uname: root, gname: wheel, perm: 0555},
