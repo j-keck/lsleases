@@ -35,7 +35,7 @@ rcvar=`set_rcvar`
 
 load_rc_config $name
 : ${lsleases_enable:=no}
-: ${lsleases_flags:="-k"}
+: ${lsleases_flags:="-k -log-timestamps"}
 
 
 

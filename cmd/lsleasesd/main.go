@@ -6,12 +6,14 @@ import (
 	"github.com/j-keck/lsleases/pkg/config"
 	"github.com/j-keck/lsleases/pkg/daemon"
 	"github.com/j-keck/plog"
+	"time"
 )
 
 type CliConfig struct {
-	logLevel     plog.LogLevel
-	printVersion bool
-	printHelp    bool
+	logLevel      plog.LogLevel
+	logTimestamps bool
+	printVersion  bool
+	printHelp     bool
 }
 
 func main() {
@@ -27,12 +29,31 @@ func main() {
 		return
 	}
 
-	log := plog.NewConsoleLogger()
-	log.SetLevel(cliCfg.logLevel)
-
+	log := newLogger(cliCfg)
 	if err := daemon.Start(daemonCfg, log); err != nil {
 		log.Errorf("unable to start daemon - %s", err.Error())
 	}
+}
+
+func newLogger(cliCfg CliConfig) plog.Logger {
+	log := plog.NewConsoleLogger()
+	log.SetLevel(cliCfg.logLevel)
+
+	var fields []plog.FieldFmt
+	if cliCfg.logTimestamps {
+		fields = append(fields, plog.Timestamp(time.UnixDate))
+	}
+
+	fields = append(fields, plog.Level("%5s"))
+
+	if cliCfg.logLevel == plog.Trace {
+		fields = append(fields, plog.Location("%20s:%-3d"))
+	}
+
+	fields = append(fields, plog.Message("%s"))
+	log.SetLogFields(fields...)
+
+	return log
 }
 
 func parseFlags() (CliConfig, config.Config) {
@@ -48,6 +69,9 @@ func parseFlags() (CliConfig, config.Config) {
 	// log level
 	plog.FlagDebugVar(&cliCfg.logLevel, "v", "debug output")
 	plog.FlagTraceVar(&cliCfg.logLevel, "vv", "trace output")
+
+	// log timestamps
+	flag.BoolVar((*bool)(&cliCfg.logTimestamps), "log-timestamps", false, "log messages with timestamps in unix format")
 
 	//
 	// daemon config
