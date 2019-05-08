@@ -1,4 +1,4 @@
 \#*#
-build-output
-build-work
-*.log
+/lsleases
+/lsleasesd
+/result

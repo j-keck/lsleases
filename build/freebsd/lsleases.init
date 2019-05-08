@@ -23,29 +23,35 @@
 . /etc/rc.subr
 
 name="lsleases"
-command="/usr/local/bin/${name}"
+daemon_cmd="/usr/local/bin/lsleasesd"
+ctrl_cmd="/usr/local/bin/lsleases"
 daemon_user="nobody"
 logfile="/var/log/${name}.log"
-app_datadir="/var/lib/${name}"
+run_datadir="/var/run/${name}"
+app_datadir="/var/cache/${name}"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 rcvar=`set_rcvar`
 
 load_rc_config $name
 : ${lsleases_enable:=no}
-: ${lsleases_flags:=""}
+: ${lsleases_flags:="-k"}
 
-    
+
 
 lsleases_start(){
-    # create logfile and set ownership    
+    # create logfile and set ownership
     touch ${logfile} && chown ${daemon_user} ${logfile}
 
     # create app datadir and set ownership
     mkdir -p ${app_datadir} && chown ${daemon_user} ${app_datadir}
 
+    # create run datadir and set ownership
+    mkdir -p ${run_datadir} && chown ${daemon_user} ${run_datadir}
+
+
     # startup
-    daemon -u ${daemon_user} ${command} -s ${lsleases_flags} > ${logfile} 2>&1
+    daemon -u ${daemon_user} ${daemon_cmd} ${lsleases_flags} > ${logfile} 2>&1
 
     sleep 0.5
     ${command} > /dev/null 2>&1
@@ -55,7 +61,7 @@ lsleases_start(){
 }
 
 lsleases_stop(){
-    ${command} -x
+    ${ctrl_cmd} -x
 
     # Remove sock file
     rm -f ${app_datadir}/${name}.sock
@@ -63,4 +69,4 @@ lsleases_stop(){
 
 
 run_rc_command "$1"
-    
+

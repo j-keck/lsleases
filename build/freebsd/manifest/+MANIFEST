@@ -9,6 +9,7 @@ desc: |-
   dhcp leases sniffer
 files: {
   /usr/local/bin/lsleases: {uname: root, gname: wheel, perm: 0555},
+  /usr/local/bin/lsleasesd: {uname: root, gname: wheel, perm: 0555},
   /usr/local/etc/rc.d/lsleases: {uname: root, gname: wheel, perm: 0555},
   /usr/local/man/man1/lsleases.1: {uname: root, gname: wheel, perm: 0444}
 }

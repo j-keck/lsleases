@@ -1,0 +1,67 @@
+stack:
+ - go 1.12 amd64
+
+
+install:
+  - choco install nsis -pre
+
+
+environment:
+  BUILD_DIR_EXE: build-work\windows\exe
+  BUILD_DIR_ZIP: build-work\windows\zip
+
+
+before_build:
+  - go version
+
+
+build_script:
+  - ps: $env:VERSION = $(git describe --tags --always)
+  - cmd: |
+      go build -ldflags "-X github.com/j-keck/lsleases/pkg/daemon.version=%VERSION%"
+
+  - cmd: |
+      mkdir %BUILD_DIR_EXE%
+      copy lsleases.exe %BUILD_DIR_EXE%
+      copy lsleasesd.exe %BUILD_DIR_EXE%
+      copy LICENSE %BUILD_DIR_EXE%
+      copy doc\lsleases.html %BUILD_DIR_EXE%
+      copy doc\lsleasesd.html %BUILD_DIR_EXE%
+      copy build\windows\installer.nsi %BUILD_DIR_EXE%
+      copy build\windows\amd64/nssm.exe %BUILD_DIR_EXE%
+      copy build\windows\*.bat %BUILD_DIR_EXE%
+      pushd %BUILD_DIR_EXE%
+      makensis installer.nsi
+      popd
+
+  - cmd: |
+      mkdir %BUILD_DIR_ZIP%\lsleases
+      copy lsleases.exe %BUILD_DIR_ZIP%\lsleases
+      copy lsleasesd.exe %BUILD_DIR_ZIP%\lsleases
+      copy LICENSE %BUILD_DIR_ZIP%\lsleases
+      copy doc\lsleases.html %BUILD_DIR_ZIP%\lsleases
+      copy doc\lsleasesd.html %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\list-leases.bat %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\watch-leases.bat %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\clear-leases.bat %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\start-start.bat %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\stop-server.bat %BUILD_DIR_ZIP%\lsleases
+      pushd %BUILD_DIR_EXE%
+      zip -r lsleases_$(VERSION)_win_standalone.zip lsleases
+      popd
+
+
+artifacts:
+  - path: $(BUILD_DIR_EXE)\lsleases_$(VERSION)_win_installer.exe
+    name: installer
+  - path: $(BUILD_DIR_ZIP)\lsleases_$(VERSION)_win_standalone.zip
+    name: standalone
+
+
+deploy:
+  description: 'Release'
+  provider: GitHub
+  auth_token:
+    secure: qqn10ztf8r42lkErydQEdSw0Vho2EmB0/8PjVuBjvN+r4QLbg6OLgWAVm7aeykiF
+  artifact: installer
+  force_update: true
