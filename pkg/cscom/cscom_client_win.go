@@ -9,6 +9,7 @@ import (
 	"net"
 	"time"
 	"strings"
+	"errors"
 )
 
 

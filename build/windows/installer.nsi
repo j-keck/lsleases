@@ -6,7 +6,7 @@
 RequestExecutionLevel admin
 
 # installer location
-Outfile "lsleases_$%VERSION%_win_installer.exe"
+Outfile "lsleases-$%VERSION%-$%PLATFORM%-windows-installer.exe"
 
 InstallDir $PROGRAMFILES\${APPNAME}
 
@@ -112,7 +112,8 @@ Section "install"
   SetOutPath $INSTDIR
 
   File "lsleases.exe"
-  File "manual.html"
+  File "lsleasesd.exe"
+  File "manual-windows.html"
   File "nssm.exe"
   File "list-leases.bat"
   File "watch-leases.bat"
@@ -124,11 +125,11 @@ Section "install"
   createShortCut  "$SMPROGRAMS\${APPNAME}\watch for new leases.lnk" "$INSTDIR\watch-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\clear leases.lnk" "$INSTDIR\clear-leases.bat"
   createShortCut  "$SMPROGRAMS\${APPNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe"
-  createShortCut  "$SMPROGRAMS\${APPNAME}\manual.lnk" "$INSTDIR\manual.html"
+  createShortCut  "$SMPROGRAMS\${APPNAME}\manual.lnk" "$INSTDIR\manual-windows.html"
 
   ${If} $autostartCheckboxState == ${BST_CHECKED}
     # register service per nssm wrapper
-    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleases.exe" -s'
+    ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleasesd.exe"'
     Sleep 1000
     Exec '"$INSTDIR\nssm.exe" start ${APPNAME}'
 
@@ -152,7 +153,7 @@ Section "install"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "instdir" $INSTDIR
 
   # add firwall rule
-  Exec 'netsh advfirewall firewall add rule name=lsleases dir=in action=allow program="$INSTDIR\lsleases.exe" enable=yes'
+  Exec 'netsh advfirewall firewall add rule name=lsleases dir=in action=allow program="$INSTDIR\lsleasesd.exe" enable=yes'
 
 
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -212,7 +213,7 @@ Section "uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 
   # remove firewall rule
-  Exec 'netsh advfirewall firewall delete rule name=lsleases program="$INSTDIR\lsleases.exe"'
+  Exec 'netsh advfirewall firewall delete rule name=lsleases program="$INSTDIR\lsleasesd.exe"'
 
   # programm files
   rmDir /r "$INSTDIR\*.*"
