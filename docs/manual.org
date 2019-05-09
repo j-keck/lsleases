@@ -1,0 +1,36 @@
+The *lsleases* package contains two executables:
+
+  - *lsleases* - client program
+  - *lsleasesd* - daemon program
+
+TODO ....
+
+* TODO How it works
+
+- describe the four datagrams 'DHCP discovery', 'DHCP offer',
+  'DHCP request' and 'DHCP acknowledgement'
+
+- 'DHCP discovery' and 'DHCP request' are broadcasts ....
+
+* Project structure
+
+#+BEGIN_EXAMPLE
+.
+├── build                   : build scripts
+├── cmd
+│   ├── lsleases            : client programm
+│   └── lsleasesd           : daemon programm
+├── docs                    : documentation
+├── examples                : go library examples
+├── pkg                     : modules
+│   ├── config              : configuration
+│   ├── cscom               : client server communication
+│   ├── daemon              : daemon (lsleasesd)
+│   ├── leases              : leases, history, cleanup
+│   └── sniffer             : sniffer
+├── README.org
+#+END_EXAMPLE
+
+* TODO Persistent firewall rules
+
+* TODO go library

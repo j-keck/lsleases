@@ -63,7 +63,7 @@ func main() {
 			// TODO: json output?
 
 			format := "%-9s  %-15s  %-17s  %s\n"
-			fmt.Printf(format, "Captured", "IP", "Mac", "Host")
+			fmt.Printf(format, "Captured", "Ip", "Mac", "Host")
 			var ts int64
 			for {
 				if leases, err = cscom.AskServerWithPayload(
@@ -99,7 +99,7 @@ func main() {
 
 func listLeases(cfg CliConfig, leases []leases.Lease) {
 	format := "%-15s  %-17s  %s\n"
-	fmt.Printf(format, "IP", "Mac", "Host")
+	fmt.Printf(format, "Ip", "Mac", "Host")
 	for _, lease := range leases {
 		fmt.Printf(format, lease.IP, lease.Mac, lease.Host)
 	}
@@ -121,7 +121,7 @@ func parseFlags() CliConfig {
 	printHelp := flag.Bool("h", false, "print help and exit")
 	printVersion := flag.Bool("V", false, "print version and exit")
 	watchLeases := flag.Bool("w", false, "watch leases")
-	clearLeases := flag.Bool("c", false, "clear leases")
+	clearLeases := flag.Bool("c", false, "clear leases history")
 	shutdown := flag.Bool("x", false, "shutdown server")
 
 	// options

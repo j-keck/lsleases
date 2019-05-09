@@ -22,6 +22,7 @@ cp -v lsleases  usr/local/bin
 cp -v lsleasesd usr/local/bin
 
 cp -v lsleases.1 usr/local/man/man1
+cp -v lsleasesd.1 usr/local/man/man1
 cp -v build/freebsd/lsleasesd.init usr/local/etc/rc.d/lsleasesd
 
 echo "update version to ${LSLEASES_VERSION}"

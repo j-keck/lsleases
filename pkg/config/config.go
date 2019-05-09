@@ -24,13 +24,13 @@ type Config struct {
 
 
 func NewDefaultConfig() Config {
-	cleanupLeasesInterval,  _ := time.ParseDuration("30m")
+	cleanupLeasesInterval,  _ := time.ParseDuration("60m")
 	leasesExpiryDuration, _ := time.ParseDuration(fmt.Sprintf("%dh", 7 * 24))
 
 	return Config {
 		CleanupLeasesInterval: cleanupLeasesInterval,
 		CleanupMethod:         PingBasedCleanup,
-		MissedPingsThreshold:  3,
+		MissedPingsThreshold:  5,
 		LeasesExpiryDuration:  leasesExpiryDuration,
 		PersistentLeases:      false,
 	}

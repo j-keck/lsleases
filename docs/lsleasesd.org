@@ -1,0 +1,112 @@
+#+TITLE: lsleasesd(1) | lsleasesd User Manual
+#+AUTHOR: j-keck [jhyphenkeck@gmail.com]
+#+LaTeX_HEADER: \usepackage[margin=1in]{geometry}
+
+* NAME
+
+*lsleasesd* -- DHCP leases sniffer
+
+
+* SYNOPSIS
+
+*lsleasesd* [options]
+
+
+* DESCRIPTION
+
+*lsleasesd* captures broadcast 'DHCP Request' datagrams.
+
+
+* OPTIONS
+
+*Multiple Flags have to be specified individually and separated by blanks*
+
+- ~-h~ :: print help and exit
+
+
+- ~-v~ :: debug output
+
+
+- ~-vv~ :: trace output
+
+                 detailed logging with caller locations
+
+
+- ~-V~ :: print version and exit
+
+
+- ~-p~ :: passive mode - clear leases after a given expiration duration
+
+                 by default *lsleasesd* pings all hosts in the history to
+                 verify if the device exists.
+                 with the ~-p~ flag *lsleasesd* removes a lease from the history
+                 after a given expiration duration if the device was not seen any more.
+
+                 - ~-e~ :: lease expiration duration (default 7d) (valid units: 'd', 'h', 'm', 's')
+
+
+- ~-t~ :: cleanup interval (default 1h) (valid units: 'd', 'h', 'm', 's')
+
+                 *in active mode:* ping interval
+
+                 *in passive mode:* check expired leases interval
+
+
+- ~-m~ :: missed ping threshold (default 5)
+
+                 number of missed pings after which a lease is removed from the history
+
+
+- ~-log-timestamps~ :: log messages with timestamps in unix format
+
+
+* EXAMPLES
+
+** ping every hour, remove offline hosts after 24 missed pings
+
+#+BEGIN_EXAMPLE
+j@main:~ ⟩ lsleasesd -t 1h -m 24
+#+END_EXAMPLE
+
+
+** passive mode, erase leases after 14 days
+
+#+BEGIN_EXAMPLE
+j@main:~ ⟩ lsleasesd -p -e 14d
+#+END_EXAMPLE
+
+* CONFIGURATION
+
+To configure *lsleasesd* you need to change the program arguments.
+
+** Linux
+
+Change ~ExecStart=/usr/bin/lsleasesd -k~ in ~/etc/systemd/system/lsleasesd.service~
+
+
+** FreeBSD
+
+Change ~lsleasesd_flags~ in ~/etc/rc.conf~.
+
+#+BEGIN_SRC shell
+lsleasesd_enable="YES"
+lsleasesd_flags="-k -log-timestamps"
+#+END_SRC
+
+
+* VERSION
+
+@version@
+
+
+* SEE ALSO
+
+*lsleases(1)*
+
+
+* HOMEPAGE
+
+[[http://github.com/j-keck/lsleases]]
+
+Please report bugs and feature requests in the issue tracker.
+

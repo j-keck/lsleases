@@ -17,6 +17,7 @@ before_build:
 
 build_script:
   - ps: $env:VERSION = $(git describe --tags --always)
+
   - cmd: |
       go build -ldflags "-X github.com/j-keck/lsleases/pkg/daemon.version=%VERSION%"
 

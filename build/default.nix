@@ -31,12 +31,18 @@ in with pkgs; rec {
   manpage = stdenv.mkDerivation rec {
     inherit version;
     name = "manpage";
-    src = ../docs/MANUAL.md;
+    src = ../docs;
     phases = "buildPhase";
     buildPhase = ''
       mkdir -p $out
-      substituteAll $src $out/MANUAL.md
-      ${pandoc}/bin/pandoc -s -o $out/lsleases.1 $out/MANUAL.md
+
+      # replace all @VARIABLES@ with their values from the environment
+      substituteAll $src/lsleases.org $out/lsleases.org
+      substituteAll $src/lsleasesd.org $out/lsleasesd.org
+
+      # create man pages
+      ${pandoc}/bin/pandoc -s -o $out/lsleases.1 $out/lsleases.org
+      ${pandoc}/bin/pandoc -s -o $out/lsleasesd.1 $out/lsleasesd.org
     '';
   };
 
@@ -65,6 +71,7 @@ in with pkgs; rec {
 
         mkdir -p $out/man/man1
         cp ${manpage}/lsleases.1 $out/man/man1
+        cp ${manpage}/lsleasesd.1 $out/man/man1
       '';
 
       meta = with pkgs.stdenv.lib; {

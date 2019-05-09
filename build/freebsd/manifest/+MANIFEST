@@ -15,6 +15,7 @@ files: {
   /usr/local/bin/lsleasesd: {uname: root, gname: wheel, perm: 0555},
   /usr/local/etc/rc.d/lsleasesd: {uname: root, gname: wheel, perm: 0555},
   /usr/local/man/man1/lsleases.1: {uname: root, gname: wheel, perm: 0444}
+  /usr/local/man/man1/lsleasesd.1: {uname: root, gname: wheel, perm: 0444}
 }
 scripts: {
   deinstall: <<EOD

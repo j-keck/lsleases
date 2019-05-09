@@ -12,7 +12,7 @@ node("nix") {
         stage("create manpage") {
             sh "nix-build build/default.nix -A manpage"
             dir("result") {
-                stash name: "manpage", includes: "lsleases.1"
+                stash name: "manpage", includes: "*"
             }
         }
     }

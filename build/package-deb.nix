@@ -40,6 +40,7 @@ pkgs.stdenv.mkDerivation rec {
 
       mkdir -p usr/local/man/man1
       cp ${pkg}/share/man/man1/lsleases.1.gz usr/local/man/man1
+      cp ${pkg}/share/man/man1/lsleasesd.1.gz usr/local/man/man1
 
       mkdir -p etc/systemd/system
       cp "${pkgs.writeScript "lsleasesd.service" ''

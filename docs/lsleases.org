@@ -1,0 +1,81 @@
+#+TITLE: lsleases(1) | lsleases User Manual
+#+AUTHOR: j-keck [jhyphenkeck@gmail.com]
+#+LaTeX_HEADER: \usepackage[margin=1in]{geometry}
+
+* NAME
+
+*lsleases* -- Displays captured DHCP leases from *lsleasesd*.
+
+
+* SYNOPSIS
+
+*lsleases* [options]
+
+
+* OPTIONS
+
+*Multiple Flags have to be specified individually and separated by blanks*
+
+- ~-h~ :: print help and exit
+
+- ~-v~ :: debug output
+
+- ~-vv~ :: trace output
+
+                detailed logging with caller locations
+
+- ~-V~ :: print version and exit
+
+- ~-c~ :: clear leases history
+
+- ~-w~ :: watch leases
+
+                client polls server every second for new leases
+
+- ~-x~ :: shutdown server
+
+
+* EXAMPLES
+
+** list captured leases
+
+ #+BEGIN_EXAMPLE
+ j@main:~ ⟩ lsleases
+ Ip               Mac                Host
+ 192.168.1.152    80:d0:9b:xx:xx:xx  android-6298296f6184995a
+ 192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
+ 192.168.1.155    5c:cf:7f:xx:xx:xx  NODE-931BFD
+ #+END_EXAMPLE
+
+
+**  watch for new leases
+
+ #+BEGIN_EXAMPLE
+ j@main:~ ⟩ lsleases -w
+ Captured   Ip               Mac                Host
+ 16:23:29   192.168.1.152    80:d0:9b:xx:xx:xx  android-6298296f6184995a
+ ... output hangs here - one minute later, a raspberry boots up
+ 16:24:29   192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
+ <CTRL-C>
+ #+END_EXAMPLE
+
+In this mode *lsleases* displays already captured DHCP leases and
+polls the *lsleasesd* server every second for new captured DHCP leases.
+To exit the program, hit '<CTRL-C>'.
+
+
+* VERSION
+
+@version@
+
+
+* SEE ALSO
+
+**lsleasesd(1)**
+
+
+* HOMEPAGE
+
+[[http://github.com/j-keck/lsleases]]
+
+Please report bugs and feature requests in the issue tracker.

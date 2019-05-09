@@ -25,7 +25,7 @@ func main() {
 	}
 
 	if cliCfg.printVersion {
-		fmt.Println(daemon.Version())
+		fmt.Printf("lsleasesd (server): %s\n", daemon.Version())
 		return
 	}
 
@@ -81,7 +81,7 @@ func parseFlags() (CliConfig, config.Config) {
 	validDurationUnits := "(valid units: 'd', 'h', 'm', 's')"
 
 	CleanupMethodVar(&daemonCfg.CleanupMethod, "p", "passive mode")
-	DurationVar(&daemonCfg.CleanupLeasesInterval, "t", "cleanup old leases interval "+validDurationUnits)
+	DurationVar(&daemonCfg.CleanupLeasesInterval, "t", "cleanup interval "+validDurationUnits)
 	flag.IntVar(&daemonCfg.MissedPingsThreshold, "m", daemonCfg.MissedPingsThreshold, "missed arping threshold")
 	DurationVar(&daemonCfg.LeasesExpiryDuration, "e", "leases expiry duration "+validDurationUnits)
 	flag.BoolVar(&daemonCfg.PersistentLeases, "k", daemonCfg.PersistentLeases, "keep leases over restart")

@@ -1,0 +1,141 @@
+* lsleases - DHCP leases sniffer
+
+*lsleases* captures broadcast 'DHCP request' datagrams from
+devices (pc, laptop, virtual machine, phone, raspberry, esp32, ...)
+with dynamic ip addresses in your local network.
+
+You can list the captured ip addresses to lookup an assigned ip for a device.
+
+/For more information, check the [[docs/manual.org][Manual]]./
+
+
+* Usage
+
+1.) install *lsleases* - see [[#installation][Installation]]
+
+2.) re-plug / start-up any device with a dynamic ip address
+
+3.) list captured devices
+
+#+BEGIN_EXAMPLE
+j@main:~ ⟩ lsleases
+Ip               Mac                Host
+192.168.1.152    80:d0:9b:xx:xx:xx  android-6298296f6184995a
+192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
+192.168.1.155    5c:cf:7f:xx:xx:xx  NODE-931BFD
+#+END_EXAMPLE
+
+/You can use lsleases as a go library in your own programs: [[#lsleases-go-library][lsleases go library]]/
+
+
+* Installation
+
+*!* If no leases are captured, make sure your firewall has port 67 (DHCP) open *!*
+
+#+BEGIN_SRC shell
+sudo iptables -I INPUT -p udp --dport 67 -j ACCEPT
+#+END_SRC
+
+check the [[docs/manual.org][Manual]] for a description.
+
+
+*** Debian / Ubuntu
+
+ 1.) download the ~.deb~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+
+ 2.) install the package ~sudo dpkg -i lsleases-<VERSION>-<ARCH>.deb~
+
+ 3.) activate the service ~sudo systemctl enable lsleasesd~
+
+ 4.) start the daemon ~sudo systemctl start lsleasesd~
+
+
+*** RedHat / Fedora
+
+1.) download the ~.rpm~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+
+2.) install the package ~sudo rpm -i lsleases-<VERSION>-<ARCH>.rpm~
+
+3.) activate the service ~sudo systemctl enable lsleasesd~
+
+4.) start the daemon ~sudo systemctl start lsleasesd~
+
+
+*** Windows
+
+I provide two packages for windows:
+
+  - ~lsleases-<VERSION>-<ARCH>-windows-installer.exe~
+  - ~lsleases-<VERSION>-<ARCH>-windows-standalone.zip~
+
+check [[docs/manual-windows.org][Windows Manual]] for more information.
+
+1.) download the package from [[http://github.com/j-keck/lsleases/releases/latest]]
+
+2.) install per installer or unzip the standalone package
+
+
+*** FreeBSD
+
+1.) download the ~.freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+
+2.) install the package ~sudo pkg install lsleases-<VERSION>-<ARCH>-freebsd.txz~
+
+3.) allow unprivileged users open ports less than 1024 (*lsleasesd* runs as user _nobody_)
+#+BEGIN_SRC shell
+echo net.inet.ip.portrange.reservedhigh=0 | sudo tee -a /etc/sysctl.conf
+sudo service sysctl restart
+#+END_SRC
+
+4.) activate the service ~sudo sysrc lsleasesd_enable=YES~
+
+5.) start the daemon ~sudo service lsleasesd start~
+
+
+
+* lsleases go library
+
+You can use *lsleases* as a go library in your own programs.
+For example to trigger any custom action on device discovery.
+
+#+BEGIN_SRC go :tangle examples/simple-sniffer.go :mkdirp yes
+package main
+
+import "github.com/j-keck/lsleases/pkg/sniffer"
+import "github.com/j-keck/lsleases/pkg/config"
+import "github.com/j-keck/plog"
+
+func main() {
+  // create a logger instance
+  log := plog.NewConsoleLogger()
+
+  // create the sniffer with the default configuration
+  cfg := config.NewDefaultConfig()
+  sniffer := sniffer.NewSniffer(cfg, log)
+
+  // subscribe to DHCP leases events and log the events
+  go func() {
+    leasesC := sniffer.Subscribe(10)
+    for {
+      lease := <-leasesC
+      log.Infof("new lease: %s", lease.String())
+    }
+  }()
+
+  if err := sniffer.Start(); err == nil {
+    log.Info("sniffing ... - hit <CTRL-C> to abort -")
+    select {}
+  } else {
+    panic(err)
+  }
+}
+#+END_SRC
+
+#+BEGIN_SRC shell
+GO111MODULE=on sudo go run examples/simple-sniffer.go
+#+END_SRC
+
+
+* Changelog
+
+see [[docs/changelog.org][Changelog]]

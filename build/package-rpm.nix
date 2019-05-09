@@ -42,6 +42,7 @@ pkgs.stdenv.mkDerivation rec {
       /usr/bin/lsleases
       /usr/bin/lsleasesd
       /usr/local/man/man1/lsleases.1.gz
+      /usr/local/man/man1/lsleasesd.1.gz
 
       %post
       /usr/sbin/setcap cap_net_raw,cap_net_bind_service=+ep /usr/bin/lsleasesd
@@ -60,6 +61,7 @@ pkgs.stdenv.mkDerivation rec {
 
     mkdir -p pkg/usr/local/man/man1
     cp ${pkg}/share/man/man1/lsleases.1.gz pkg/usr/local/man/man1
+    cp ${pkg}/share/man/man1/lsleasesd.1.gz pkg/usr/local/man/man1
 
     mkdir -p pkg/etc/systemd/system
     cp "${pkgs.writeScript "lsleasesd.service" ''

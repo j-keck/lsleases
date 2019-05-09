@@ -1,0 +1,7 @@
+* TODO
+
+  - describe installer / standalone differences
+
+  - how to use it
+
+  - add some screenhots?
