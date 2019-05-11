@@ -6,7 +6,6 @@ import (
 	"github.com/j-keck/lsleases/pkg/config"
 	"github.com/j-keck/lsleases/pkg/daemon"
 	"github.com/j-keck/plog"
-	"time"
 )
 
 type CliConfig struct {
@@ -36,22 +35,25 @@ func main() {
 }
 
 func newLogger(cliCfg CliConfig) plog.Logger {
-	log := plog.NewConsoleLogger()
-	log.SetLevel(cliCfg.logLevel)
 
-	var fields []plog.FieldFmt
+	var formatters []plog.Formatter
+
 	if cliCfg.logTimestamps {
-		fields = append(fields, plog.Timestamp(time.UnixDate))
+		formatters = append(formatters, plog.TimestampUnixDate)
 	}
 
-	fields = append(fields, plog.Level("%5s"))
+	formatters = append(formatters, plog.Level)
 
 	if cliCfg.logLevel == plog.Trace {
-		fields = append(fields, plog.Location("%20s:%-3d"))
+		formatters = append(formatters, plog.Location)
 	}
 
-	fields = append(fields, plog.Message("%s"))
-	log.SetLogFields(fields...)
+	formatters = append(formatters, plog.Message)
+
+
+	// initalize the logger with the given formatters
+	log := plog.NewConsoleLogger(" | ", formatters...)
+	log.SetLevel(cliCfg.logLevel)
 
 	return log
 }

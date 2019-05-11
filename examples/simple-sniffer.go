@@ -6,7 +6,7 @@ import "github.com/j-keck/plog"
 
 func main() {
   // create a logger instance
-  log := plog.NewConsoleLogger()
+  log := plog.NewDefaultConsoleLogger()
 
   // create the sniffer with the default configuration
   cfg := config.NewDefaultConfig()

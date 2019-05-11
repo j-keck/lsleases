@@ -31,7 +31,7 @@ type CliConfig struct {
 func main() {
 	cfg := parseFlags()
 
-	log := plog.NewConsoleLogger()
+	log := plog.NewDefaultConsoleLogger()
 	log.SetLevel(cfg.logLevel)
 
 	switch cfg.action {
