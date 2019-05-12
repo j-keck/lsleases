@@ -1,4 +1,4 @@
 github.com/j-keck/arping v1.0.0 h1:DN6Wy73IeadEEo5xVCgEp+ZGn2xmAypggxj8mtxXBD0=
 github.com/j-keck/arping v1.0.0/go.mod h1:ymszkNOg6tORTn+6F6j+Jc8TOr5osrynvN6ivFWZ2GA=
-github.com/j-keck/plog v0.1.0 h1:0BpaAiCoznV1bplZX8uUSjlX0WKskzwHdxDR7AUrCcg=
-github.com/j-keck/plog v0.1.0/go.mod h1:iGLlLlvHFSIeoRTzy8pcq26/04m2r+446IoFkxWrWfs=
+github.com/j-keck/plog v0.2.0 h1:zc7GH64QHK6VZ3BXGKcYS3K8jCtyyb+AmOhhXZNOcvU=
+github.com/j-keck/plog v0.2.0/go.mod h1:iGLlLlvHFSIeoRTzy8pcq26/04m2r+446IoFkxWrWfs=

@@ -62,7 +62,7 @@ in with pkgs; rec {
         -X github.com/j-keck/lsleases/pkg/daemon.version=${version}
       '';
 
-      modSha256 = "sha256:07srf10i1n8fxjgxc8hj8iirsmkbl8pv07q6n93pb1q0ibsxqj21";
+      modSha256 = "sha256:0bqdcw2ffgjknv8isj81kdxmf2m8v94gsb7yd7figyvkx66kr9p3";
 
       installPhase  = ''
         mkdir -p $out/bin

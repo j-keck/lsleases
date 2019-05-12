@@ -36,24 +36,20 @@ func main() {
 
 func newLogger(cliCfg CliConfig) plog.Logger {
 
-	var formatters []plog.Formatter
+	log := plog.NewConsoleLogger(" | ")
+	log.SetLevel(cliCfg.logLevel)
 
 	if cliCfg.logTimestamps {
-		formatters = append(formatters, plog.TimestampUnixDate)
+		log.AddLogFormatter(plog.TimestampUnixDate)
 	}
 
-	formatters = append(formatters, plog.Level)
+	log.AddLogFormatter(plog.Level)
 
 	if cliCfg.logLevel == plog.Trace {
-		formatters = append(formatters, plog.Location)
+		log.AddLogFormatter(plog.Location)
 	}
 
-	formatters = append(formatters, plog.Message)
-
-
-	// initalize the logger with the given formatters
-	log := plog.NewConsoleLogger(" | ", formatters...)
-	log.SetLevel(cliCfg.logLevel)
+	log.AddLogFormatter(plog.Message)
 
 	return log
 }
