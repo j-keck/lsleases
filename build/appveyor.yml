@@ -50,14 +50,9 @@ build_script:
       chdir %APPVEYOR_BUILD_FOLDER%
       mkdir %BUILD_DIR_ZIP%\lsleases
       copy lsleases.exe %BUILD_DIR_ZIP%\lsleases
-      copy lsleasesd.exe %BUILD_DIR_ZIP%\lsleases
       copy LICENSE %BUILD_DIR_ZIP%\lsleases
       copy manual-windows.html %BUILD_DIR_ZIP%\lsleases
-      copy build\windows\list-leases.bat %BUILD_DIR_ZIP%\lsleases
-      copy build\windows\watch-leases.bat %BUILD_DIR_ZIP%\lsleases
-      copy build\windows\clear-leases.bat %BUILD_DIR_ZIP%\lsleases
-      copy build\windows\start-server.bat %BUILD_DIR_ZIP%\lsleases
-      copy build\windows\stop-server.bat %BUILD_DIR_ZIP%\lsleases
+      copy build\windows\capture-leases.bat %BUILD_DIR_ZIP%\lsleases
       chdir %BUILD_DIR_ZIP%
       7z.exe a lsleases-%VERSION%-%PLATFORM%-windows-standalone.zip .\lsleases
 
