@@ -4,7 +4,9 @@
 
 * NAME
 
-*lsleases* -- Displays captured DHCP leases from *lsleasesd*.
+*lsleases* -- List captured ip addresses from devices with dynamic ip addresses in your local network.
+
+If you start *lseases* with the *-s* flag, it captures the datagrams itself and doesn't need a dameon.
 
 
 * SYNOPSIS
@@ -25,6 +27,13 @@
                 detailed logging with caller locations
 
 - ~-V~ :: print version and exit
+
+- ~-s~ :: standalone mode
+
+                In this mode *lsleases* is the daemon and the client in one program
+                and captures the datagrams itself.
+
+                The downsite is, that it can only capture the datagrams when it runs.
 
 - ~-c~ :: clear leases history
 

@@ -27,7 +27,7 @@ TODO ....
 │   ├── cscom               : client server communication
 │   ├── daemon              : daemon (lsleasesd)
 │   ├── leases              : leases, history, cleanup
-│   └── sniffer             : sniffer
+│   └── sniffer             : network sniffer
 ├── README.org
 #+END_EXAMPLE
 

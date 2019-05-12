@@ -1,4 +1,4 @@
-* lsleases - DHCP leases sniffer
+* lsleases - list assigned ip addresses in your network
 
 *lsleases* captures broadcast 'DHCP request' datagrams from
 devices (pc, laptop, virtual machine, phone, raspberry, esp32, ...)

@@ -2,6 +2,8 @@ package main
 
 import "github.com/j-keck/lsleases/pkg/cscom"
 import "github.com/j-keck/lsleases/pkg/leases"
+import "github.com/j-keck/lsleases/pkg/sniffer"
+import "github.com/j-keck/lsleases/pkg/config"
 import "github.com/j-keck/plog"
 import "flag"
 import "fmt"
@@ -15,6 +17,8 @@ const (
 	PrintVersion Action = iota
 	PrintHelp
 
+	Standalone
+
 	ListLeases
 	WatchLeases
 	ClearLeases
@@ -27,6 +31,7 @@ type CliConfig struct {
 	action       Action
 	jsonOutput   bool
 }
+
 
 func main() {
 	cfg := parseFlags()
@@ -47,6 +52,28 @@ func main() {
 	case PrintHelp:
 		flag.Usage()
 
+	case Standalone:
+		sniffer := sniffer.NewSniffer(config.NewDefaultConfig(), log)
+		go func() {
+			leasesC := sniffer.Subscribe(10)
+
+			// TODO: combine the output from here with the code in WatchLeases
+			format := "%-9s  %-15s  %-17s  %s\n"
+			fmt.Printf(format, "Captured", "Ip", "Mac", "Host")
+			for {
+				lease := <-leasesC
+				ts := lease.Created.Format("15:04:05")
+				fmt.Printf(format, ts, lease.IP, lease.Mac, lease.Host)
+			}
+		}()
+
+		if err := sniffer.Start(); err == nil {
+			select {}
+		} else {
+			panic(err)
+		}
+
+
 	case ListLeases:
 		if leases, err := cscom.AskServer(log, cscom.GetLeases); err == nil {
 			if cfg.jsonOutput {
@@ -60,7 +87,6 @@ func main() {
 
 	case WatchLeases:
 		if leases, err := cscom.AskServer(log, cscom.GetLeases); err == nil {
-			// TODO: json output?
 
 			format := "%-9s  %-15s  %-17s  %s\n"
 			fmt.Printf(format, "Captured", "Ip", "Mac", "Host")
@@ -120,6 +146,7 @@ func parseFlags() CliConfig {
 	// action
 	printHelp := flag.Bool("h", false, "print help and exit")
 	printVersion := flag.Bool("V", false, "print version and exit")
+	standalone := flag.Bool("s", false, "standalone mode - no daemon necessary")
 	watchLeases := flag.Bool("w", false, "watch leases")
 	clearLeases := flag.Bool("c", false, "clear leases history")
 	shutdown := flag.Bool("x", false, "shutdown server")
@@ -134,6 +161,8 @@ func parseFlags() CliConfig {
 		cfg.action = PrintHelp
 	} else if *printVersion {
 		cfg.action = PrintVersion
+	} else if *standalone {
+		cfg.action = Standalone
 	} else if *watchLeases {
 		cfg.action = WatchLeases
 	} else if *clearLeases {
