@@ -1,16 +1,51 @@
-The *lsleases* package contains two executables:
+#+TITLE: lsleases Manual
+
+* Intro
+
+*lsleases* helps you to find dynamic assigned ip addresses
+from any devices in your local network.
+
+This package contains two executables:
 
   - *lsleases* - client program
   - *lsleasesd* - daemon program
 
-TODO ....
+** lsleases
 
-* TODO How it works
+ *lsleases* lists captured ip addresses from devices with dynamic ip addresses in your local network.
 
-- describe the four datagrams 'DHCP discovery', 'DHCP offer',
-  'DHCP request' and 'DHCP acknowledgement'
+ It can be used in two modes:
 
-- 'DHCP discovery' and 'DHCP request' are broadcasts ....
+*** Client
+
+ *lsleases* communicates with the *lsleasesd* daemon to list captured ip addresses.
+
+ The daemon runs in the background and keeps a cache, so you don't miss any assigned ip address.
+
+
+*** Standalone
+
+ You can start *lsleases* with the *-s* flag, then it captures the datagrams itself and doesn't need a running dameon.
+
+
+** lsleasesd
+
+ *lsleasesd* captures broadcast 'DHCP request' datagrams from any device \\
+ (pc, laptop, virtual machine, phone, raspberry, esp32, ...) \\
+ with dynamic ip addresses in your local network.
+
+ It runs as daemon in the background and keeps a cache of captured leases.
+
+ Old entries are removed from the cache
+
+   - if the hosts is not reachable (active mode, this is the default mode)
+
+   - after a expiration duration (see the *-p* flag)
+
+
+ You can interact with this daemon with the *lsleases* program.
+
+
 
 * Project structure
 
@@ -31,6 +66,17 @@ TODO ....
 ├── README.org
 #+END_EXAMPLE
 
-* TODO Persistent firewall rules
 
-* TODO go library
+* Firewall
+
+*lsleases* opens a network socket to captures broadcast 'DHCP request' datagrams.
+
+If you have a firewall which blocks all incomming traffic, *lsleases* can't capture any packages.
+
+To temporary allow incomming traffic on port 67 (DHCP) execute the following command.
+#+BEGIN_SRC shell :eval no
+sudo iptables -I INPUT -p udp --dport 67 -j ACCEPT
+#+END_SRC
+
+
+TOOD: describe how make the firewall rule persistent.

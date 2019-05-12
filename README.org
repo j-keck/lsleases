@@ -1,6 +1,6 @@
-* lsleases - list assigned ip addresses in your network
+* lsleases - list dynamic assigned ip addresses in your network
 
-*lsleases* captures broadcast 'DHCP request' datagrams from
+*lsleases* captures broadcast 'DHCP request' datagrams from any
 devices (pc, laptop, virtual machine, phone, raspberry, esp32, ...)
 with dynamic ip addresses in your local network.
 
@@ -32,7 +32,7 @@ Ip               Mac                Host
 
 *!* If no leases are captured, make sure your firewall has port 67 (DHCP) open *!*
 
-#+BEGIN_SRC shell
+#+BEGIN_SRC shell :eval no
 sudo iptables -I INPUT -p udp --dport 67 -j ACCEPT
 #+END_SRC
 
@@ -75,14 +75,23 @@ check [[docs/manual-windows.org][Windows Manual]] for more information.
 2.) install per installer or unzip the standalone package
 
 
+*** OSX
+
+1.) download the ~-osx-standalone.zip~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+
+2.) unpack the zip archive and go into the ~lsleases~ directory
+
+3.) execute ~./capture-leases.sh~
+
+
 *** FreeBSD
 
-1.) download the ~.freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+1.) download the ~-freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
 2.) install the package ~sudo pkg install lsleases-<VERSION>-<ARCH>-freebsd.txz~
 
 3.) allow unprivileged users open ports less than 1024 (*lsleasesd* runs as user _nobody_)
-#+BEGIN_SRC shell
+#+BEGIN_SRC shell :eval no
 echo net.inet.ip.portrange.reservedhigh=0 | sudo tee -a /etc/sysctl.conf
 sudo service sysctl restart
 #+END_SRC
@@ -131,7 +140,9 @@ func main() {
 }
 #+END_SRC
 
-#+BEGIN_SRC shell
+#+RESULTS:
+
+#+BEGIN_SRC shell :eval no
 GO111MODULE=on sudo go run examples/simple-sniffer.go
 #+END_SRC
 

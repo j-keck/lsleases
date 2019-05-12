@@ -4,14 +4,30 @@
 
 * NAME
 
-*lsleases* -- List captured ip addresses from devices with dynamic ip addresses in your local network.
-
-If you start *lseases* with the *-s* flag, it captures the datagrams itself and doesn't need a dameon.
+*lsleases* -- Controls the *lsleasesd* daemon.
 
 
 * SYNOPSIS
 
 *lsleases* [options]
+
+
+* DESCRIPTION
+
+*lsleases* lists captured ip addresses from devices with dynamic ip addresses in your local network.
+
+It can be used in two modes:
+
+** Client
+
+*lsleases* communicates with the *lsleasesd* daemon to list captured ip addresses.
+
+The daemon runs in the background and keeps a cache, so you don't miss any assigned ip address.
+
+
+** Standalone
+
+You can start *lsleases* with the *-s* flag, then it captures the datagrams itself and doesn't need a running dameon.
 
 
 * OPTIONS

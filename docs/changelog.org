@@ -2,11 +2,11 @@
 
 /only notable changes are listed/
 
-** 1.5.x
+** 2.0.x
 
-/the 1.5.x version is a complete rewrite/
+/the 2.x.x version is a complete rewrite/
 
-*** 1.5.0
+*** 2.0.0
 
   - split client and server in two separate programms
     ('lslease' / 'lsleasesd')
@@ -19,11 +19,13 @@
 
   - new flag: '-j' to output leases as json
 
+  - new flag '-s' for standalone mode
+
   - use systemd unit files under linux
 
   - modularize the code, so it can used from other go programs
 
-  [[https://github.com/j-keck/lsleases/compare/1.4.3...1.5.0][all changes since 1.4.3]]
+  [[https://github.com/j-keck/lsleases/compare/1.4.3...2.0.0][all changes since 1.4.3]]
 
 
 ** 1.4.x
