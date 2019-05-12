@@ -69,8 +69,6 @@ func main() {
 
 		if err := sniffer.Start(); err == nil {
 			select {}
-		} else {
-			panic(err)
 		}
 
 

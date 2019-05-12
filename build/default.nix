@@ -47,10 +47,10 @@ in with pkgs; rec {
   };
 
 
-  lsleases = {arch ? "amd64"}:
+  lsleases = {arch ? "amd64", goos ? "linux" }:
     let goModule = if arch == "i386" then pkgsi686Linux.buildGoModule else pkgs.buildGoModule; in
     goModule rec {
-      inherit version;
+      inherit version goos;
       pname = "lsleases";
       rev = "v${version}";
       src = lib.cleanSource ../.;
@@ -64,10 +64,18 @@ in with pkgs; rec {
 
       modSha256 = "sha256:0bqdcw2ffgjknv8isj81kdxmf2m8v94gsb7yd7figyvkx66kr9p3";
 
+      preBuild = ''
+        export GOOS=${goos}
+      '';
+
       installPhase  = ''
+        BIN_PATH=${if goos == stdenv.buildPlatform.parsed.kernel.name
+                   then "$GOPATH/bin"
+                   else "$GOPATH/bin/${goos}_$GOARCH"}
+
         mkdir -p $out/bin
-        cp $GOPATH/bin/lsleases  $out/bin
-        cp $GOPATH/bin/lsleasesd $out/bin
+        cp $BIN_PATH/lsleases  $out/bin
+        cp $BIN_PATH/lsleasesd $out/bin
 
         mkdir -p $out/man/man1
         cp ${manpage}/lsleases.1 $out/man/man1
@@ -88,5 +96,7 @@ in with pkgs; rec {
   package-deb-test = import ./package-deb-test.nix { inherit pkgs package-deb; };
 
   package-rpm = {arch ? "amd64"}: import ./package-rpm.nix { inherit pkgs lsleases arch; };
+
+  package-osx = { arch ? "amd64"}: import ./package-osx.nix { inherit pkgs lsleases arch; };
 }
 

@@ -53,12 +53,25 @@ parallel(
                 buildWithNix("rpm", "amd64")
             }
         }
+    },
+    "osx": {
+        node("nix") {
+            dir("build-work/osx") {
+                buildWithNix("osx", "i386")
+                buildWithNix("osx", "amd64")
+            }
+        }
     }
 )
 
 
 def buildWithNix(String pkg, String arch) {
-  env.PACKAGE = "lsleases-${LSLEASES_VERSION}-${arch}.${pkg}"
+  // FIXME: cleanup this
+  if(pkg == "osx") {
+    env.PACKAGE = "lsleases-${LSLEASES_VERSION}-${arch}-osx-standalone.zip"
+  } else {
+    env.PACKAGE = "lsleases-${LSLEASES_VERSION}-${arch}.${pkg}"
+  }
 
   checkout scm
   unstash name: "manpage"
