@@ -41,7 +41,7 @@ build_script:
       copy LICENSE %BUILD_DIR_EXE%
       copy manual-windows.html %BUILD_DIR_EXE%
       copy build\windows\installer.nsi %BUILD_DIR_EXE%
-      copy build\windows\amd64/nssm.exe %BUILD_DIR_EXE%
+      copy build\windows\%platform%\nssm.exe %BUILD_DIR_EXE%
       copy build\windows\*.bat %BUILD_DIR_EXE%
       chdir %BUILD_DIR_EXE%
       makensis installer.nsi
