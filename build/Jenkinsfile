@@ -77,7 +77,7 @@ def buildWithNix(String pkg, String arch) {
 
 def sign(String fileName, String passphrase) {
     String cmd = "gpg --pinentry-mode loopback --passphrase ${passphrase} " +
-                 " --detach-sign --output ${fileName}.sig ${fileName}"
+                 " --detach-sign -u jhyphenkeck@gmail.com --output ${fileName}.sig ${fileName}"
 
     echo "write signature in ${fileName}.sig"
     // execute without logging
