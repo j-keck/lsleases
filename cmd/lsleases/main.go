@@ -80,7 +80,7 @@ func main() {
 				listLeases(cfg, leases.(cscom.Leases))
 			}
 		} else {
-			os.Stderr.WriteString(err.Error())
+			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 		}
 
 	case WatchLeases:
@@ -104,13 +104,13 @@ func main() {
 					time.Sleep(1 * time.Second)
 
 				} else {
-					os.Stderr.WriteString(err.Error())
+					fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 					break
 				}
 
 			}
 		} else {
-			os.Stderr.WriteString(err.Error())
+			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 		}
 
 	case ClearLeases:
