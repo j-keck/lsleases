@@ -14,7 +14,7 @@
 
 * DESCRIPTION
 
-*lsleases* lists captured ip addresses from devices with dynamic ip addresses in your local network.
+*lsleases* displays captured ip addresses.
 
 It can be used in two modes:
 
@@ -28,6 +28,7 @@ The daemon runs in the background and keeps a cache, so you don't miss any assig
 ** Standalone
 
 You can start *lsleases* with the *-s* flag, then it captures the datagrams itself and doesn't need a running dameon.
+The downsite is, that it can only capture the datagrams when it runs.
 
 
 * OPTIONS
@@ -48,8 +49,6 @@ You can start *lsleases* with the *-s* flag, then it captures the datagrams itse
 
                 In this mode *lsleases* is the daemon and the client in one program
                 and captures the datagrams itself.
-
-                The downsite is, that it can only capture the datagrams when it runs.
 
 - ~-c~ :: clear leases history
 
@@ -96,7 +95,7 @@ To exit the program, hit '<CTRL-C>'.
 
 * SEE ALSO
 
-**lsleasesd(1)**
+*lsleasesd(1)*
 
 
 * HOMEPAGE

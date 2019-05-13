@@ -1,7 +1,7 @@
 * lsleases - list dynamic assigned ip addresses in your network
 
-*lsleases* captures broadcast 'DHCP request' datagrams from any
-devices (pc, laptop, virtual machine, phone, raspberry, esp32, ...)
+*lsleases* captures broadcast 'DHCP request' datagrams from any device \\
+(pc, laptop, virtual machine, phone, raspberry, esp32, ...)
 with dynamic ip addresses in your local network.
 
 You can list the captured ip addresses to lookup an assigned ip for a device.
@@ -30,6 +30,9 @@ Ip               Mac                Host
 
 * Installation
 
+/I will provide standalone binaries for each platform in the coming days./
+
+
 *!* If no leases are captured, make sure your firewall has port 67 (DHCP) open *!*
 
 #+BEGIN_SRC shell :eval no
@@ -37,6 +40,21 @@ sudo iptables -I INPUT -p udp --dport 67 -j ACCEPT
 #+END_SRC
 
 check the [[docs/manual.org][Manual]] for a description.
+
+
+*** Build from source
+
+ 1.) fetch the standalone binary
+#+BEGIN_SRC shell :eval no
+go get github.com/j-keck/lsleases/cmd/lsleases
+#+END_SRC
+
+ 2.) run it
+#+BEGIN_SRC shell :eval no
+sudo $GOPATH/bin/lsleases -s
+#+END_SRC
+
+I will provide more information in the [[docs/manual.org][Manual]].
 
 
 *** Debian / Ubuntu
@@ -50,15 +68,16 @@ check the [[docs/manual.org][Manual]] for a description.
  4.) start the daemon ~sudo systemctl start lsleasesd~
 
 
+
 *** RedHat / Fedora
 
-1.) download the ~.rpm~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the ~.rpm~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
-2.) install the package ~sudo rpm -i lsleases-<VERSION>-<ARCH>.rpm~
+ 2.) install the package ~sudo rpm -i lsleases-<VERSION>-<ARCH>.rpm~
 
-3.) activate the service ~sudo systemctl enable lsleasesd~
+ 3.) activate the service ~sudo systemctl enable lsleasesd~
 
-4.) start the daemon ~sudo systemctl start lsleasesd~
+ 4.) start the daemon ~sudo systemctl start lsleasesd~
 
 
 *** Windows
@@ -70,35 +89,37 @@ I provide two packages for windows:
 
 check [[docs/manual-windows.org][Windows Manual]] for more information.
 
-1.) download the package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
-2.) install per installer or unzip the standalone package
+ 2.) install per installer or unzip the standalone package
 
 
 *** OSX
 
-1.) download the ~-osx-standalone.zip~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the ~-osx-standalone.zip~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
-2.) unpack the zip archive and go into the ~lsleases~ directory
+ 2.) unpack the zip archive and go into the ~lsleases~ directory
 
-3.) execute ~./capture-leases.sh~
+ 3.) execute ~./capture-leases.sh~
 
 
 *** FreeBSD
 
-1.) download the ~-freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the ~-freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
-2.) install the package ~sudo pkg install lsleases-<VERSION>-<ARCH>-freebsd.txz~
+ 2.) install the package ~sudo pkg install lsleases-<VERSION>-<ARCH>-freebsd.txz~
 
-3.) allow unprivileged users open ports less than 1024 (*lsleasesd* runs as user _nobody_)
+ 3.) allow unprivileged users open ports less than 1024 (*lsleasesd* runs as user _nobody_)
 #+BEGIN_SRC shell :eval no
 echo net.inet.ip.portrange.reservedhigh=0 | sudo tee -a /etc/sysctl.conf
 sudo service sysctl restart
 #+END_SRC
 
-4.) activate the service ~sudo sysrc lsleasesd_enable=YES~
+ 4.) activate the service ~sudo sysrc lsleasesd_enable=YES~
 
-5.) start the daemon ~sudo service lsleasesd start~
+ 5.) start the daemon ~sudo service lsleasesd start~
+
+
 
 
 

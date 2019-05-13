@@ -7,64 +7,46 @@ from any devices in your local network.
 
 This package contains two executables:
 
-  - *lsleases* - client program
-  - *lsleasesd* - daemon program
 
 ** lsleases
 
- *lsleases* lists captured ip addresses from devices with dynamic ip addresses in your local network.
+ *lsleases* displays captured ip addresses.
 
- It can be used in two modes:
-
-*** Client
-
- *lsleases* communicates with the *lsleasesd* daemon to list captured ip addresses.
-
- The daemon runs in the background and keeps a cache, so you don't miss any assigned ip address.
-
-
-*** Standalone
-
- You can start *lsleases* with the *-s* flag, then it captures the datagrams itself and doesn't need a running dameon.
+ See the *lsleaes* [[lsleases.org][man page]] for more information.
 
 
 ** lsleasesd
 
- *lsleasesd* captures broadcast 'DHCP request' datagrams from any device \\
- (pc, laptop, virtual machine, phone, raspberry, esp32, ...) \\
- with dynamic ip addresses in your local network.
+ *lsleasesd* captures broadcast 'DHCP request' datagrams.
 
- It runs as daemon in the background and keeps a cache of captured leases.
-
- Old entries are removed from the cache
-
-   - if the hosts is not reachable (active mode, this is the default mode)
-
-   - after a expiration duration (see the *-p* flag)
+ See the *lsleasesd* [[lsleasesd.org][man page]] for more information.
 
 
- You can interact with this daemon with the *lsleases* program.
+* Source
+
+** Build from source
+
+TODO
 
 
+** Project structure
 
-* Project structure
-
-#+BEGIN_EXAMPLE
-.
-├── build                   : build scripts
-├── cmd
-│   ├── lsleases            : client programm
-│   └── lsleasesd           : daemon programm
-├── docs                    : documentation
-├── examples                : go library examples
-├── pkg                     : modules
-│   ├── config              : configuration
-│   ├── cscom               : client server communication
-│   ├── daemon              : daemon (lsleasesd)
-│   ├── leases              : leases, history, cleanup
-│   └── sniffer             : network sniffer
-├── README.org
-#+END_EXAMPLE
+ #+BEGIN_EXAMPLE
+ .
+ ├── build                   : build scripts
+ ├── cmd
+ │   ├── lsleases            : client programm
+ │   └── lsleasesd           : daemon programm
+ ├── docs                    : documentation
+ ├── examples                : go library examples
+ ├── pkg                     : modules
+ │   ├── config              : configuration
+ │   ├── cscom               : client server communication
+ │   ├── daemon              : daemon (lsleasesd)
+ │   ├── leases              : leases, history, cleanup
+ │   └── sniffer             : network sniffer
+ ├── README.org
+ #+END_EXAMPLE
 
 
 * Firewall

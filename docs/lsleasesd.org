@@ -15,8 +15,7 @@
 
 * DESCRIPTION
 
-*lsleasesd* captures broadcast 'DHCP request' datagrams from any device \\
-(pc, laptop, virtual machine, phone, raspberry, esp32, ...) \\
+*lsleasesd* captures broadcast 'DHCP request' datagrams from any device
 with dynamic ip addresses in your local network.
 
 It runs as daemon in the background and keeps a cache of captured leases.
