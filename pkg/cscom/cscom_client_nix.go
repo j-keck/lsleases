@@ -19,7 +19,12 @@ func connect() (net.Conn, error) {
 
 		if strings.Contains(err.Error(), sockFileNotFound) ||
 			strings.Contains(err.Error(), serverNotRunning) {
-			return nil, errors.New("no running server found - start one with 'lsleasesd'")
+			msg := strings.Join([]string{
+				"no running server found",
+				"  - start the server per 'sudo lsleasesd'",
+				"  - or use the standalone mode per 'sudo lsleases -s'",
+			}, "\n")
+			return nil, errors.New(msg)
 		}
 		return nil, err
 	}
