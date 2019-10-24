@@ -36,13 +36,13 @@ type CliConfig struct {
 func main() {
 	cfg := parseFlags()
 
-	log := plog.NewDefaultConsoleLogger()
+	log := plog.GlobalLogger().Add(plog.NewDefaultConsoleLogger())
 	log.SetLevel(cfg.logLevel)
 
 	switch cfg.action {
 	case PrintVersion:
 		var serverVersion string
-		if version, err := cscom.AskServer(log, cscom.GetVersion); err == nil {
+		if version, err := cscom.AskServer(cscom.GetVersion); err == nil {
 			serverVersion = version.(cscom.Version).String()
 		} else {
 			serverVersion = err.Error()
@@ -53,7 +53,7 @@ func main() {
 		flag.Usage()
 
 	case Standalone:
-		sniffer := sniffer.NewSniffer(config.NewDefaultConfig(), log)
+		sniffer := sniffer.NewSniffer(config.NewDefaultConfig())
 		go func() {
 			leasesC := sniffer.Subscribe(10)
 
@@ -73,7 +73,7 @@ func main() {
 
 
 	case ListLeases:
-		if leases, err := cscom.AskServer(log, cscom.GetLeases); err == nil {
+		if leases, err := cscom.AskServer(cscom.GetLeases); err == nil {
 			if cfg.jsonOutput {
 				listLeasesAsJson(leases.(cscom.Leases))
 			} else {
@@ -84,14 +84,14 @@ func main() {
 		}
 
 	case WatchLeases:
-		if leases, err := cscom.AskServer(log, cscom.GetLeases); err == nil {
+
+		if leases, err := cscom.AskServer(cscom.GetLeases); err == nil {
 
 			format := "%-9s  %-15s  %-17s  %s\n"
 			fmt.Printf(format, "Captured", "Ip", "Mac", "Host")
 			var ts int64
 			for {
 				if leases, err = cscom.AskServerWithPayload(
-					log,
 					cscom.GetLeasesSince,
 					fmt.Sprintf("%d", ts),
 				); err == nil {
@@ -114,10 +114,10 @@ func main() {
 		}
 
 	case ClearLeases:
-		cscom.TellServer(log, cscom.ClearLeases)
+		cscom.TellServer(cscom.ClearLeases)
 
 	case Shutdown:
-		cscom.TellServer(log, cscom.Shutdown)
+		cscom.TellServer(cscom.Shutdown)
 	}
 }
 

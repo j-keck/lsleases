@@ -3,7 +3,10 @@ package leases
 import (
 	"fmt"
 	"time"
+	"github.com/j-keck/plog"
 )
+
+var log = plog.GlobalLogger()
 
 type Lease struct {
 	Created     time.Time

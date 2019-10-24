@@ -128,7 +128,7 @@ sudo service sysctl restart
 You can use *lsleases* as a go library in your own programs.
 For example to trigger any custom action on device discovery.
 
-#+BEGIN_SRC go :tangle examples/simple-sniffer.go :mkdirp yes
+#+BEGIN_SRC go :tangle examples/simple-sniffer.go :mkdirp yes :eval no
 package main
 
 import "github.com/j-keck/lsleases/pkg/sniffer"
@@ -137,11 +137,11 @@ import "github.com/j-keck/plog"
 
 func main() {
   // create a logger instance
-  log := plog.NewDefaultConsoleLogger()
+  log := plog.GlobalLogger().Add(plog.NewDefaultConsoleLogger())
 
   // create the sniffer with the default configuration
   cfg := config.NewDefaultConfig()
-  sniffer := sniffer.NewSniffer(cfg, log)
+  sniffer := sniffer.NewSniffer(cfg)
 
   // subscribe to DHCP leases events and log the events
   go func() {
@@ -160,8 +160,6 @@ func main() {
   }
 }
 #+END_SRC
-
-#+RESULTS:
 
 #+BEGIN_SRC shell :eval no
 GO111MODULE=on sudo go run examples/simple-sniffer.go

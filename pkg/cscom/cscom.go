@@ -3,18 +3,21 @@ package cscom
 import (
 	"encoding/json"
 	"github.com/j-keck/lsleases/pkg/leases"
+	"github.com/j-keck/plog"
 	"io"
 	"net"
 )
 
+var log = plog.GlobalLogger()
+
 type ClientRequest string
 
 const (
-	GetVersion       = ClientRequest("get-version")
-	GetLeases        = ClientRequest("get-leases")
-	GetLeasesSince   = ClientRequest("get-leases-since")
-	ClearLeases      = ClientRequest("clear-leases")
-	Shutdown         = ClientRequest("shutdown")
+	GetVersion     = ClientRequest("get-version")
+	GetLeases      = ClientRequest("get-leases")
+	GetLeasesSince = ClientRequest("get-leases-since")
+	ClearLeases    = ClientRequest("clear-leases")
+	Shutdown       = ClientRequest("shutdown")
 )
 
 type ServerResponse interface {

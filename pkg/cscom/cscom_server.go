@@ -2,36 +2,34 @@ package cscom
 
 import (
 	"github.com/j-keck/lsleases/pkg/config"
-	"github.com/j-keck/plog"
 	"net"
 	"strings"
 )
 
 type comServer struct {
-	log  plog.Logger
 	lsnr net.Listener
 }
 
-func NewComServer(log plog.Logger) (*comServer, error) {
+func NewComServer() (*comServer, error) {
 	log.Tracef("start listener on %s", config.SOCK_PATH)
-	lsnr, err := startListener(log)
+	lsnr, err := startListener()
 	if err != nil {
 		return new(comServer), err
 	}
 
-	return &comServer{log, lsnr}, nil
+	return &comServer{lsnr}, nil
 }
 
 func (self *comServer) Listen(cb func(ClientRequest, string) ServerResponse) error {
-	self.log.Trace("waiting for client connection")
+	log.Trace("waiting for client connection")
 	con, err := self.lsnr.Accept()
 	if err != nil {
 		return err
 	}
 
-	self.log.Trace("client connected - waiting for message")
+	log.Trace("client connected - waiting for message")
 	raw := strings.TrimSpace(readString(con))
-	self.log.Tracef("client message received: '%s'", raw)
+	log.Tracef("client message received: '%s'", raw)
 
 	// try to split the given message in a request and payload part.
 	var req ClientRequest
@@ -54,5 +52,5 @@ func (self *comServer) Listen(cb func(ClientRequest, string) ServerResponse) err
 }
 
 func (self *comServer) Stop() {
-	stopListener(self.log)
+	stopListener()
 }

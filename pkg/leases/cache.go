@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/j-keck/lsleases/pkg/config"
-	"github.com/j-keck/plog"
 	"io/ioutil"
 	"os"
 	"path"
@@ -13,10 +12,10 @@ import (
 
 //type Leases Leases
 
-func NewCache(cfg config.Config, log plog.Logger) *Leases {
+func NewCache(cfg config.Config) *Leases {
 	cache := new(Leases)
 	go func() {
-		cleaner := NewCleaner(cfg, log)
+		cleaner := NewCleaner(cfg)
 		ticker := time.NewTicker(cfg.CleanupLeasesInterval)
 		defer ticker.Stop()
 		for {

@@ -9,10 +9,10 @@ import (
 	"net"
 )
 
-func startListener(log plog.Logger) (net.Listener, error) {
+func startListener() (net.Listener, error) {
 	return npipe.Listen(config.SOCK_PATH)
 }
 
-func stopListener(log plog.Logger) error {
+func stopListener() error {
 	return nil
 }

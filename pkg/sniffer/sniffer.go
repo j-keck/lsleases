@@ -11,14 +11,15 @@ import (
 	"time"
 )
 
+var log = plog.GlobalLogger()
+
 type sniffer struct {
-	log         plog.Logger
 	cfg         config.Config
 	subscribers []chan leases.Lease
 }
 
-func NewSniffer(cfg config.Config, log plog.Logger) *sniffer {
-	return &sniffer{cfg: cfg, log: log}
+func NewSniffer(cfg config.Config) *sniffer {
+	return &sniffer{cfg: cfg}
 }
 
 func (self *sniffer) Start() error {
@@ -27,7 +28,7 @@ func (self *sniffer) Start() error {
 			if len(sub) < cap(sub) {
 				sub <- lease
 			} else {
-				self.log.Warnf("subscriber channel full - discard lease event: %s", lease)
+				log.Warnf("subscriber channel full - discard lease event: %s", lease)
 			}
 		}
 	})
@@ -44,9 +45,9 @@ type cachedSniffer struct {
 	cache *leases.Leases
 }
 
-func NewCachedSniffer(cfg config.Config, log plog.Logger) *cachedSniffer {
-	sniffer := NewSniffer(cfg, log)
-	self := cachedSniffer{*sniffer, leases.NewCache(cfg, log)}
+func NewCachedSniffer(cfg config.Config) *cachedSniffer {
+	sniffer := NewSniffer(cfg)
+	self := cachedSniffer{*sniffer, leases.NewCache(cfg)}
 
 	go func() {
 		leaseC := self.Subscribe(10)
@@ -62,12 +63,12 @@ func NewCachedSniffer(cfg config.Config, log plog.Logger) *cachedSniffer {
 }
 
 func (self *cachedSniffer) LoadLeases() error {
-	self.log.Infof("load lease from %s", config.PERSISTENT_LEASES_PATH)
+	log.Infof("load lease from %s", config.PERSISTENT_LEASES_PATH)
 	return self.cache.LoadLeases(config.PERSISTENT_LEASES_PATH)
 }
 
 func (self *cachedSniffer) SaveLeases() error {
-	self.log.Infof("save lease to %s", config.PERSISTENT_LEASES_PATH)
+	log.Infof("save lease to %s", config.PERSISTENT_LEASES_PATH)
 	return self.cache.SaveLeases(config.PERSISTENT_LEASES_PATH)
 }
 
@@ -80,7 +81,6 @@ func (self *cachedSniffer) ClearLeases() {
 }
 
 func (self *sniffer) listen(cb func(leases.Lease)) error {
-	log := self.log
 	log.Trace("setup listener on port :67")
 	config := listenConfig()
 	con, err := config.ListenPacket(context.Background(), "udp4", ":67")

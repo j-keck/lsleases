@@ -1,12 +1,11 @@
 package cscom
 
 import (
-	"github.com/j-keck/lsleases/pkg/config"
-	"github.com/j-keck/plog"
 	"fmt"
+	"github.com/j-keck/lsleases/pkg/config"
 )
 
-func TellServer(log plog.Logger, clientReq ClientRequest) error {
+func TellServer(clientReq ClientRequest) error {
 	log.Tracef("connect to unix-domain-socket at: %s", config.SOCK_PATH)
 	con, err := connect()
 	if err != nil {
@@ -19,11 +18,11 @@ func TellServer(log plog.Logger, clientReq ClientRequest) error {
 	return err
 }
 
-func AskServer(log plog.Logger, clientReq ClientRequest) (ServerResponse, error) {
-	return AskServerWithPayload(log, clientReq, "")
+func AskServer(clientReq ClientRequest) (ServerResponse, error) {
+	return AskServerWithPayload(clientReq, "")
 }
 
-func AskServerWithPayload(log plog.Logger, clientReq ClientRequest, payload string) (ServerResponse, error) {
+func AskServerWithPayload(clientReq ClientRequest, payload string) (ServerResponse, error) {
 	log.Tracef("connect to unix-domain-socket at: %s", config.SOCK_PATH)
 	con, err := connect()
 	if err != nil {

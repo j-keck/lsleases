@@ -11,10 +11,10 @@ type Cleaner interface {
 	FilterObsoleteLeases(Leases) Leases
 }
 
-func NewCleaner(cfg config.Config, log plog.Logger) Cleaner {
+func NewCleaner(cfg config.Config) Cleaner {
 	if cfg.CleanupMethod == config.PingBasedCleanup {
 		log.Infof("enable ping based cleanup - ping every: %s", cfg.CleanupLeasesInterval)
-		if aliveChecker, err := NewAliveChecker(log); err == nil {
+		if aliveChecker, err := NewAliveChecker(); err == nil {
 			return pingBasedCleanup{cfg, log, *aliveChecker}
 		} else {
 			log.Warnf("ping test failed - fallback to time based cleanup - %s", err.Error())

@@ -3,17 +3,16 @@
 package leases
 
 import "github.com/j-keck/arping"
-import "github.com/j-keck/plog"
 import "net"
 import "errors"
 
-func NewAliveChecker(log plog.Logger) (*aliveChecker, error) {
+func NewAliveChecker() (*aliveChecker, error) {
 
 	// find any local ip where
 	//  * the interface is not down
 	//  * is no loopback interface (because it has no mac)
 	//  * is no v6 address
-	ip, err := findLocalIP(log)
+	ip, err := findLocalIP()
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +22,7 @@ func NewAliveChecker(log plog.Logger) (*aliveChecker, error) {
 	log.Tracef("arping to '%s' to check permission", ip.String())
 	if _, _, err := arping.Ping(ip); err == arping.ErrTimeout {
 		log.Tracef("arping check succeed")
-		return &aliveChecker{log}, nil
+		return new(aliveChecker), nil
 	} else {
 		return nil, errors.New("no permission for arping")
 	}
@@ -39,7 +38,7 @@ func (self *aliveChecker) IsAlive(ip string) (bool, error) {
 	}
 }
 
-func findLocalIP(log plog.Logger) (net.IP, error) {
+func findLocalIP() (net.IP, error) {
 	log.Trace("search interface for arping test")
 	ifaces, err := net.Interfaces()
 	if err != nil {

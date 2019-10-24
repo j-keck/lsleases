@@ -29,29 +29,29 @@ func main() {
 	}
 
 	log := newLogger(cliCfg)
-	if err := daemon.Start(daemonCfg, log); err != nil {
+	if err := daemon.Start(daemonCfg); err != nil {
 		log.Errorf("unable to start daemon - %s", err.Error())
 	}
 }
 
 func newLogger(cliCfg CliConfig) plog.Logger {
 
-	log := plog.NewConsoleLogger(" | ")
-	log.SetLevel(cliCfg.logLevel)
+	consoleLogger := plog.NewConsoleLogger(" | ")
+	consoleLogger.SetLevel(cliCfg.logLevel)
 
 	if cliCfg.logTimestamps {
-		log.AddLogFormatter(plog.TimestampUnixDate)
+		consoleLogger.AddLogFormatter(plog.TimestampUnixDate)
 	}
 
-	log.AddLogFormatter(plog.Level)
+	consoleLogger.AddLogFormatter(plog.Level)
 
 	if cliCfg.logLevel == plog.Trace {
-		log.AddLogFormatter(plog.Location)
+		consoleLogger.AddLogFormatter(plog.Location)
 	}
 
-	log.AddLogFormatter(plog.Message)
+	consoleLogger.AddLogFormatter(plog.Message)
 
-	return log
+	return plog.GlobalLogger().Add(consoleLogger)
 }
 
 func parseFlags() (CliConfig, config.Config) {

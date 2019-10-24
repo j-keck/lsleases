@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-func NewAliveChecker(log plog.Logger) (*aliveChecker, error) {
+func NewAliveChecker() (*aliveChecker, error) {
 	if con, err := net.Dial("ip4:icmp", "127.0.0.1"); err != nil {
 		return nil, err
 	} else {
 		con.Close()
-		return &aliveChecker{log}, nil
+		return new(aliveChecker), nil
 	}
 }
 

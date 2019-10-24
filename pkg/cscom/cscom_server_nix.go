@@ -4,17 +4,16 @@ package cscom
 
 import (
 	"github.com/j-keck/lsleases/pkg/config"
-	"github.com/j-keck/plog"
 	"net"
 	"os"
 	"fmt"
 	"path"
 )
 
-func startListener(log plog.Logger) (net.Listener, error) {
+func startListener() (net.Listener, error) {
 	// remove stale sock file if it exists
 	if _, err := os.Stat(config.SOCK_PATH); err == nil {
-		if _, err := AskServer(log, GetVersion); err != nil {
+		if _, err := AskServer(GetVersion); err != nil {
 			log.Debugf("remove stale socket file %s", config.SOCK_PATH)
 			if err = os.Remove(config.SOCK_PATH); err != nil {
 				return nil, fmt.Errorf("delete stale socket file failed - %s", err.Error())
@@ -44,6 +43,6 @@ func startListener(log plog.Logger) (net.Listener, error) {
 	return ls, nil
 }
 
-func stopListener(log plog.Logger) error {
+func stopListener() error {
 	return os.Remove(config.SOCK_PATH)
 }

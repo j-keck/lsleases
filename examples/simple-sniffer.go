@@ -1,16 +1,17 @@
 package main
 
+
 import "github.com/j-keck/lsleases/pkg/sniffer"
 import "github.com/j-keck/lsleases/pkg/config"
 import "github.com/j-keck/plog"
 
 func main() {
   // create a logger instance
-  log := plog.NewDefaultConsoleLogger()
+  log := plog.GlobalLogger().Add(plog.NewDefaultConsoleLogger())
 
   // create the sniffer with the default configuration
   cfg := config.NewDefaultConfig()
-  sniffer := sniffer.NewSniffer(cfg, log)
+  sniffer := sniffer.NewSniffer(cfg)
 
   // subscribe to DHCP leases events and log the events
   go func() {

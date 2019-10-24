@@ -11,22 +11,24 @@ import (
 	"strconv"
 )
 
+var log = plog.GlobalLogger()
+
 // FIXME:
 //  - shutdown logic - os.Exit(0) doen't "call" 'defer com.Stop()'.
 //    the old sock file are not deleted
 //  - shutdown logic is interleaved with the program logic
-func Start(cfg config.Config, log plog.Logger) error {
+func Start(cfg config.Config) error {
 	log.Infof("startup  - version: %s", version)
 
 	// client-server communication
-	com, err := cscom.NewComServer(log)
+	com, err := cscom.NewComServer()
 	if err != nil {
 		return err
 	}
 	defer com.Stop()
 
 	// initialize sniffer
-	sniffer := sniffer.NewCachedSniffer(cfg, log)
+	sniffer := sniffer.NewCachedSniffer(cfg)
 	if cfg.PersistentLeases {
 		if err := sniffer.LoadLeases(); err != nil {
 			log.Infof("unable to load leases - start with empty leases cache - %s", err.Error())

@@ -5,7 +5,7 @@ import (
 )
 
 func TestAddOrUpdate(t *testing.T) {
-	var cache LeasesCache
+	cache := new(Leases)
 
 	byMac := func(mac string) func(Lease) bool {
 		return func(cur Lease) bool {
@@ -37,7 +37,7 @@ func TestAddOrUpdate(t *testing.T) {
 }
 
 func TestCache(t *testing.T) {
-	var cache LeasesCache
+	cache := new(Leases)
 
 	if len(cache.List()) != 0 {
 		t.Error("new cache not empty")
@@ -49,19 +49,4 @@ func TestCache(t *testing.T) {
 	if len(cache.List()) != 1 {
 		t.Error("cache empty - expected one lease")
 	}
-}
-
-func TestLeasesFilter(t *testing.T) {
-	//	cache := LeasesCache{}
-	// for i := 0; i < 10; i++ {
-	//	cache.Leases = append(cache.Leases, &sniffer.Lease{MissedPings: i})
-	// }
-
-	// filtered := cache.Filter(func(l *Lease) bool {
-	//	return l.MissedPings < 3
-	// })
-
-	// if len(filtered.Leases) != 3 {
-	//	t.Errorf("expected 3 leases - %d leases found", len(filtered.Leases))
-	// }
 }
