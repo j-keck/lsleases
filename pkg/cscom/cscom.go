@@ -68,12 +68,16 @@ func readString(con net.Conn) string {
 }
 
 func readLeases(con net.Conn) []leases.Lease {
-	raw := read(con)
+	//	var leases []leases.Lease
+	var leases = make([]leases.Lease, 0)
 
-	var leases []leases.Lease
-	err := json.Unmarshal(raw, &leases)
-	if err != nil {
-		panic(err)
+	raw := read(con)
+	if raw != nil && string(raw) != "null" {
+		log.Tracef("try to unmarshall leases from raw: %v", raw)
+		err := json.Unmarshal(raw, &leases)
+		if err != nil {
+			log.Errorf("error: %v", err)
+		}
 	}
 
 	return leases
