@@ -32,20 +32,19 @@ TODO
 ** Project structure
 
  #+BEGIN_EXAMPLE
- .
- ├── build                   : build scripts
- ├── cmd
- │   ├── lsleases            : client programm
- │   └── lsleasesd           : daemon programm
- ├── docs                    : documentation
- ├── examples                : go library examples
- ├── pkg                     : modules
- │   ├── config              : configuration
- │   ├── cscom               : client server communication
- │   ├── daemon              : daemon (lsleasesd)
- │   ├── leases              : leases, history, cleanup
- │   └── sniffer             : network sniffer
- ├── README.org
+├── build               : build scripts
+├── cmd
+│   ├── lsleases        : client programm
+│   └── lsleasesd       : daemon programm
+├── docs                : documentation
+├── examples            : go library examples
+└── pkg                 : modules
+    ├── config          : configuration
+    ├── cscom           : client server communication
+    ├── daemon          : daemon (lsleasesd)
+    ├── leases          : leases, history, cleanup
+    ├── sniffer         : network sniffer
+    └── webui           : web app
  #+END_EXAMPLE
 
 

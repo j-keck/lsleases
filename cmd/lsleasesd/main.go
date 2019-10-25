@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/j-keck/lsleases/pkg/config"
 	"github.com/j-keck/lsleases/pkg/daemon"
+	"github.com/j-keck/lsleases/pkg/webui"
 	"github.com/j-keck/plog"
 )
 
@@ -13,10 +14,13 @@ type CliConfig struct {
 	logTimestamps bool
 	printVersion  bool
 	printHelp     bool
+	startupWebUI  bool
+	webUIAddr     string
 }
 
 func main() {
 	cliCfg, daemonCfg := parseFlags()
+	log := newLogger(cliCfg)
 
 	if cliCfg.printHelp {
 		flag.Usage()
@@ -28,11 +32,18 @@ func main() {
 		return
 	}
 
-	log := newLogger(cliCfg)
+	if cliCfg.startupWebUI {
+		go func() {
+			webui := webui.NewWebUI()
+			webui.ListenAndServe(cliCfg.webUIAddr)
+		}()
+	}
+
 	if err := daemon.Start(daemonCfg); err != nil {
 		log.Errorf("unable to start daemon - %s", err.Error())
 	}
 }
+
 
 func newLogger(cliCfg CliConfig) plog.Logger {
 
@@ -63,6 +74,10 @@ func parseFlags() (CliConfig, config.Config) {
 
 	flag.BoolVar((*bool)(&cliCfg.printHelp), "h", false, "print help and exit")
 	flag.BoolVar((*bool)(&cliCfg.printVersion), "V", false, "print version and exit")
+
+	// webui
+	flag.BoolVar((*bool)(&cliCfg.startupWebUI), "webui", false, "startup webui")
+	flag.StringVar((*string)(&cliCfg.webUIAddr), "webui-addr", ":9999", "webui listener address")
 
 	// log level
 	plog.FlagDebugVar(&cliCfg.logLevel, "v", "debug output")

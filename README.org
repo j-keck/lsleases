@@ -15,7 +15,7 @@ You can list the captured ip addresses to lookup an assigned ip for a device.
 
 2.) re-plug / start-up any device with a dynamic ip address
 
-3.) list captured devices
+3a.) list captured devices
 
 #+BEGIN_EXAMPLE
 j@main:~ ⟩ lsleases
@@ -24,6 +24,11 @@ Ip               Mac                Host
 192.168.1.122    b8:27:eb:xx:xx:xx  raspberrypi
 192.168.1.155    5c:cf:7f:xx:xx:xx  NODE-931BFD
 #+END_EXAMPLE
+
+3b.) or if you start the *lsleasesd* with the '-webui' option, open you browser at http://127.0.0.1:9999
+
+[[./docs/webui-screenshot.png]]
+
 
 /You can use lsleases as a go library in your own programs: [[#lsleases-go-library][lsleases go library]]/
 
