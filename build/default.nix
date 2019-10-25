@@ -62,7 +62,7 @@ in with pkgs; rec {
         -X github.com/j-keck/lsleases/pkg/daemon.version=${version}
       '';
 
-      modSha256 = "sha256:0bqdcw2ffgjknv8isj81kdxmf2m8v94gsb7yd7figyvkx66kr9p3";
+      modSha256 = "sha256:1yjrdl73yilyg9vp7khqwjc5li88frc602ir3vb0xl3apbv9z0km";
 
       preBuild = ''
         export GOOS=${goos}
