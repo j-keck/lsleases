@@ -5,7 +5,6 @@ package leases
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/j-keck/plog"
 	"net"
 	"time"
 )

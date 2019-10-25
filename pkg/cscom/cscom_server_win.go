@@ -4,7 +4,6 @@ package cscom
 
 import (
 	"github.com/j-keck/lsleases/pkg/config"
-	"github.com/j-keck/plog"
 	"github.com/j-keck/npipe"
 	"net"
 )
