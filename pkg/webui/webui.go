@@ -35,7 +35,9 @@ func (self *WebUI) ListenAndServe(addr string) {
 
 	log.Infof("startup webui on address: %s - you can open the webui at: %s",
 		addr, browserAddr)
-	http.ListenAndServe(addr, nil)
+	if err := http.ListenAndServe(addr, nil); err != nil {
+		log.Warnf("unable to start webui: %v", err)
+	}
 }
 
 func (self *WebUI) registerEndpoints() {
