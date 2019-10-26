@@ -131,6 +131,7 @@ Section "install"
     # register service per nssm wrapper
     ExecWait '"$INSTDIR\nssm.exe" install ${APPNAME} "$INSTDIR\lsleasesd.exe"'
     Sleep 1000
+    ExecWait '"$INSTDIR\nssm.exe" set ${APPNAME} AppParameters "-webui -webui-addr 127.0.0.1:9999"'
     Exec '"$INSTDIR\nssm.exe" start ${APPNAME}'
 
     # service controller scripts
