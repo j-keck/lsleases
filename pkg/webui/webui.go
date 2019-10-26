@@ -139,7 +139,7 @@ var index = `
         <div style="overflow-x:auto;">
           <div id="notification"></div>
           <table id="leases">
-            <thead><tr><th>Created</th><th>IP</th><th>MAC</th><th>Hostname</th></tr></thead>
+            <thead><tr><th>Captured</th><th>IP</th><th>MAC</th><th>Hostname</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
