@@ -6,6 +6,29 @@
 
 /the 2.x.x version is a complete rewrite/
 
+*** 2.1.0
+
+  - initial webui.
+    The webui asks the server every second for new leases
+    and shows the leases in a tabluar view.
+    The webui is only enabled in the Windows build, if you are
+    under Linux, and you would use the webui, add the ~-webui~
+    option to *lsleasesd* parameters. Check the [[lsleasesd.org][lsleasesd manual]]
+    for more information.
+
+
+  - API change: 'sniffer.NewSniffer' doesn't accept
+    a logger instance anymore.
+
+      You can configure the Logger in your app per:
+        'plog.GlobalLogger().Add(plog.NewDefaultConsoleLogger())'
+
+      and then create the sniffer instance without the 'plog.Logger' argument:
+        'sniffer.NewSniffer(config.NewDefaultConfig())'
+
+
+
+
 *** 2.0.0
 
   - split client and server in two separate programms
