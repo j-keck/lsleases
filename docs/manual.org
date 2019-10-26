@@ -26,8 +26,31 @@ This package contains two executables:
 
 ** Build from source
 
-TODO
+You can clone this repository and build the binaries yourself, or use
+the *go* command to download and build it.
 
+When you build this project yourself, it's mandatory to set the
+necessary capabilities or use *sudo* when you start *lsleasesd*.
+
+You can set the necessary capabilities per ~sudo setcap cap_net_raw,cap_net_bind_services=+ep lsleasesd~.
+
+*** Build from checkout
+
+In the checkout directory execute:
+
+#+BEGIN_SRC sh :eval no
+go build github.com/j-keck/lsleases/cmd/lsleases
+go build github.com/j-keck/lsleases/cmd/lsleasesd
+#+END_SRC
+
+*** Build and fetch per *go* command
+
+#+BEGIN_SRC sh :eval no
+go get -u github.com/j-keck/lsleases/cmd/lsleases
+go get -u github.com/j-keck/lsleases/cmd/lsleasesd
+#+END_SRC
+
+This installs *lsleases* (the client) and *lsleasesd* (the server) under ~$GOPATH/bin~.
 
 ** Project structure
 

@@ -25,7 +25,8 @@ Ip               Mac                Host
 192.168.1.155    5c:cf:7f:xx:xx:xx  NODE-931BFD
 #+END_EXAMPLE
 
-3b.) or if you start the *lsleasesd* with the '-webui' option, open you browser at http://127.0.0.1:9999
+3b.) or if you start *lsleasesd* with the '-webui' option, you can open your browser at http://127.0.0.1:9999
+to access the integrated webapp.
 
 [[./docs/webui-screenshot.png]]
 
@@ -37,7 +38,6 @@ Ip               Mac                Host
 
 /I will provide standalone binaries for each platform in the coming days./
 
-
 *!* If no leases are captured, make sure your firewall has port 67 (DHCP) open *!*
 
 #+BEGIN_SRC shell :eval no
@@ -46,21 +46,13 @@ sudo iptables -I INPUT -p udp --dport 67 -j ACCEPT
 
 check the [[docs/manual.org][Manual]] for a description.
 
-
-*** Build from source
-
- 1.) fetch the standalone binary
-#+BEGIN_SRC shell :eval no
-go get github.com/j-keck/lsleases/cmd/lsleases
-#+END_SRC
-
- 2.) run it
-#+BEGIN_SRC shell :eval no
-sudo $GOPATH/bin/lsleases -s
-#+END_SRC
-
-I will provide more information in the [[docs/manual.org][Manual]].
-
+  - [[#debian--ubuntu][Debian / Ubuntu]]
+  - [[#redhat--fedora][Redhat / Fedora]]
+  - [[#windows][Windows]]
+  - [[#osx][OSX]]
+  - [[#freebsd][FreeBSD]]
+  - [[#build-from-source-client--server][Build from source (client / server)]]
+  - [[#build-from-source-standalone][Build from source (standalone)]]
 
 *** Debian / Ubuntu
 
@@ -101,7 +93,7 @@ check [[docs/manual-windows.org][Windows Manual]] for more information.
 
 *** OSX
 
- 1.) download the ~-osx-standalone.zip~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the ~lsleases-<VERSION>-<ARCH>-osx-standalone.zip~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
  2.) unpack the zip archive and go into the ~lsleases~ directory
 
@@ -110,9 +102,9 @@ check [[docs/manual-windows.org][Windows Manual]] for more information.
 
 *** FreeBSD
 
- 1.) download the ~-freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
+ 1.) download the ~lsleases-<VERSION>-amd64-freebsd.txz~ package from [[http://github.com/j-keck/lsleases/releases/latest]]
 
- 2.) install the package ~sudo pkg install lsleases-<VERSION>-<ARCH>-freebsd.txz~
+ 2.) install the package ~sudo pkg install lsleases-<VERSION>-amd64-freebsd.txz~
 
  3.) allow unprivileged users open ports less than 1024 (*lsleasesd* runs as user _nobody_)
 #+BEGIN_SRC shell :eval no
@@ -125,8 +117,46 @@ sudo service sysctl restart
  5.) start the daemon ~sudo service lsleasesd start~
 
 
+*** Build from source (client / server)
 
+   1.) fetch the server
+  #+BEGIN_SRC shell :eval no
+  go get -u github.com/j-keck/lsleases/cmd/lsleasesd
+  #+END_SRC
 
+   2.) start the server
+  #+BEGIN_SRC shell :eval no
+  sudo $GOPATH/bin/lsleasesd &
+  #+END_SRC
+
+   3.) fetch the client
+  #+BEGIN_SRC shell :eval no
+  go get -u github.com/j-keck/lsleases/cmd/lsleases
+  #+END_SRC
+
+   4.) run the client
+  #+BEGIN_SRC shell :eval no
+  $GOPATH/bin/lsleases -w
+  #+END_SRC
+
+  see the [[/docs/manual.org#build-from-source][Manual]] for more information.
+
+*** Build from source (standalone)
+
+For a quick test you can use the standalone mode without the server component.
+In this mode it does not run in the background, has no cache and supports no webui.
+
+ 1.) fetch the client
+#+BEGIN_SRC shell :eval no
+go get -u github.com/j-keck/lsleases/cmd/lsleases
+#+END_SRC
+
+ 2.) run the client in the standalone mode
+#+BEGIN_SRC shell :eval no
+sudo $GOPATH/bin/lsleases -s
+#+END_SRC
+
+see the [[/docs/manual.org#build-from-source][Manual]] for more information.
 
 * lsleases go library
 

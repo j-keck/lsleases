@@ -51,6 +51,14 @@ with the *-webui-addr* flag.
 - ~-V~ :: print version and exit
 
 
+- ~-k~ :: keep leases over restart
+
+
+- ~-m~ :: missed ping threshold (default 5)
+
+                 number of missed pings after which a lease is removed from the history
+
+
 - ~-p~ :: passive mode - clear leases after a given expiration duration
 
                  by default *lsleasesd* pings all hosts in the history to
@@ -68,14 +76,11 @@ with the *-webui-addr* flag.
                  *in passive mode:* check expired leases interval
 
 
-- ~-m~ :: missed ping threshold (default 5)
-
-                 number of missed pings after which a lease is removed from the history
-
-
 - ~-log-timestamps~ :: log messages with timestamps in unix format
 
+
 - ~-webui~ :: startup webui
+
 
 - ~-webui-addr~ :: webui listener address (default ":9999")
 

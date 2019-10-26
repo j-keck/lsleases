@@ -14,17 +14,23 @@ I provide two packages for windows:
 
 * Installable service
 
-This package installs a service which captures 'DHCP request' broadcast datagrams.
-
+This package installs a service which captures 'DHCP request' broadcast datagrams in the background.
 To list captured leases, go to 'Start / Programms / lsleases / list-leases'.
+
+The webui is by default only from your local machine reachable at: http://localhost:9999.
+If the webui should be also reachable from other hosts or on a different port,
+open *cmd* in the *lsleases* directory and execute
+
+  - ~nssm.exe set lsleases AppParameters "-webui -webui-addr :9999"~.
+  - ~nssm.exe restart lsleases~
 
 
 * Standalone zip archive
 
 This package contains a version of lsleases which does not run in
-the background and doesn not cache captured leases.
+the background, does not cache captured leases and does not include a webui.
 
-After unpacking execute 'capture-leases.bat'. This starts the leases
+After unpacking, execute 'capture-leases.bat'. This starts the leases
 sniffer, and displays all captured leases.
 
 Note:
