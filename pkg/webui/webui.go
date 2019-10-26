@@ -138,13 +138,11 @@ var index = `
   <body>
     <div class="container">
       <div id="content">
-        <div style="overflow-x:auto;">
-          <div id="notification"></div>
-          <table id="leases">
-            <thead><tr><th>Captured</th><th>IP</th><th>MAC</th><th>Hostname</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
+        <div id="notification"></div>
+        <table id="leases">
+          <thead><tr><th>Captured</th><th>IP</th><th>MAC</th><th>Hostname</th></tr></thead>
+          <tbody></tbody>
+        </table>
         <div id="footer">lsleases</div>
       </div>
     </div>
@@ -152,8 +150,8 @@ var index = `
     <script language="javascript">
       let since = 0;
 
-      get("/api/version", function(xhr) {
-          let version = " v" + xhr.response.version;
+      get("/api/version", function(obj) {
+          let version = " v" + obj.version;
           let node = document.createElement("span");
           node.appendChild(document.createTextNode(version));
           node.style = "font-size: 8px";
@@ -161,22 +159,20 @@ var index = `
       });
 
       window.setInterval(function() {
-          get("/api/leases?since=" + since, function(xhr) {
+          get("/api/leases?since=" + since, function(leases) {
               since = new Date().getTime() * 1000000;
-              if(xhr.statusText == "OK") {
-                  updateNotification("");
-                  let leases = xhr.response;
-                  leases.sort(function(a, b) { return a.Created > b.Created });
-                  leases.forEach(function(item, index) {
-                      updateLeasesTable(item);
-                  });
-              } else {
+              updateNotification("");
+              leases.sort(function(a, b) { return a.Created > b.Created });
+              leases.forEach(function(item, index) {
+                  updateLeasesTable(item);
+              });
+              }, function(xhr) {
                   updateNotification("Unable to fetch leases");
               }
-          })}, 1000);
+          )}, 1000);
 
 
-        function get(path, cb) {
+        function get(path, cbOk, cbErr) {
           let xhr;
           if (window.XMLHttpRequest) {
               xhr = new XMLHttpRequest();
@@ -188,10 +184,13 @@ var index = `
           }
           xhr.onreadystatechange = function() {
               if (xhr.readyState == XMLHttpRequest.DONE) {
-                  cb(xhr);
+                  if(xhr.statusText == "OK") {
+                    cbOk(JSON.parse(xhr.response));
+                  } else {
+                    cbErr(xhr);
+                  }
               }
           };
-          xhr.responseType = "json";
           xhr.open("GET", path);
           xhr.send();
       }
