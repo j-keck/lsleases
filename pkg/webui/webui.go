@@ -16,7 +16,6 @@ type endpoint struct {
 }
 
 type WebUI struct {
-	endpoints []endpoint
 }
 
 func NewWebUI() WebUI {
@@ -217,13 +216,21 @@ var index = `
           let createdCell = row.insertCell();
           createdCell.id = "created";
           createdCell.title = created.toLocaleString();
-          createdCell.appendChild(document.createTextNode(created.toLocaleTimeString()));
+          createdCell.textContent = created.toLocaleTimeString();
+
+          // ip as link
+          let ipCell = row.insertCell();
+          let ipLink = document.createElement("a");
+          ipLink.href = "http://" + lease.IP;
+          ipLink.target = "_blank";
+          ipLink.textContent = lease.IP;
+          ipCell.appendChild(ipLink);
 
           // text cells
-          ["IP", "Mac", "Host"].forEach(function(n) {
+          ["Mac", "Host"].forEach(function(n) {
               let cell = row.insertCell();
               cell.id = n.toLowerCase();
-              cell.appendChild(document.createTextNode(lease[n]));
+              cell.textContent = lease[n];
           });
       }
     </script>
