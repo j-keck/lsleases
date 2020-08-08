@@ -6,7 +6,7 @@ pkgs.stdenv.mkDerivation rec {
 
   version = pkg.version;
 
-  pkgVersion = builtins.replaceStrings ["-"] ["."] version;
+  pkgVersion = pkgs.lib.removePrefix "v" (builtins.replaceStrings ["-"] ["."] version);
   target = if arch == "i386"
               then "i386"
               else "x86_64";

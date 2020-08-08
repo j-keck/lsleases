@@ -13,7 +13,7 @@ pkgs.stdenv.mkDerivation rec {
 
       cp "${pkgs.writeText "control" ''
         Package: lsleases
-        Version: ${pkg.version}
+        Version: ${pkgs.lib.removePrefix "v" pkg.version}
         Priority: optional
         Architecture: ${arch}
         Section: custom

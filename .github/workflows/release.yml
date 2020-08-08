@@ -1,0 +1,122 @@
+name: Build release
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  build-linux:
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        platform:
+          - deb
+          - rpm
+          - osx
+        arch:
+          - i386
+          - amd64
+
+    name: build for linux / macos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v9
+
+      - name: build
+        run: |
+          set -x
+          git fetch --tags -f
+          mkdir build-output/
+          PACKAGE="package-${{ matrix.platform }}"
+          echo "BUILD: $PLATFORM@${{ matrix.arch }}"
+          BUILD=$(nix-build --no-out-link --no-build-output -A $PACKAGE  --argstr arch ${{ matrix.arch }})
+          cp -v $BUILD/* build-output/
+
+      - name: upload assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build-output/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+  build-windows:
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        arch:
+          - i386
+          - amd64
+
+    name: build for windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: prepare
+        shell: bash
+        run: |
+          choco install nsis pandoc
+
+          git fetch --tags -f
+          echo "::set-env name=VERSION::$(git describe --tags --always)"
+          echo "::set-env name=LDFLAGS::-X github.com/j-keck/lsleases/pkg/daemon.version=%VERSION% -X main.version=%VERSION%"
+          echo "::set-env name=PLATFORM::${{ matrix.arch }}"
+
+          if [ ${{ matrix.arch }} == "i386" ]; then
+            echo "::set-env name=GOARCH::386"
+          else
+            echo "::set-env name=GOARCH::${{ matrix.arch }}"
+          fi
+
+
+      - name: build
+        run: |
+
+          go build -ldflags "${{ env['LDFLAGS'] }}" ./cmd/lsleases
+          go build -ldflags "${{ env['LDFLAGS'] }}" ./cmd/lsleasesd
+
+          pandoc -s -o manual-windows.html docs/manual-windows.org
+
+
+          mkdir build-installer
+          copy lsleases.exe build-installer\
+          copy lsleasesd.exe build-installer\
+          copy LICENSE build-installer\
+          copy manual-windows.html build-installer\
+          copy build\windows\installer.nsi build-installer\
+          copy build\windows\${{ matrix.arch }}\nssm.exe build-installer\
+          copy build\windows\*.bat build-installer\
+          pushd .
+          chdir build-installer\
+          makensis installer.nsi
+          popd
+
+
+          mkdir build-standalone\lsleases
+          copy lsleases.exe build-standalone\lsleases\
+          copy LICENSE build-standalone\lsleases\
+          copy manual-windows.html build-standalone\lsleases\
+          copy build\windows\capture-leases.bat build-standalone\lsleases\
+          pushd .
+          chdir build-standalone\
+          7z.exe a lsleases-${{ env['VERSION'] }}-${{ matrix.arch }}-windows-standalone.zip .\lsleases
+          popd
+
+      - name: upload assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build-installer/lsleases-v*.exe
+            build-standalone/lsleases*.zip
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+

@@ -27,6 +27,7 @@
         'sniffer.NewSniffer(config.NewDefaultConfig())'
 
 
+  [[https://github.com/j-keck/lsleases/compare/2.0.0...2.1.0][all changes since 2.0.0]]
 
 
 *** 2.0.0
